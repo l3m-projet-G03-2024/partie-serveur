@@ -11,7 +11,9 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class HealthcheckEntity {
+    private int test;
     @Id
     private Long id;
 }
