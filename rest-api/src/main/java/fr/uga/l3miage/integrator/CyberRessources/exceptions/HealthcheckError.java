@@ -1,4 +1,4 @@
-package fr.uga.l3miage.integrator.exceptions;
+package fr.uga.l3miage.integrator.CyberRessources.exceptions;
 
 import lombok.Builder;
 import lombok.Data;

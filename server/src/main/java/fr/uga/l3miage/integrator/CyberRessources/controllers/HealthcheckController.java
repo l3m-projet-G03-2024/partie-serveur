@@ -1,7 +1,7 @@
-package fr.uga.l3miage.integrator.controllers;
+package fr.uga.l3miage.integrator.CyberRessources.controllers;
 
 import fr.uga.l3miage.integrator.endpoints.HealthcheckEndpoints;
-import fr.uga.l3miage.integrator.services.HealthcheckService;
+import fr.uga.l3miage.integrator.CyberRessources.services.HealthcheckService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 

@@ -1,4 +1,4 @@
-package fr.uga.l3miage.integrator;
+package fr.uga.l3miage.integrator.CyberRessources;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

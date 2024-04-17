@@ -1,9 +1,10 @@
-package fr.uga.l3miage.integrator.models;
+package fr.uga.l3miage.integrator.CyberRessources.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -11,9 +12,9 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class HealthcheckEntity {
-    private int test;
+public class StockEntity {
     @Id
-    private Long id;
+    @Column(name = "id_stock")
+    private Integer stock;
+    private Integer quantite;
 }
