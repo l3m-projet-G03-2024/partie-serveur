@@ -2,3 +2,4 @@
 target
 docker/postgres-data
 .iml
+*.DS_Store
