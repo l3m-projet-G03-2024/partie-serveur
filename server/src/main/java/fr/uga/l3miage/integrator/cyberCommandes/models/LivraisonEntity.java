@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Entity
+@Table(name = "Livraison")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,22 +23,27 @@ public class LivraisonEntity {
     @Enumerated(EnumType.STRING)
     private EtatsDeLivraison etat;
 
+    @Column(nullable = true)
     private Integer tdpTheorique;
 
     private Integer tdpEffectif;
 
+    @Column(nullable = true)
     private Integer tddTheorique;
 
     private Integer tddEffectif;
 
+    @Column(nullable = true)
     private Integer tdcTheorique;
 
     private Integer tdcEffectif;
 
+    @Column(nullable = true)
     private Integer tecTheorique;
 
     private Integer tecEffectif;
 
+    @Column(nullable = true)
     private Integer tdmTheorique;
 
     private Integer tdmEffectif;

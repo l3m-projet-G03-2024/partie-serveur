@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 @Entity
+@Table(name = "Journee")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,11 +26,13 @@ public class JourneeEntity {
     
     private Date date;
 
-    @Column(name = "distance_parcourir")
+    @Column(name = "distance_parcourir", nullable = true)
     private Double distanceAParcourir;
 
+    @Column(nullable = true)
     private Double montant;
 
+    @Column(nullable = true)
     private Integer tdmTheorique;
 
     @OneToMany(mappedBy = "journee")

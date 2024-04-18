@@ -2,13 +2,11 @@ package fr.uga.l3miage.integrator.cyberVitrine.models;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "Client")
 @Getter
 @Setter
 @Builder

@@ -12,13 +12,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "Tournee")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class TourneeEntity {
 
 @Id
-@Column(name = "refrencen_tournee")
+@Column(name = "reference_tournee")
 private String reference;
 
 private EtatsDeTournee etat;
