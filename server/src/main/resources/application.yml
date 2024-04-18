@@ -12,6 +12,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    show-sql: true
 l3:
   miage:
     webservice:

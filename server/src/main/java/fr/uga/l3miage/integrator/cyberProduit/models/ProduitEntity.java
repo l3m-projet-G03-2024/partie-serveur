@@ -34,6 +34,6 @@ public class ProduitEntity {
     @OneToMany(mappedBy = "produitEntity")
     private Set<StockEntity> stockEntities;
 
-    @ManyToOne(optional = true)
+    @ManyToOne
     private CatalogueEntity catalogueEntity;
 }
