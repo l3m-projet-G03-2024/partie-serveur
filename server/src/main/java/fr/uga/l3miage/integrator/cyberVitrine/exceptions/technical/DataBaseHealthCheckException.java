@@ -1,4 +1,4 @@
-package fr.uga.l3miage.integrator.exceptions.technical;
+package fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical;
 
 public class DataBaseHealthCheckException extends Exception {
 

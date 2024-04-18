@@ -1,7 +1,7 @@
-package fr.uga.l3miage.integrator.exceptions.handlers;
+package fr.uga.l3miage.integrator.cyberVitrine.exceptions.handlers;
 
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.HealthcheckRestException;
 import fr.uga.l3miage.integrator.exceptions.HealthcheckError;
-import fr.uga.l3miage.integrator.exceptions.rest.HealthcheckRestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

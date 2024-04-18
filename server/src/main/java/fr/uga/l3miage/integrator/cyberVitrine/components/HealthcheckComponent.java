@@ -1,8 +1,8 @@
-package fr.uga.l3miage.integrator.components;
+package fr.uga.l3miage.integrator.cyberVitrine.components;
 
-import fr.uga.l3miage.integrator.exceptions.technical.DataBaseHealthCheckException;
-import fr.uga.l3miage.integrator.models.HealthcheckEntity;
-import fr.uga.l3miage.integrator.repositories.HealthcheckRepository;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.DataBaseHealthCheckException;
+import fr.uga.l3miage.integrator.cyberVitrine.models.HealthcheckEntity;
+import fr.uga.l3miage.integrator.cyberVitrine.repositories.HealthcheckRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

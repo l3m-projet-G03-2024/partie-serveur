@@ -1,8 +1,8 @@
-package fr.uga.l3miage.integrator.services;
+package fr.uga.l3miage.integrator.cyberVitrine.services;
 
-import fr.uga.l3miage.integrator.components.HealthcheckComponent;
-import fr.uga.l3miage.integrator.exceptions.rest.HealthcheckRestException;
-import fr.uga.l3miage.integrator.exceptions.technical.DataBaseHealthCheckException;
+import fr.uga.l3miage.integrator.cyberVitrine.components.HealthcheckComponent;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.HealthcheckRestException;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.DataBaseHealthCheckException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

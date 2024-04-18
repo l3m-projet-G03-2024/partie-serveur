@@ -1,6 +1,5 @@
-package fr.uga.l3miage.integrator.exceptions.rest;
+package fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest;
 
-import fr.uga.l3miage.integrator.exceptions.technical.DataBaseHealthCheckException;
 import lombok.Getter;
 
 @Getter
