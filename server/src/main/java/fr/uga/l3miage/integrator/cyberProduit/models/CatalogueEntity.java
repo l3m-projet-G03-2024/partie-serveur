@@ -18,5 +18,5 @@ public class CatalogueEntity {
     private String libelle;
 
     @OneToMany(mappedBy = "catalogueEntity")
-    private Set<CatalogueEntity> catalogueEntities;
+    private Set<ProduitEntity> produitEntities;
 }
