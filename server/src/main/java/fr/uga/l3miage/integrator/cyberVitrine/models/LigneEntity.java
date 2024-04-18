@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberVitrine.models;
 
+import fr.uga.l3miage.integrator.cyberProduit.models.ProduitEntity;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -20,6 +21,9 @@ public class LigneEntity {
 
     private Double montant ;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private CommandeEntity commandeEntity ;
+
+    @ManyToOne
+    private ProduitEntity produitEntity;
 }

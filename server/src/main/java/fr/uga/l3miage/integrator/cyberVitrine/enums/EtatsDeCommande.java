@@ -1,6 +1,6 @@
 package fr.uga.l3miage.integrator.cyberVitrine.enums;
 
-public enum EtatDeCommande {
+public enum EtatsDeCommande {
     OUVERTE,
     PLANIFIEE,
     ENLIVRAISON,

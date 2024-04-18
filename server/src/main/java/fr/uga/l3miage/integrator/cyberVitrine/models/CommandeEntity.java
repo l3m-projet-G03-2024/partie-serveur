@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberVitrine.models;
 
-import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatDeCommande;
+import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
+import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class CommandeEntity {
     @Column(name = "reference_commande")
     private String reference ;
 
-    private EtatDeCommande etat ;
+    private EtatsDeCommande etat ;
 
     @Column(name = "date_creation")
     private LocalDateTime dateDeCreation ;
@@ -29,6 +30,7 @@ public class CommandeEntity {
     @Column(nullable = true)
     private String commentaire ;
 
+    @Column(nullable = true)
     private Double montantTotal ;
 
     @ManyToOne
@@ -36,5 +38,8 @@ public class CommandeEntity {
 
     @OneToMany(mappedBy = "commandeEntity")
     private Set<LigneEntity> ligneEntities ;
+
+    @ManyToOne(optional = true)
+    private LivraisonEntity livraisonEntity;
 
 }

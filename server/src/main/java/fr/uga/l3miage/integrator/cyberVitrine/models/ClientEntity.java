@@ -2,6 +2,7 @@ package fr.uga.l3miage.integrator.cyberVitrine.models;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -27,8 +28,10 @@ public class ClientEntity {
 
     private String ville ;
 
+    @Column(nullable = true)
     private Double longitude ;
 
+    @Column(nullable = true)
     private Double latitude ;
 
     @OneToMany(mappedBy = "clientEntity")

@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -14,4 +16,7 @@ import javax.persistence.Id;
 public class CatalogueEntity {
     @Id
     private String libelle;
+
+    @OneToMany(mappedBy = "catalogueEntity")
+    private Set<CatalogueEntity> catalogueEntities;
 }
