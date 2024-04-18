@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@Table(name = "Commande")
 @Getter
 @Setter
 @Builder
@@ -29,9 +30,6 @@ public class CommandeEntity {
 
     @Column(nullable = true)
     private String commentaire ;
-
-    @Column(nullable = true)
-    private Double montantTotal ;
 
     @ManyToOne
     private ClientEntity clientEntity ;

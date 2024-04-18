@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Stock")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,11 +14,10 @@ import javax.persistence.*;
 public class StockEntity {
     @Id
     @Column(name = "id_stock")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer stock;
+    private String stock;
     private Integer quantite;
 
-    @ManyToOne(optional = true)
+    @ManyToOne
     private ProduitEntity produitEntity;
 
     @ManyToOne
