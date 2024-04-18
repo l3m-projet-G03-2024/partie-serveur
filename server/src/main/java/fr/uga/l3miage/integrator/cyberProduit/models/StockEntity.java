@@ -16,4 +16,10 @@ public class StockEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer stock;
     private Integer quantite;
+
+    @ManyToOne(optional = true)
+    private ProduitEntity produitEntity;
+
+    @ManyToOne
+    private EntrepotEntity entrepotEntity;
 }

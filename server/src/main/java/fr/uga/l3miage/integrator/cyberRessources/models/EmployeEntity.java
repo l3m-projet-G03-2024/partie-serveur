@@ -1,9 +1,12 @@
 package fr.uga.l3miage.integrator.cyberRessources.models;
 
+import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -26,4 +29,11 @@ public class EmployeEntity {
 
     @Enumerated(EnumType.STRING)
     private Emploi emploi;
+
+    @OneToOne(optional = true)
+    private EntrepotEntity entrepot;
+
+    @ManyToMany
+    private Set<TourneeEntity> tourneeEntities;
+
 }
