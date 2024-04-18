@@ -1,20 +1,19 @@
 package fr.uga.l3miage.integrator.CyberRessources.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class StockEntity {
     @Id
     @Column(name = "id_stock")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer stock;
     private Integer quantite;
 }

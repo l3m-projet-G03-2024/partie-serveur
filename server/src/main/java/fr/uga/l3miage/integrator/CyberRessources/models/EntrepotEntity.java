@@ -1,8 +1,6 @@
 package fr.uga.l3miage.integrator.CyberRessources.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -10,9 +8,12 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class EntrepotEntity {
     @Id
     @Column(name = "nom_entrepot")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String nom;
     private String lettre;
 }

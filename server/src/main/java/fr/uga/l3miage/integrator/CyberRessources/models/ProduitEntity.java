@@ -19,9 +19,9 @@ public class ProduitEntity {
     private String titre;
     private String description;
     private double prix;
-    @Column(name = "option_montage")
+    @Column(nullable = true)
     private boolean aOptionMontage;
-    @Column(name = "tdm_theorique")
+    @Column(nullable = true)
     private Integer tdmTheorique;
     @Enumerated(EnumType.STRING)
     private Encombrement encombrement;
