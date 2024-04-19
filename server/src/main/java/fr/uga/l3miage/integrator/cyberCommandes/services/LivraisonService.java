@@ -13,7 +13,6 @@ public class LivraisonService {
     private final LivraisonComponent livraisonComponent;
     private final LivraisonMapper livraisonMapper;
     public LivraisonResponseDTO createLivraison(LivraisonCreationRequest livraisonCreationRequest){
-
         return null;
     }
 

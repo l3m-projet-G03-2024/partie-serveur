@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Gestion des Livraisons")
 @RequestMapping("/api/livraisons")
 public interface LivraisonEndPoints {
-    @Operation(description = "Création d'une Livraison")
-    @ApiResponse(responseCode = "201",description = "La Livraison à bien été créé")
-    @ApiResponse(responseCode = "400",description = "une erreur c'est produit avec la requête")
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/create")
-    LivraisonResponseDTO createLivraison(@RequestBody LivraisonCreationRequest livraisonCreationRequest);
+
+    // @Operation(description = "Création d'une Livraison")
+    // @ApiResponse(responseCode = "201",description = "La Livraison à bien été créé")
+    // @ApiResponse(responseCode = "400",description = "une erreur c'est produit avec la requête")
+    // @ResponseStatus(HttpStatus.CREATED)
+    // @PostMapping("/create")
+    // LivraisonResponseDTO createLivraison(@RequestBody LivraisonCreationRequest livraisonCreationRequest);
 }

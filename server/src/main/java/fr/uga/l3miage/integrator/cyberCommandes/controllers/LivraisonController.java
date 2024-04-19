@@ -12,8 +12,4 @@ import org.springframework.stereotype.Controller;
 public class LivraisonController implements LivraisonEndPoints {
     private final LivraisonService livraisonService;
 
-    @Override
-    public LivraisonResponseDTO createLivraison(LivraisonCreationRequest livraisonCreationRequest){
-        return null;
-    }
 }
