@@ -8,6 +8,5 @@ import java.util.List;
 
 @Mapper
 public interface JourneeMapper {
-    JourneeResponseDTO toJourneeResponseDTO(JourneeEntity journeeEntity);
     List<JourneeResponseDTO> toJourneeResponseDTOS(List<JourneeEntity> journeeEntities);
 }
