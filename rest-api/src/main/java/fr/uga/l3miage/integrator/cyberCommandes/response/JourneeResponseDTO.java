@@ -1,7 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.response;
 
-import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatDeJournee;
-import io.swagger.v3.oas.annotations.media.Schema;
+import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,5 +11,5 @@ import java.util.Date;
 public class JourneeResponseDTO {
     private String reference;
     private Date date;
-    private EtatDeJournee etat;
+    private EtatsDeJournee etat;
 }
