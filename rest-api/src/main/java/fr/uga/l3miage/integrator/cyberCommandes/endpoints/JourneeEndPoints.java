@@ -21,7 +21,7 @@ import java.util.List;
 public interface JourneeEndPoints {
 
     @ApiResponse(responseCode = "200",description = "liste de journée envoie avec succes")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de journee n'a pas été trouvé")
+    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de journée n'a pas été trouvé")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     List<JourneeResponseDTO> getAllJournees();
@@ -33,4 +33,11 @@ public interface JourneeEndPoints {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
     JourneeResponseDTO createJournee(@RequestBody JourneeRequest journeeRequest) ;
+
+    @ApiResponse(responseCode = "200",description = "liste de journée supprime avec succes")
+    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la journée n'a pas été supprimée")
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/journees/{referenceJourner}")
+    void deleteJourneeById(String reference);
+
 }

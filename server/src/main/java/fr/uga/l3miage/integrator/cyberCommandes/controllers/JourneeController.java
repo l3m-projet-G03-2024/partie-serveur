@@ -16,15 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JourneeController implements JourneeEndPoints {
     private final JourneeService journeeService;
-    private final JourneeMapper journeeMapper;
 
     public List<JourneeResponseDTO> getAllJournees(){
-        List<JourneeEntity> journeeEntities = journeeService.getAllJournees();
-        List<JourneeResponseDTO> journeeResponseDTOS = new ArrayList<>();
+        return journeeService.getAllJournees();
+    }
 
-        journeeResponseDTOS = journeeMapper.toJourneeResponseDTOS(journeeEntities);
-
-        return journeeResponseDTOS;
+    public void deleteJourneeById(String reference){
+        journeeService.deleteJourneeById(reference);
     }
 
     @Override
