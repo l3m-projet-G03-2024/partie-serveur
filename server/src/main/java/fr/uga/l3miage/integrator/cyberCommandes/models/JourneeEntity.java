@@ -11,9 +11,12 @@ import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
 @Table(name = "journee")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class JourneeEntity {

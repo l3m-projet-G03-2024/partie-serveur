@@ -17,4 +17,8 @@ public class JourneeComponent {
     public List<JourneeEntity> findAllJournees(){
         return journeeRepository.findAll();
     }
+
+    public JourneeEntity createJourneeEntity(JourneeEntity journeeEntity){
+        return journeeRepository.save(journeeEntity) ;
+    }
 }
