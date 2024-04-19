@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Ligne")
+@Table(name = "ligne")
 @Getter
 @Setter
 @Builder

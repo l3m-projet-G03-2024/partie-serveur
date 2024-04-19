@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "Client")
+@Table(name = "client")
 @Getter
 @Setter
 @Builder
