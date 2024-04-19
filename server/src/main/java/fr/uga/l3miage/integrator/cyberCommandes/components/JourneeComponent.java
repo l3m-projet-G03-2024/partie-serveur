@@ -14,7 +14,7 @@ import java.util.Set;
 public class JourneeComponent {
     private final JourneeRepository journeeRepository;
 
-    public List<JourneeEntity> getAllJournees(){
+    public List<JourneeEntity> findAllJournees(){
         return journeeRepository.findAll();
     }
 }
