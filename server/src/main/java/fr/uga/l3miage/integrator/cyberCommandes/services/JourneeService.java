@@ -1,17 +1,12 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
-<<<<<<< HEAD
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.BadRequestRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
-=======
-import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
-import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
->>>>>>> 19a9ad5 (feat: implementation de delete par reference)
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,12 +18,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JourneeService {
     private final JourneeComponent journeeComponent;
-<<<<<<< HEAD
     private final TourneeComponent tourneeComponent ;
     private final JourneeMapper journeeMapper ;
-=======
-    private final JourneeMapper journeeMapper;
->>>>>>> 19a9ad5 (feat: implementation de delete par reference)
 
     public List<JourneeResponseDTO> getAllJournees(){
         List<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();

@@ -37,7 +37,7 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "200",description = "liste de journée supprime avec succes")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la journée n'a pas été supprimée")
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/journees/{referenceJourner}")
+    @DeleteMapping("/{referenceJourner}")
     void deleteJourneeById(String reference);
 
 }
