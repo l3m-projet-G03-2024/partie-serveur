@@ -18,7 +18,12 @@ public class JourneeComponent {
         return journeeRepository.findAll();
     }
 
+<<<<<<< HEAD
     public JourneeEntity createJourneeEntity(JourneeEntity journeeEntity){
         return journeeRepository.save(journeeEntity) ;
+=======
+    public void deleteJourneeById(String reference){
+        journeeRepository.deleteById(reference);
+>>>>>>> 19a9ad5 (feat: implementation de delete par reference)
     }
 }
