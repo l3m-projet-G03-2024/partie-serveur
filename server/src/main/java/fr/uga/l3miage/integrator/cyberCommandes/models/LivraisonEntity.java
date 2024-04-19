@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -22,6 +23,8 @@ public class LivraisonEntity {
      
     @Enumerated(EnumType.STRING)
     private EtatsDeLivraison etat;
+
+    private Date date;
 
     @Column(nullable = true)
     private Integer tdpTheorique;
