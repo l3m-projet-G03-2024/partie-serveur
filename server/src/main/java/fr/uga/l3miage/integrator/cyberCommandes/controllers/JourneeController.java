@@ -7,6 +7,8 @@ import fr.uga.l3miage.integrator.cyberCommandes.services.JourneeService;
 import fr.uga.l3miage.integrator.cyberCommandes.endpoints.JourneeEndPoints;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+
+import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 
 import java.util.ArrayList;
@@ -30,4 +32,8 @@ public class JourneeController implements JourneeEndPoints {
         return journeeService.createJournee(journeeRequest) ;
     }
 
+    @Override
+     public JourneeDetailResponseDTO getJourneeById(String reference) {
+         return journeeService.getJournee(reference);
+     }
 }

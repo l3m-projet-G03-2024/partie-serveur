@@ -6,6 +6,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,6 @@ public interface JourneeEndPoints {
     @GetMapping("")
     List<JourneeResponseDTO> getAllJournees();
 
-
     @Operation(description = "Création d'une journée")
     @ApiResponse(responseCode = "201", description = "La journée a bien été créée")
     @ApiResponse(responseCode = "409", description = "Conflit avec l'état actuel de la ressource", content = @Content(schema = @Schema(implementation = CreateJourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
@@ -40,4 +40,10 @@ public interface JourneeEndPoints {
     @DeleteMapping("/{referenceJourner}")
     void deleteJourneeById(String reference);
 
+    @Operation(description = "Prend une  journee")
+    @ApiResponse(responseCode= "200", description = "La journée a est présent dans la base de donnée")
+    @ApiResponse(responseCode = "404", description = "Cette journée n'exist pas")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{id}")
+    JourneeDetailResponseDTO getJourneeById(@PathVariable String reference);
 }

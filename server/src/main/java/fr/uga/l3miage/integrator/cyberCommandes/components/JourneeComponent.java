@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -21,7 +22,10 @@ public class JourneeComponent {
     public JourneeEntity createJourneeEntity(JourneeEntity journeeEntity) {
         return journeeRepository.save(journeeEntity);
     }
-    public void deleteJourneeById(String reference){
+    public void deleteJourneeById(String reference) {
         journeeRepository.deleteById(reference);
+    }
+    public Optional<JourneeEntity> getJourneeById(String reference){
+        return journeeRepository.findById(reference);
     }
 }
