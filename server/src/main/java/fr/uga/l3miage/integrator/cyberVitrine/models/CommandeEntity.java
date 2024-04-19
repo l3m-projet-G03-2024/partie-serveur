@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "Commande")
+@Table(name = "commande")
 @Getter
 @Setter
 @Builder
