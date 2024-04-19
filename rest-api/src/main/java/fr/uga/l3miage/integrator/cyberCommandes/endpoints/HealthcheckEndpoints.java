@@ -1,4 +1,4 @@
-package fr.uga.l3miage.integrator.endpoints;
+package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
