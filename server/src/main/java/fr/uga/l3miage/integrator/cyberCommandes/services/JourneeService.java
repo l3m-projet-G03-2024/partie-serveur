@@ -46,7 +46,7 @@ public class JourneeService {
     public JourneeDetailResponseDTO getJournee(String reference){
         Optional<JourneeEntity> journeeEntityOptional = journeeComponent.getJourneeById(reference);
         if (journeeEntityOptional.isPresent()) {
-            return journeeMapper.toJourneeDeatilResponseDTO(journeeEntityOptional.get());
+            return journeeMapper.toJourneeDetailResponseDTO(journeeEntityOptional.get());
         } else {
             return null; //dans le cas où l'id n'existe pas on doit gerer une exception ici
         }
