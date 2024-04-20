@@ -44,6 +44,6 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode= "200", description = "La journée a est présent dans la base de donnée")
     @ApiResponse(responseCode = "404", description = "Cette journée n'exist pas")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{reference}")
+    @GetMapping("/{id}")
     JourneeDetailResponseDTO getJourneeById(@PathVariable String reference);
 }

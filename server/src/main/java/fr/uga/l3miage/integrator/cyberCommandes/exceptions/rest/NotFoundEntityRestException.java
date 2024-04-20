@@ -6,3 +6,4 @@ public class NotFoundEntityRestException extends RuntimeException{
         super(message);
     }
 }
+
