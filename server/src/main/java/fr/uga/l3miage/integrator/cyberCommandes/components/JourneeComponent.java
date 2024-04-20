@@ -25,7 +25,7 @@ public class JourneeComponent {
     public void deleteJourneeById(String reference) {
         journeeRepository.deleteById(reference);
     }
-    public Optional<JourneeEntity> getJourneeById(String reference){
-        return journeeRepository.findById(reference);
+    public JourneeEntity getJourneeById(String reference){
+        return journeeRepository.findById(reference).orElseThrow();
     }
 }
