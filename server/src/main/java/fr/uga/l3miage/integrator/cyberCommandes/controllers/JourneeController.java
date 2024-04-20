@@ -27,12 +27,12 @@ public class JourneeController implements JourneeEndPoints {
         journeeService.deleteJourneeById(reference);
     }
 
-    @Override
+    
     public JourneeResponseDTO createJournee(JourneeRequest journeeRequest){
         return journeeService.createJournee(journeeRequest) ;
     }
 
-    @Override
+    
      public JourneeDetailResponseDTO getJourneeById(String reference) {
          return journeeService.getJournee(reference);
      }
