@@ -20,6 +20,7 @@ public class CommandeEntity {
     @Column(name = "reference_commande")
     private String reference ;
 
+    @Enumerated(EnumType.STRING)
     private EtatsDeCommande etat ;
 
     @Column(name = "date_creation")
