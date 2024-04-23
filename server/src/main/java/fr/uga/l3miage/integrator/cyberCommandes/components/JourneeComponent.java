@@ -7,8 +7,7 @@ import org.springframework.stereotype.Component;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
 
 @Component
 @RequiredArgsConstructor

@@ -4,7 +4,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -14,7 +14,7 @@ public class LivraisonResponseDTO {
     private String reference;
 
     @Schema(description = "Date de la livraison")
-    private Date date;
+    private LocalDateTime date;
 
     @Schema(description = "L'etat de la livraison")
     private EtatsDeLivraison etat;
