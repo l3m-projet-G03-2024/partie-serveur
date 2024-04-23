@@ -5,7 +5,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 
 import java.util.List;
