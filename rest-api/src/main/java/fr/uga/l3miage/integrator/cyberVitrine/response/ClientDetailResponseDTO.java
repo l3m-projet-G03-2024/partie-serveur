@@ -2,11 +2,15 @@ package fr.uga.l3miage.integrator.cyberVitrine.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Schema(description = "les details d'un client")
 public class ClientDetailResponseDTO {
 
