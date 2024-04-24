@@ -2,18 +2,25 @@ package fr.uga.l3miage.integrator.cyberVitrine.response;
 
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import lombok.Builder;
+import lombok.Data;
+
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
 @Builder
+
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Schema(description = "represente les commandes d'un client")
 public class CommandeResponseDTO {
 
