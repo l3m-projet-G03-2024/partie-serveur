@@ -11,10 +11,16 @@ import lombok.Data;
 @Builder
 @Schema(description = "présentation d'une tournée")
 public class TourneeResponseDTO {
-     @Schema(description = "reference d'une tournée")
+
+    @Schema(description = "reference d'une tournée")
     private String reference;
+
     @Schema(description = "l'atat d'une tournée")
     private EtatsDeTournee etatsDeTournee;
+
+    @Schema(description = "la distance de la tournée")
+    private Double distance;
+
     @Schema(description="liste des livraisons")
     private Set<LivraisonResponseDTO> livraisonEntities;
 
