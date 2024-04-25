@@ -19,11 +19,19 @@ public class TourneeService {
     private final TourneeComponent tourneeComponent;
     private final TourneeMapper tourneeMapper;
 
-    public List<TourneeResponseDTO> getTourneesByEtats(EtatsDeTournee etatsDeTournee){
+    public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
         try {
-            List<TourneeEntity> tourneeEntities = (etatsDeTournee == null) ? 
-            tourneeComponent.findAllTournee() : tourneeComponent.findAllTourneesByEtat(etatsDeTournee);
+
+            List<TourneeEntity> tourneeEntities;
+
+            if (etatsDeTournee == null && referenceJournee == null) {
+                tourneeEntities = tourneeComponent.findAllTournee();
+            } else {
+                tourneeEntities = tourneeComponent.findAllTourneesByEtatOrReferenceJournee(etatsDeTournee, referenceJournee);
+            }
+
             return tourneeMapper.toTourneeResponseDTO(tourneeEntities);
+
         } catch (Exception e) {
             throw new NotFoundEntityRestException(e.getMessage());
         }
