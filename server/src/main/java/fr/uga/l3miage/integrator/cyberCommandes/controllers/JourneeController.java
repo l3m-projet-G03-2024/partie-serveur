@@ -17,21 +17,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JourneeController implements JourneeEndPoints {
     private final JourneeService journeeService;
-
+    @Override
     public List<JourneeResponseDTO> getAllJournees(){
         return journeeService.getAllJournees();
     }
-
+    @Override
     public void deleteJourneeById(String reference){
         journeeService.deleteJourneeById(reference);
     }
 
-    
+    @Override
     public JourneeResponseDTO createJournee(JourneeRequest journeeRequest){
         return journeeService.createJournee(journeeRequest) ;
     }
 
-    
+    @Override
      public JourneeDetailResponseDTO getJourneeById(String reference) {
          return journeeService.getJournee(reference);
      }

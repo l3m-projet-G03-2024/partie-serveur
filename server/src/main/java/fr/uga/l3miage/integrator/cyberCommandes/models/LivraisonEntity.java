@@ -5,6 +5,7 @@ import javax.persistence.*;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.Set;
 @Entity
 @Table(name = "livraison")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LivraisonEntity {

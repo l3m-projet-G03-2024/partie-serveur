@@ -8,12 +8,14 @@ import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tournee")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class TourneeEntity {
@@ -28,6 +30,8 @@ private Integer tdrTheorique;
 
 private Integer tdrEffectif;
 
+@Column(nullable =  true)
+private Double distance;
 
 @OneToMany(mappedBy = "tourneeEntity")
 private Set<LivraisonEntity> livraisons;

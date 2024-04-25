@@ -24,7 +24,6 @@ public class TourneeService {
             List<TourneeEntity> tourneeEntities = (etatsDeTournee == null) ? 
             tourneeComponent.findAllTournee() : tourneeComponent.findAllTourneesByEtat(etatsDeTournee);
             return tourneeMapper.toTourneeResponseDTO(tourneeEntities);
-
         } catch (Exception e) {
             throw new NotFoundEntityRestException(e.getMessage());
         }
