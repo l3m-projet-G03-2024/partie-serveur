@@ -27,7 +27,7 @@ public interface TourneeEndPoints {
     @ApiResponse(responseCode = "404",description ="la tournée n'a pas été trouvée")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
-    List<TourneeResponseDTO> getAllTournee(@RequestParam(required = false) EtatsDeTournee etat);
+    List<TourneeResponseDTO> getAllTournee(@RequestParam(required = false) EtatsDeTournee etat, @RequestParam(required = false) String referenceJournee);
 
 
 

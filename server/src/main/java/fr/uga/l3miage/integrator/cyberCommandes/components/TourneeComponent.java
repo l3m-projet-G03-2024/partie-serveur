@@ -20,8 +20,8 @@ public class TourneeComponent {
         return tourneeRepository.findAll();
     }
 
-    public List<TourneeEntity> findAllTourneesByEtat(EtatsDeTournee etatsDeTournee){
-        return tourneeRepository.findAllByEtat(etatsDeTournee);
+    public List<TourneeEntity> findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
+        return tourneeRepository.findAllByEtatOrJourneeReference(etatsDeTournee,referenceJournee);
 
     }
 
