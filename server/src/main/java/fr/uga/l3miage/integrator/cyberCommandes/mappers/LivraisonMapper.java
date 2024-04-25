@@ -5,9 +5,13 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper
 public interface LivraisonMapper {
 
     LivraisonResponseDTO toResponse(LivraisonEntity livraisonEntity);
+
+    List<LivraisonResponseDTO> toLivraisonResponse(List<LivraisonEntity> livraisonEntities);
 
 }
