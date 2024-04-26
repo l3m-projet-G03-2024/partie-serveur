@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,23 +29,15 @@ public class TourneeServiceTest {
 
 
     @Test 
-    void RequestTourneeByEtat(){
-            /*  LivraisonEntity livraisonEntity = LivraisonEntity
-                    .builder()
-                    .reference("1L")
-                    .etat(EtatsDeLivraison.ENDECHARGEMENT)
-                    .build();
-                LivraisonEntity livraisonEntity2 = LivraisonEntity
-                    .builder()
-                    .reference("2L")
-                    .etat(EtatsDeLivraison.ENCLIENTELE)
-                    .build();
-                Set<LivraisonEntity> livraisonEntities = new HashSet<>();
-                livraisonEntities.add(livraisonEntity);
-                livraisonEntities.add(livraisonEntity2);*/
-        // Création des entités de tournée simulées
+    void RequestTourneeByEtatOrReferenceJournee(){
+
+        JourneeEntity journee1 = JourneeEntity.builder()
+                .reference("1Ab")
+                .build();
+
         TourneeEntity tourneeEntity1 = TourneeEntity.builder()
             .reference("1T")
+                .journee(journee1)
             .etat(EtatsDeTournee.ENCHARGEMENT)
             .build();
         TourneeEntity tourneeEntity2 = TourneeEntity.builder()
@@ -56,6 +49,8 @@ public class TourneeServiceTest {
             .etat(EtatsDeTournee.EFFECTUEE)
             .build();
 
+
+
         // Création d'une liste de tournées simulées
         List<TourneeEntity> tourneeEntities = new ArrayList<>();
         tourneeEntities.add(tourneeEntity1);
@@ -66,15 +61,39 @@ public class TourneeServiceTest {
 
         // Configuration du mock pour retourner la liste simulée lorsque findAllTourneesByEtat est appelé avec ENCHARGEMENT
         List<TourneeEntity> tourneesEnChargement = Arrays.asList(tourneeEntity1, tourneeEntity2);
-        when(tourneeComponent.findAllTourneesByEtat(EtatsDeTournee.ENCHARGEMENT)).thenReturn(tourneesEnChargement);
+        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENCHARGEMENT,null)).thenReturn(tourneesEnChargement);
 
-        // Appel de la méthode à tester sans spécifier d'état
-        List<TourneeResponseDTO> tourneeResponseDTOs = tourneeService.getTourneesByEtats(null);
-        assertEquals(3, tourneeResponseDTOs.size()); 
-        // Appel de la méthode à tester en spécifiant ENCHARGEMENT comme état
-        List<TourneeResponseDTO> tourneeResponseDTOsEnChargement = tourneeService.getTourneesByEtats(EtatsDeTournee.ENCHARGEMENT);
-        // On s'attend à recevoir 2 DTO de réponse de tournée en chargement
-        assertEquals(2, tourneeResponseDTOsEnChargement.size()); 
+        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(null,journee1.getReference())).thenReturn(List.of(tourneeEntity1));
+
+        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENCHARGEMENT,journee1.getReference())).thenReturn(List.of(tourneeEntity1));
+
+        when(tourneeComponent.findAllTournee()).thenReturn(tourneeEntities);
+
+        // Appel de la méthode à tester en spécifiant seulement l'état
+        List<TourneeResponseDTO> tourneeResponseDTOs = tourneeService.getTourneesByEtatsOrReferenceJournee(EtatsDeTournee.ENCHARGEMENT,null);
+        assertEquals(2, tourneeResponseDTOs.size());
+
+        // Appel de la méthode à tester en spécifiant ENCHARGEMENT comme état et en specifiant la reference de la journée 1
+        List<TourneeResponseDTO> tourneeResponseDTOsEnChargement = tourneeService.getTourneesByEtatsOrReferenceJournee(EtatsDeTournee.ENCHARGEMENT,tourneeEntity1.getJournee().getReference());
+        // On s'attend à recevoir 1 DTO de réponse de tournée en chargement
+        assertEquals(1, tourneeResponseDTOsEnChargement.size());
+
+
+        // Appel de la méthode à tester en specifiant seulement la reference de la journée 1
+        List<TourneeResponseDTO> tourneeResponseDTOsJournee1 = tourneeService.getTourneesByEtatsOrReferenceJournee(null,tourneeEntity1.getJournee().getReference());
+        // On s'attend à recevoir 1 DTO de réponse de tournée en chargement
+        assertEquals(1, tourneeResponseDTOsJournee1.size());
+
+
+        // Appel de la méthode à tester
+        List<TourneeResponseDTO> tourneeResponseDTOsAll = tourneeService.getTourneesByEtatsOrReferenceJournee(null,null);
+        // On s'attend à recevoir 1 DTO de réponse de tournée en chargement
+        assertEquals(3, tourneeResponseDTOsAll.size());
+
+
+
+
+
     }
 
 

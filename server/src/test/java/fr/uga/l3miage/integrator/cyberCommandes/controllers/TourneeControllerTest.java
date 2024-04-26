@@ -42,8 +42,8 @@ public class TourneeControllerTest {
         this.tourneeRepository.deleteAll();
     }
     @Test
-    void getAllTourneeByEtatFound(){
-        when(tourneeComponent.findAllTourneesByEtat(EtatsDeTournee.ENPARCOURS)).thenReturn(Collections.emptyList());
+    void getAllTourneeByEtatOrReferenceJourneeFound(){
+        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENPARCOURS,null)).thenReturn(Collections.emptyList());
 
         // When
         ResponseEntity<String> response = template.getForEntity("/api/v1/tournees?etat=ENPARCOURS", String.class);
@@ -52,11 +52,11 @@ public class TourneeControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
     @Test
-    void getAllTourneeByEtatNotFound(){
+    void getAllTourneeByEtatOrReferenceJourneeNotFound(){
          final  HttpHeaders headers = new HttpHeaders();
          final Map<String, Object> urlParams = new HashMap<>();
          urlParams.put("journee", "il n'existe aucune journée qui a MN comme etat");
-        when(tourneeComponent.findAllTourneesByEtat(EtatsDeTournee.ENPARCOURS)).thenReturn(Collections.emptyList());
+        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENPARCOURS,null)).thenReturn(Collections.emptyList());
 
         // When
         ResponseEntity<NotFoundErrorResponse> response = template.exchange("/api/tournees?etat=MN",
