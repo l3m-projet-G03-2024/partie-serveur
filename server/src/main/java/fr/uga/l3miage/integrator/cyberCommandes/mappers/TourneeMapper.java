@@ -2,6 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.mappers;
 
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,6 +16,8 @@ public interface TourneeMapper {
     @Mapping(target = "etatsDeTournee", source = "etat") 
     TourneeResponseDTO toTourneeResponseDTO(TourneeEntity tourneeEntity);
     List<TourneeResponseDTO> toTourneeResponseDTO(List<TourneeEntity> tourneeEntities);
+
+    TourneeEntity toEntity(TourneeCreationRequest tourneeCreationRequest);
     
 
 }

@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JourneeRepository extends JpaRepository<JourneeEntity, String> {
+    JourneeEntity findByReference(String refJournee);
 }
 
