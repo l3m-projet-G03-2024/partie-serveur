@@ -1,42 +1,67 @@
 package fr.uga.l3miage.integrator.cyberVitrine.contollers;
 
+import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
+import fr.uga.l3miage.integrator.cyberVitrine.controllers.CommandeController;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.when;
 
 @AutoConfigureTestDatabase
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@AutoConfigureWebTestClient
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,properties = "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect")
 public class CommandeControllerTest {
     @Autowired
-    private CommandeComponent commandeComponent;
-    @MockBean
+    private TestRestTemplate testRestTemplate;
+
+    @Autowired
     private CommandeRepository commandeRepository;
+
+    @SpyBean
+    private CommandeComponent commandeComponent;
+
+    @SpyBean
+    private CommandeController commandeController;
+
+   @AfterEach
+   public void clear() {
+       commandeRepository.deleteAll();
+   }
 
     @Test
     void getAllCommandeNotFound() {
 
-        // Given
-        when(commandeRepository.findAll()).thenReturn(Collections.emptyList());
 
-        // then-when
-        List<CommandeEntity> result = commandeComponent.findAllCommandes();
-        List<CommandeEntity> result2 = commandeComponent.findCommandByEtat(EtatsDeCommande.PLANIFIEE);
-        assertTrue(result.isEmpty(), "La liste des commandes doit être vide");
-        assertTrue(result2.isEmpty(), "La liste des commandes doit être vide");
+        // Given
+        final HttpHeaders headers = new HttpHeaders();
+        final Map<String,Object> urlParams = new HashMap<>();
+        urlParams.put("commandes","il n'existe pas de commande sans état");
+
+
+        when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
+        // when
+        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes?etat",String.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
 
     }
 

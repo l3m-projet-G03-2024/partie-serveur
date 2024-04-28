@@ -16,8 +16,8 @@ import java.util.List;
 public interface CommandeEndPoints {
 
 
-    @ApiResponse(responseCode = "200",description = "liste de commande envoyer avec succès")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de commande n'a pas été trouvé")
+    @ApiResponse(responseCode = "200",description = "liste de commande envoyée avec succès")
+    @ApiResponse(responseCode = "404", description = "Aucune commande trouvée pour l'état spécifié")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     List<CommandeResponseDTO> getCommandes(@RequestParam(required = false) EtatsDeCommande etat);
