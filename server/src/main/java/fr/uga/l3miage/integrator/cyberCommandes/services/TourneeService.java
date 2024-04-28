@@ -2,6 +2,10 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import org.springframework.stereotype.Service;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
@@ -18,6 +22,7 @@ import lombok.AllArgsConstructor;
 public class TourneeService {
     private final TourneeComponent tourneeComponent;
     private final TourneeMapper tourneeMapper;
+    private final JourneeRepository journeeRepository;
 
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
         try {
@@ -36,6 +41,26 @@ public class TourneeService {
             throw new NotFoundEntityRestException(e.getMessage());
         }
 
+    }
+
+    public TourneeCreationResponseDTO createTournee(List<TourneeCreationRequest> tournees,String refJournee) {
+        try {
+            JourneeEntity journee = journeeRepository.findByReference(refJournee);
+            if (journee == null) {
+                new TourneeCreationResponseDTO(false,"Journée avec la réference "+refJournee+" non trouvée");
+            }
+            for (TourneeCreationRequest tourneeCreationRequest : tournees) {
+                TourneeEntity tourneeEntity = tourneeMapper.toEntity(tourneeCreationRequest);
+                tourneeEntity.setReference(journee.getReference());
+                tourneeComponent.createTournee(tourneeEntity);
+            }
+            return new TourneeCreationResponseDTO(true,"Toutes les tournées ont été créés avec succès");
+
+        }
+        catch (Exception e) {
+            return new TourneeCreationResponseDTO(false,"Erreur lors de la création des tournées: " + e.getMessage());
+
+        }
     }
 
 }

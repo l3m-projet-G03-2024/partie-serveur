@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.models;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import javax.persistence.*;
 

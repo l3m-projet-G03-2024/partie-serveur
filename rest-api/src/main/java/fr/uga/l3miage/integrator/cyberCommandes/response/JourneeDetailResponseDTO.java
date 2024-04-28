@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.response;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
@@ -18,7 +19,7 @@ public class JourneeDetailResponseDTO {
     private EtatsDeJournee etat;
 
     @Schema(description = "date de la journéee")
-    private Date date;
+    private LocalDate date;
 //pour ce premier increment pas necessairement besoin de calculer ces attributs
 // Pour le sécond incrément on ajoutera les information manquantes
     @Schema(description = "somme des distances a parcourir dans la journée")

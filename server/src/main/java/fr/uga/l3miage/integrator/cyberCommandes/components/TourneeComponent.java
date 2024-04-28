@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -21,8 +22,12 @@ public class TourneeComponent {
     }
 
     public List<TourneeEntity> findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
-        return tourneeRepository.findAllByEtatOrJourneeReference(etatsDeTournee,referenceJournee);
+        return tourneeRepository.findAllByEtatOrReference(etatsDeTournee,referenceJournee);
 
+    }
+
+    public TourneeEntity createTournee(TourneeEntity tourneeEntity) {
+        return tourneeRepository.save(tourneeEntity);
     }
 
     
