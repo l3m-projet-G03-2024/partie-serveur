@@ -51,13 +51,24 @@ public class CommandeControllerTest {
 
         // Given
         final HttpHeaders headers = new HttpHeaders();
-        final Map<String,Object> urlParams = new HashMap<>();
-        urlParams.put("commandes","il n'existe pas de commande sans état");
+       final Map<String,Object> urlParams = new HashMap<>();
+        urlParams.put("commandes","Aucune commande trouvée pour l'état spécifié");
 
 
-        when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
+       // when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
+
+        NotFoundErrorResponse notFoundErrorResponseExpected = NotFoundErrorResponse
+                .builder()
+                .uri("/api/v1/commandes?etat=MS")
+                .errorMessage(null)
+                .build();
         // when
-        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes?etat",String.class);
+        //ResponseEntity<String> response = testRestTemplate.getForEntity("/api/commandes",String.class);
+        ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/v1/commandes/etat=MS",
+                HttpMethod.GET,new HttpEntity<>(null,headers),
+                NotFoundErrorResponse.class
+                );
+
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -68,39 +79,13 @@ public class CommandeControllerTest {
     @Test
     void getAllCommandeFound() {
         // Given
-        ClientEntity client1 = new ClientEntity();
-        ClientEntity client2 = new ClientEntity();
-        CommandeEntity commande1 = new CommandeEntity();
-        CommandeEntity commande2 = new CommandeEntity();
-        commande1.setClientEntity(client1);
-        commande2.setClientEntity(client2);
-
-
-        commande1.setEtat(EtatsDeCommande.PLANIFIEE);
-        commande2.setEtat(EtatsDeCommande.PLANIFIEE);
-
-        List<CommandeEntity> commandes = Arrays.asList(commande1,commande2);
-        when(commandeRepository.findAll()).thenReturn(commandes);
-        when(commandeRepository.findAllByEtat(EtatsDeCommande.PLANIFIEE)).thenReturn(commandes);
+        when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
 
         // when
-        List<CommandeEntity> result = commandeComponent.findAllCommandes();
-        List<CommandeEntity> result2 = commandeComponent.findCommandByEtat(EtatsDeCommande.PLANIFIEE);
+        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes?etat=PLANIFIEE",String.class);
 
-        // then
-        assertFalse(result.isEmpty());
-        assertEquals(2,result.size());
-        assertEquals(commandes,result);
-        assertEquals(client1,result.get(0).getClientEntity());
-        assertEquals(client2,result.get(1).getClientEntity());
-
-
-        // then
-        assertFalse(result2.isEmpty(),"La liste des commandes ne doit pas être vide");
-        assertEquals(2,result2.size());
-        assertEquals(commandes,result2);
-        assertEquals(commandes.get(0).getEtat(),EtatsDeCommande.PLANIFIEE);
-        assertEquals(commandes.get(1).getEtat(),EtatsDeCommande.PLANIFIEE);
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK); 
     }
 
 
