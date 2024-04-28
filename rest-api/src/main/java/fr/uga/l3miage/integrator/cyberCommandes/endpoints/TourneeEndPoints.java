@@ -26,14 +26,12 @@ public interface TourneeEndPoints {
     @GetMapping("")
     List<TourneeResponseDTO> getAllTournee(@RequestParam(required = false) EtatsDeTournee etat, @RequestParam(required = false) String referenceJournee);
 
-
     @Operation(description = "crée des tournées pour une journée")
     @ApiResponse(responseCode = "200",description = "les tournées ont été créés")
     @ApiResponse(responseCode = "404",description ="les tournées n'ont pas été créés")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping()
     TourneeCreationResponseDTO createTournee(@RequestBody List<TourneeCreationRequest> tourneeCreationRequests,@RequestParam String refJournee);
-
 
 
 
