@@ -9,19 +9,23 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
-import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -30,7 +34,9 @@ public class JourneeServiceTest {
     private JourneeService journeeService;
     @MockBean
     private JourneeComponent journeeComponent;
-    
+
+    @SpyBean
+    private JourneeMapper journeeMapper;
 
     // Test de recuperation d'une journée via son id
     @Test
@@ -75,4 +81,23 @@ public class JourneeServiceTest {
         assertEquals(2, journeeEntities.size());
     }
 
+    @Test
+    void createJournee(){
+        //Given
+        JourneeCreationRequest journeeRequest = JourneeCreationRequest
+                .builder()
+                .reference("test")
+                .date(LocalDate.of(2024, 04, 29))
+                .build();
+
+        JourneeEntity journeeEntity = journeeMapper.toEntity(journeeRequest);
+
+        //When
+        when(journeeComponent.createJourneeEntity(any(JourneeEntity.class))).thenReturn(journeeEntity);
+        JourneeDetailResponseDTO responseExpected = journeeMapper.toJourneeDetailResponseDTO(journeeEntity);
+        JourneeDetailResponseDTO response = journeeService.createJournee(journeeRequest);
+
+        //Then
+        assertThat(response).usingRecursiveComparison().isEqualTo(responseExpected);
+    }
 }
