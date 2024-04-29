@@ -85,7 +85,7 @@ public class CommandeControllerTest {
         ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes?etat=PLANIFIEE",String.class);
 
         // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK); 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
 

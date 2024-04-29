@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Schema(description = "Representation d'une livraison")
 public class LivraisonResponseDTO {
