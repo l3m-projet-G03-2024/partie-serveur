@@ -4,6 +4,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -11,6 +12,6 @@ import java.util.Date;
 @Builder
 public class JourneeResponseDTO {
     private String reference;
-    private Date date;
+    private LocalDate date;
     private EtatsDeJournee etat;
 }

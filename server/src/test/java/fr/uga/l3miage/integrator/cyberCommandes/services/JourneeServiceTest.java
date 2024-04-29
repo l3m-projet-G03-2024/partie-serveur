@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -68,7 +69,7 @@ public class JourneeServiceTest {
         // Configuration de la Mock pour retourner la liste simulée l'orsque la methode findAllJournee est appelé
         when(journeeComponent.findAllJournees()).thenReturn(journeeEntities);
 
-        List<JourneeResponseDTO> journeeResponseDTOs = journeeService.getAllJournees();
+        List<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.getAllJournees();
         // Verification du resultat
         assertNotNull(journeeResponseDTOs);
         assertEquals(2, journeeEntities.size());

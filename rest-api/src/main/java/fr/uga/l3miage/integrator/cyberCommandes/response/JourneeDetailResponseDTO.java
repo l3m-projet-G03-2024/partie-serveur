@@ -24,7 +24,7 @@ public class JourneeDetailResponseDTO {
 // Pour le sécond incrément on ajoutera les information manquantes
     @Schema(description = "somme des distances a parcourir dans la journée")
     private Double distanceAParcourir;
-    @Schema(description = "montan total de la journée")
+    @Schema(description = "montant total de la journée")
     private Double montant;
 
     // @Schema(description = "temps de retour estimer")
