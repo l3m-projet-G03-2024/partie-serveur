@@ -14,9 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,7 +74,7 @@ public class CommandeServiceTest {
 
         // Configurations et mocks
         when(commandeComponent.findAllCommandes()).thenReturn(commandes);
-        when(commandeMapper.toCommandeResponseDTO(commandes)).thenReturn(Arrays.asList(
+        when(commandeMapper.toCommandesResponseDTO(commandes)).thenReturn(Arrays.asList(
                new CommandeResponseDTO("1ABC",null,null,clientDetailResponseDTO1),
                 new CommandeResponseDTO("1BC",null,null,clientDetailResponseDTO2)
         ));
@@ -115,7 +113,7 @@ public class CommandeServiceTest {
 
         when(commandeComponent.findCommandByEtat(etatsDeCommande)).thenReturn(commandes);
 
-        when(commandeMapper.toCommandeResponseDTO(commandes)).thenReturn(List.of(
+        when(commandeMapper.toCommandesResponseDTO(commandes)).thenReturn(List.of(
                 new CommandeResponseDTO("1ABDR", etatsDeCommande, null, null)
         ));
 
@@ -124,7 +122,7 @@ public class CommandeServiceTest {
         assertEquals(1, result.size(), "devrait renvoyer une commande");
         verify(commandeComponent).findCommandByEtat(etatsDeCommande);
         assertEquals("1ABDR",result.get(0).getReference());
-        verify(commandeMapper,times(2)).toCommandeResponseDTO(commandes);
+        verify(commandeMapper,times(2)).toCommandesResponseDTO(commandes);
 
 
 

@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberVitrine.response;
 
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -33,5 +34,8 @@ public class CommandeResponseDTO {
     private LocalDate dateDeCreation;
 
     @Schema(description = "details necessaires du client")
-    private ClientDetailResponseDTO clientEntity;
+    private ClientDetailResponseDTO client;
+
+    @Schema(description = "référence de la livraison de la commande")
+    private LivraisonResponseDTO livraison ;
 }
