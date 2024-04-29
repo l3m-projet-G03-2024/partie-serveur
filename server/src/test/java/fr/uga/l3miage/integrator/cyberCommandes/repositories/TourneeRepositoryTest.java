@@ -47,7 +47,7 @@ public class TourneeRepositoryTest {
         tourneeRepository.save(tourneeEntity2);
         tourneeRepository.save(tourneeEntity3);
 
-        List<TourneeEntity> tourneeEntities = tourneeRepository.findAllByEtatOrJourneeReference(EtatsDeTournee.ENCHARGEMENT,journee1.getReference());
+        List<TourneeEntity> tourneeEntities = tourneeRepository.findByEtatOrJourneeReference(EtatsDeTournee.ENCHARGEMENT,journee1.getReference());
         
         // On s'attend à recevoir 2 tournées en chargement
         assertEquals( 2, tourneeEntities.size()); 
