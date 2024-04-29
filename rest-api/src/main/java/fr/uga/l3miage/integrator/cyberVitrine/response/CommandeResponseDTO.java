@@ -26,12 +26,12 @@ public class CommandeResponseDTO {
     private String reference;
 
     @Schema(description = "l'état de la commande")
-    private EtatsDeCommande etatDeCommande;
+    private EtatsDeCommande etat;
 
     @NotNull
     @Schema(description = "date de la création de la commande")
     private LocalDate dateDeCreation;
 
     @Schema(description = "details necessaires du client")
-    private ClientDetailResponseDTO client;
+    private ClientDetailResponseDTO clientEntity;
 }

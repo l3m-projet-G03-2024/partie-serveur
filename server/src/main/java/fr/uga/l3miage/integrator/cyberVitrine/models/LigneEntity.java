@@ -21,7 +21,7 @@ public class LigneEntity {
 
     private Integer quantite ;
 
-    private Double montant ;
+    // private Double montant ; à revoir si on va calculer ou pas
 
     @ManyToOne(optional = false)
     private CommandeEntity commandeEntity ;

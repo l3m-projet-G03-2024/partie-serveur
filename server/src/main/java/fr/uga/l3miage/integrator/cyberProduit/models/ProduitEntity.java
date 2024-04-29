@@ -20,6 +20,7 @@ public class ProduitEntity {
     @Column(name = "reference_produit")
     private String reference;
     private String titre;
+    @Column(length = 1000)
     private String description;
     private Double prix;
     @Column(name = "option_montage", nullable = true)
