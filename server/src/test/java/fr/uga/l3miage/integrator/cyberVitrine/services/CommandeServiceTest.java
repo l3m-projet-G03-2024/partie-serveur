@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberVitrine.services;
 
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
@@ -75,8 +76,8 @@ public class CommandeServiceTest {
         // Configurations et mocks
         when(commandeComponent.findAllCommandes()).thenReturn(commandes);
         when(commandeMapper.toCommandesResponseDTO(commandes)).thenReturn(Arrays.asList(
-               new CommandeResponseDTO("1ABC",null,null,clientDetailResponseDTO1),
-                new CommandeResponseDTO("1BC",null,null,clientDetailResponseDTO2)
+               new CommandeResponseDTO("1ABC",null,null,clientDetailResponseDTO1, new LivraisonResponseDTO()),
+                new CommandeResponseDTO("1BC",null,null,clientDetailResponseDTO2, new LivraisonResponseDTO())
         ));
 
         // Exécution
@@ -114,7 +115,7 @@ public class CommandeServiceTest {
         when(commandeComponent.findCommandByEtat(etatsDeCommande)).thenReturn(commandes);
 
         when(commandeMapper.toCommandesResponseDTO(commandes)).thenReturn(List.of(
-                new CommandeResponseDTO("1ABDR", etatsDeCommande, null, null)
+                new CommandeResponseDTO("1ABDR", etatsDeCommande, null, null, new LivraisonResponseDTO())
         ));
 
         List<CommandeResponseDTO> result = commandeService.getCommandes(etatsDeCommande);
