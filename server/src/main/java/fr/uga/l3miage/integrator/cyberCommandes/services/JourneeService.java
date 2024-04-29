@@ -6,14 +6,8 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.BadRequestRestEx
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
-<<<<<<< HEAD
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
-=======
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeDetailRequestDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequestDTO;
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
->>>>>>> 6b3db46 (feat: update journee complet)
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import lombok.RequiredArgsConstructor;
 
