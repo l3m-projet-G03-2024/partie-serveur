@@ -1,15 +1,8 @@
 package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
-
-<<<<<<< HEAD
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 
-
-=======
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeDetailRequestDTO;
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequestDTO;
->>>>>>> 6b3db46 (feat: update journee complet)
 import fr.uga.l3miage.integrator.cyberCommandes.services.JourneeService;
 import fr.uga.l3miage.integrator.cyberCommandes.endpoints.JourneeEndPoints;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +10,6 @@ import org.springframework.stereotype.Controller;
 
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

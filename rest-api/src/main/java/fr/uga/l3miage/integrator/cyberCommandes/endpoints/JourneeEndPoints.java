@@ -52,6 +52,6 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "200", description = "La journée a bien été créée")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("{referenceJournee}")
-    JourneeDetailResponseDTO updateJournee(@PathVariable(name = "referenceJournee") String reference, @RequestBody JourneeUpdateRequestDTO journeeDetailRequestDTO) ;
+    JourneeDetailResponseDTO updateJournee(@PathVariable(name = "referenceJournee") String reference, @RequestBody JourneeUpdateRequestDTO journeeRequestDTO) ;
 
 }
