@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class JourneeUpdateRequestDTO {
+public class JourneeUpdateRequest {
     private final EtatsDeJournee etat;
     private final LocalDate date;
     private final Double distanceAParcourir;

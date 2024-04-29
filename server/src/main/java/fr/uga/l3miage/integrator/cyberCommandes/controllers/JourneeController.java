@@ -2,7 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequestDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.services.JourneeService;
 import fr.uga.l3miage.integrator.cyberCommandes.endpoints.JourneeEndPoints;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class JourneeController implements JourneeEndPoints {
      }
 
      @Override
-    public JourneeDetailResponseDTO updateJournee(String reference, JourneeUpdateRequestDTO journeeUpdate){
+    public JourneeDetailResponseDTO updateJournee(String reference, JourneeUpdateRequest journeeUpdate){
         return journeeService.updateJournee(reference, journeeUpdate);
      }
 

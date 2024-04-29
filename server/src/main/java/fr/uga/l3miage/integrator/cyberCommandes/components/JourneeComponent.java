@@ -1,6 +1,5 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
-import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +7,8 @@ import org.springframework.stereotype.Component;
 
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
-import java.time.LocalDate;
+
 import java.util.List;
-import java.util.Optional;
 
 
 @Component

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-public class JourneeDetailRequestDTO {
+public class JourneeDetailRequest {
     private final String reference;
     private final EtatsDeJournee etat;
     private final LocalDate date;

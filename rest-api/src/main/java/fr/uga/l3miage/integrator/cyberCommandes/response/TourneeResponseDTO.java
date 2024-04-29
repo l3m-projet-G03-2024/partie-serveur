@@ -3,7 +3,6 @@ package fr.uga.l3miage.integrator.cyberCommandes.response;
 import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
-import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
