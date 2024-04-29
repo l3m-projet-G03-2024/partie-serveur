@@ -21,6 +21,7 @@ import java.util.List;
 @CrossOrigin("*")
 public interface JourneeEndPoints {
 
+    @Operation(description = "Listage des journées")
     @ApiResponse(responseCode = "200",description = "liste de journée envoie avec succes")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de journée n'a pas été trouvé")
     @ResponseStatus(HttpStatus.OK)
