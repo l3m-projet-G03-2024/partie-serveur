@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -7,7 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -26,6 +32,10 @@ public class TourneeServiceTest {
     private TourneeService tourneeService;
     @MockBean
     private TourneeComponent tourneeComponent;
+    @MockBean
+    private JourneeRepository journeeRepository;
+    @MockBean
+    private TourneeMapper tourneeMapper;
 
 
     @Test 
@@ -95,6 +105,43 @@ public class TourneeServiceTest {
 
 
     }
+
+    @Test
+    void CreatTouneeSuccess(){
+        TourneeCreationRequest tourneeCreationRequest1 = TourneeCreationRequest.builder()
+                .distance(7.00)
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .reference("T1")
+                .build();
+        TourneeCreationRequest tourneeCreationRequest2 = TourneeCreationRequest.builder()
+                .distance(5.00)
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .reference("T2")
+                .build();
+        List<TourneeCreationRequest> tournees = new ArrayList<>();
+        tournees.add(tourneeCreationRequest1);
+        tournees.add(tourneeCreationRequest2);
+
+        List<TourneeEntity> tourneeEntities = new ArrayList<>();
+        tourneeEntities.add(tourneeMapper.toEntity(tourneeCreationRequest1));
+        tourneeEntities.add(tourneeMapper.toEntity(tourneeCreationRequest2));
+
+        TourneeEntity tourneeEntity = tourneeMapper.toEntity(tourneeCreationRequest1);
+
+        when(tourneeMapper.toEntity(tourneeCreationRequest1)).thenReturn(tourneeEntity);
+        //when(tourneeComponent.createTournees(tourneeEntities)).thenReturn(tourneeEntities);
+
+        TourneeCreationResponseDTO tourneeCreationResponseDTO = TourneeCreationResponseDTO.builder()
+                .message("Toutes les tournées ont été créés avec succès")
+                .success(true)
+                .build();
+
+        TourneeCreationResponseDTO responseExpected = tourneeService.createTournee(tournees,"T1");
+
+        //assertThat(tourneeCreationResponseDTO).usingRecursiveComparison().isEqualTo(responseExpected);
+
+    }
+
 
 
 }
