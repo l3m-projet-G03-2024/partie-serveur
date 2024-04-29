@@ -14,14 +14,14 @@ import java.util.Set;
 @Builder
 @Schema(description = "Representation d'une livraison")
 public class LivraisonResponseDTO {
-    @Schema(description = "Reference de la livraison")
+    @Schema(description = "Reference de la livraison", example = "T2")
     private String reference;
 
 
-    @Schema(description = "L'etat de la livraison")
+    @Schema(description = "L'etat de la livraison", example = "ENPARCOURS")
     private EtatsDeLivraison etat;
 
-    @Schema(description = "l'ordre de livraison")
+    @Schema(description = "l'ordre de livraison", example = "1")
     private Integer ordre;
 
     private Set<CommandeLivraisonResponseDTO> commandeLivraisonResponseDTOS;

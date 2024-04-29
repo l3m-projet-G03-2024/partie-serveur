@@ -30,12 +30,14 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
 public class TourneeServiceTest {
     @Autowired 
     private TourneeService tourneeService;
+
     @MockBean
     private TourneeComponent tourneeComponent;
+
     @MockBean
     private JourneeRepository journeeRepository;
-    @MockBean
-    private TourneeMapper tourneeMapper;
+
+
 
 
     @Test 
@@ -69,9 +71,7 @@ public class TourneeServiceTest {
         // Configuration du mock pour retourner la liste simulée lorsque findAllTournee est appelé
         when(tourneeComponent.findAllTournee()).thenReturn(tourneeEntities);
 
-        // Configuration du mock pour retourner la liste simulée lorsque findAllTourneesByEtat est appelé avec ENCHARGEMENT
-        List<TourneeEntity> tourneesEnChargement = Arrays.asList(tourneeEntity1, tourneeEntity2);
-        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENCHARGEMENT,null)).thenReturn(tourneesEnChargement);
+        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENCHARGEMENT,null)).thenReturn(List.of(tourneeEntity1, tourneeEntity2));
 
         when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(null,journee1.getReference())).thenReturn(List.of(tourneeEntity1));
 
@@ -107,41 +107,52 @@ public class TourneeServiceTest {
     }
 
     @Test
-    void CreatTouneeSuccess(){
+    void CreatTourneeSuccess() {
+        // On cree une tournée creation request avec une distance, une référence et un état
         TourneeCreationRequest tourneeCreationRequest1 = TourneeCreationRequest.builder()
                 .distance(7.00)
                 .etat(EtatsDeTournee.EFFECTUEE)
                 .reference("T1")
                 .build();
+        // On cree une tournée creation avec une référence et un état
         TourneeCreationRequest tourneeCreationRequest2 = TourneeCreationRequest.builder()
                 .distance(5.00)
                 .etat(EtatsDeTournee.EFFECTUEE)
                 .reference("T2")
                 .build();
-        List<TourneeCreationRequest> tournees = new ArrayList<>();
-        tournees.add(tourneeCreationRequest1);
-        tournees.add(tourneeCreationRequest2);
-
-        List<TourneeEntity> tourneeEntities = new ArrayList<>();
-        tourneeEntities.add(tourneeMapper.toEntity(tourneeCreationRequest1));
-        tourneeEntities.add(tourneeMapper.toEntity(tourneeCreationRequest2));
-
-        TourneeEntity tourneeEntity = tourneeMapper.toEntity(tourneeCreationRequest1);
-
-        when(tourneeMapper.toEntity(tourneeCreationRequest1)).thenReturn(tourneeEntity);
-        //when(tourneeComponent.createTournees(tourneeEntities)).thenReturn(tourneeEntities);
-
-        TourneeCreationResponseDTO tourneeCreationResponseDTO = TourneeCreationResponseDTO.builder()
-                .message("Toutes les tournées ont été créés avec succès")
-                .success(true)
+        // On crée une liste de requêtes de création de tournée
+        List<TourneeCreationRequest> tourneeCreationRequests = Arrays.asList(tourneeCreationRequest1,
+                tourneeCreationRequest2);
+        // On crée une journée
+        JourneeEntity journee1 = JourneeEntity.builder()
+                .reference("1Ab")
                 .build();
 
-        TourneeCreationResponseDTO responseExpected = tourneeService.createTournee(tournees,"T1");
+        TourneeEntity tourneeEntity1 = TourneeEntity.builder()
+                .reference("T1")
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .distance(5.00)
+                .build();
 
-        //assertThat(tourneeCreationResponseDTO).usingRecursiveComparison().isEqualTo(responseExpected);
+        TourneeEntity tourneeEntity2 = TourneeEntity.builder()
+                .distance(5.00)
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .reference("T2")
+                .build();
+
+
+        when(journeeRepository.findByReference(journee1.getReference())).thenReturn(journee1); // On retourne la journée simulée lorsque findByReference est appelé
+        when(tourneeComponent.createTournees(List.of(tourneeEntity1, tourneeEntity2))).thenReturn(List.of(tourneeEntity1, tourneeEntity2));
+
+        TourneeCreationResponseDTO tourneeCreationResponseDTO = tourneeService.createTournee(
+                tourneeCreationRequests,
+                journee1.getReference()
+        ); // On appelle la méthode à tester
+
+
+        assertThat(tourneeCreationResponseDTO.isSuccess()).isTrue();
+        assertThat(tourneeCreationResponseDTO.getMessage()).isEqualTo("Toutes les tournées ont été créés avec succès");
 
     }
-
-
 
 }
