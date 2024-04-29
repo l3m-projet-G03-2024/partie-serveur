@@ -2,6 +2,7 @@ package fr.uga.l3miage.integrator.cyberVitrine.components;
 
 
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,15 @@ public class CommandeComponent {
 
     public List<CommandeEntity> findCommandByEtat(EtatsDeCommande etatDeCommande) {
         return commandeRepository.findAllByEtat(etatDeCommande);
+    }
+
+    public CommandeEntity getCommandeByReference(String reference) throws CommandeEntityNotFoundException {
+        return commandeRepository.findById(reference)
+                .orElseThrow(() -> new CommandeEntityNotFoundException(String.format(reference, "La commande [%s] n'a pas été trouvée", reference))) ;
+    }
+
+    public CommandeEntity updateCommande(CommandeEntity commandeEntity) {
+        return commandeRepository.save(commandeEntity) ;
     }
 
 }
