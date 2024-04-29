@@ -1,15 +1,13 @@
 package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
-import static org.mockito.Mockito.when;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-
-import org.junit.jupiter.api.AfterEach;
+import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -17,59 +15,46 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.*;
 
-
-
-import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
-
-import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import java.time.LocalDate;
+import java.util.Date;
 
 @AutoConfigureTestDatabase
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, properties ="spring.jpa.database-platform=org.hibernate.dialect.H2Dialect")
 @AutoConfigureWebClient
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect")
 public class JourneeControllerTest {
     @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired 
+    private TestRestTemplate testRestTemplate;
+    @Autowired
     private JourneeRepository journeeRepository;
     @SpyBean
     private JourneeComponent journeeComponent;
 
-    @AfterEach
-    void clear(){
-        this.journeeRepository.deleteAll();
-    }
-// Test a corriger
-   /*  @Test
-    void getJourneeByIdFound(){
-        // Given
-        try {
-            when(journeeComponent.getJourneeById("1J")).thenReturn(new JourneeEntity());
-        } catch (JourneeNotFoundException e) {
-            // Handle the exception here if needed
-        }
 
-        // When
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/v1/tournees/{reference}", String.class, "1J");
 
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }*/
-    /*@Test
-    void getNotFoundJournee() {
-        // Given
+    @Test
+    void canCreateJournee(){
+        //Given
         final HttpHeaders headers = new HttpHeaders();
-        final Map<String, Object> urlParams = new HashMap<>();
-        urlParams.put("reference", "La journée n'existe pas");
-    
-        // Mocking the behavior of journeeComponent to return null
-        when(journeeComponent.getJourneeById("La journée n'existe pas")).thenReturn(null);
-    
-        // When
-        ResponseEntity<String> response = restTemplate.exchange("/api/v1/journee/{reference}", HttpMethod.GET, new HttpEntity<>(null, headers), String.class, urlParams);
-    
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }*/
-    
+
+        final JourneeCreationRequest journeeCreationRequest = JourneeCreationRequest
+                .builder()
+                .reference("test")
+                .date(LocalDate.of(2024, 04, 29))
+                .build();
+
+        //When
+        ResponseEntity<JourneeResponseDTO> request = testRestTemplate
+                .exchange("/api/v1/journees",
+                        HttpMethod.POST,
+                        new HttpEntity<>(journeeCreationRequest, headers),
+                        JourneeResponseDTO.class);
+
+        //Then
+        assertThat(request.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(journeeRepository.count()).isEqualTo(1);
+
+    }
+
 }

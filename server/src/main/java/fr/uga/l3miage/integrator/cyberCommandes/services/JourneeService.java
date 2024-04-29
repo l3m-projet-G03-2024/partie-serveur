@@ -6,8 +6,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.BadRequestRestEx
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -20,8 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JourneeService {
     private final JourneeComponent journeeComponent;
-    private final JourneeMapper journeeMapper ;
-
+    private final JourneeMapper journeeMapper;
 
     public List<JourneeDetailResponseDTO> getAllJournees(){
         List<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();
@@ -34,7 +32,7 @@ public class JourneeService {
         journeeComponent.deleteJourneeById(reference);
     }
 
-    public JourneeDetailResponseDTO createJournee(JourneeRequest journeeRequest){
+    public JourneeDetailResponseDTO createJournee(JourneeCreationRequest journeeRequest){
         try{
             JourneeEntity journeeEntity = journeeMapper.toEntity(journeeRequest) ;
             journeeEntity.setEtat(EtatsDeJournee.NONPLANIFIEE) ;

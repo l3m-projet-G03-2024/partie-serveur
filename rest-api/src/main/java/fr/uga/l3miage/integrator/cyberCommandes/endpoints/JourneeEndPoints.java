@@ -1,7 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.CreateJourneeErrorResponse;
-import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,7 +32,7 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "409", description = "Conflit avec l'état actuel de la ressource", content = @Content(schema = @Schema(implementation = CreateJourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    JourneeDetailResponseDTO createJournee(@RequestBody JourneeRequest journeeRequest) ;
+    JourneeDetailResponseDTO createJournee(@RequestBody JourneeCreationRequest journeeRequest) ;
 
     @ApiResponse(responseCode = "200",description = "liste de journée supprime avec succes")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la journée n'a pas été supprimée")
