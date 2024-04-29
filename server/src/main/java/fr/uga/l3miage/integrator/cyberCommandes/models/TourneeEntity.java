@@ -22,6 +22,7 @@ public class TourneeEntity {
     @Column(name = "reference_tournee")
     private String reference;
 
+    @Enumerated(EnumType.STRING)
     private EtatsDeTournee etat;
 
     private Integer tdrTheorique;

@@ -26,8 +26,8 @@ public class TourneeComponent {
 
     }
 
-    public TourneeEntity createTournee(TourneeEntity tourneeEntity) {
-        return tourneeRepository.save(tourneeEntity);
+    public List<TourneeEntity> createTournees(List<TourneeEntity> tourneeEntities) {
+        return tourneeRepository.saveAll(tourneeEntities);
     }
 
     
