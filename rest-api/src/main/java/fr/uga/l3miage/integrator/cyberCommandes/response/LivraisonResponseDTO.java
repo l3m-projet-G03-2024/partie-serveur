@@ -18,7 +18,6 @@ public class LivraisonResponseDTO {
     private String reference;
 
 
-
     @Schema(description = "L'etat de la livraison")
     private EtatsDeLivraison etat;
 

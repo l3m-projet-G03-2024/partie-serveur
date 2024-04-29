@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -49,16 +50,18 @@ public class TourneeService {
 
     public TourneeCreationResponseDTO createTournee(List<TourneeCreationRequest> tournees,String refJournee) {
         try {
+            List<TourneeEntity> tourneeEntities = new ArrayList<>();
             JourneeEntity journee = journeeRepository.findByReference(refJournee);
             if (journee == null) {
                 new TourneeCreationResponseDTO(false,"Journée avec la réference "+refJournee+" non trouvée");
             }
             for (TourneeCreationRequest tourneeCreationRequest : tournees) {
                 TourneeEntity tourneeEntity = tourneeMapper.toEntity(tourneeCreationRequest);
-                tourneeEntity.setReference(journee.getReference());
-                tourneeComponent.createTournee(tourneeEntity);
-                System.out.println(tourneeEntity.toString());
+                tourneeEntity.setJournee(journee);
+                tourneeEntities.add(tourneeEntity);
+
             }
+            tourneeComponent.createTournees(tourneeEntities);
 
             return new TourneeCreationResponseDTO(true,"Toutes les tournées ont été créés avec succès");
 

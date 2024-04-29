@@ -15,6 +15,8 @@ public interface TourneeMapper {
     @Mapping(target = "livraisonEntities", source = "livraisons") 
     @Mapping(target = "etatsDeTournee", source = "etat") 
     TourneeResponseDTO toTourneeResponseDTO(TourneeEntity tourneeEntity);
+
+
     List<TourneeResponseDTO> toTourneeResponseDTO(List<TourneeEntity> tourneeEntities);
 
     TourneeEntity toEntity(TourneeCreationRequest tourneeCreationRequest);

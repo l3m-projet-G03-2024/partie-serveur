@@ -28,6 +28,7 @@ public class JourneeEntity {
     @Column(name = "reference_journee")
     private String reference;
 
+    @Enumerated(EnumType.STRING)
     private EtatsDeJournee etat;
     
     private LocalDate date;
