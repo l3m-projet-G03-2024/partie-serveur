@@ -25,14 +25,14 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de journée n'a pas été trouvé")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
-    List<JourneeResponseDTO> getAllJournees();
+    List<JourneeDetailResponseDTO> getAllJournees();
 
     @Operation(description = "Création d'une journée")
     @ApiResponse(responseCode = "201", description = "La journée a bien été créée")
     @ApiResponse(responseCode = "409", description = "Conflit avec l'état actuel de la ressource", content = @Content(schema = @Schema(implementation = CreateJourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    JourneeResponseDTO createJournee(@RequestBody JourneeRequest journeeRequest) ;
+    JourneeDetailResponseDTO createJournee(@RequestBody JourneeRequest journeeRequest) ;
 
     @ApiResponse(responseCode = "200",description = "liste de journée supprime avec succes")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la journée n'a pas été supprimée")

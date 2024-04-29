@@ -23,10 +23,10 @@ public class JourneeService {
     private final JourneeMapper journeeMapper ;
 
 
-    public List<JourneeResponseDTO> getAllJournees(){
+    public List<JourneeDetailResponseDTO> getAllJournees(){
         List<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();
-        List<JourneeResponseDTO> journeeResponseDTOS = new ArrayList<>();
-        journeeResponseDTOS = journeeMapper.toJourneeResponseDTOS(journeeEntities);
+        List<JourneeDetailResponseDTO> journeeResponseDTOS = new ArrayList<>();
+        journeeResponseDTOS = journeeMapper.toJourneeDetailResponseDTOS(journeeEntities);
         return journeeResponseDTOS;
     }
 
@@ -34,11 +34,11 @@ public class JourneeService {
         journeeComponent.deleteJourneeById(reference);
     }
 
-    public JourneeResponseDTO createJournee(JourneeRequest journeeRequest){
+    public JourneeDetailResponseDTO createJournee(JourneeRequest journeeRequest){
         try{
             JourneeEntity journeeEntity = journeeMapper.toEntity(journeeRequest) ;
             journeeEntity.setEtat(EtatsDeJournee.NONPLANIFIEE) ;
-            return journeeMapper.toJourneeResponseDTO(journeeComponent.createJourneeEntity(journeeEntity)) ;
+            return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.createJourneeEntity(journeeEntity)) ;
         } catch (Exception e) {
             throw new BadRequestRestException(e.getMessage()) ;
         }

@@ -10,11 +10,12 @@ import java.util.List;
 
 @Mapper
 public interface JourneeMapper {
-    List<JourneeResponseDTO> toJourneeResponseDTOS(List<JourneeEntity> journeeEntities);
+    List<JourneeDetailResponseDTO> toJourneeDetailResponseDTOS(List<JourneeEntity> journeeEntities);
     public JourneeDetailResponseDTO toJourneeDetailResponseDTO(JourneeEntity journeeEntity);
 
     JourneeEntity toEntity(JourneeRequest journeeRequest) ;
 
     JourneeResponseDTO toJourneeResponseDTO(JourneeEntity journeeEntity) ;
-    public JourneeDetailResponseDTO toJourneeDeatilResponseDTO(JourneeEntity journeeEntity);
+
+
 }

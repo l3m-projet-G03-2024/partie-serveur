@@ -18,7 +18,7 @@ import java.util.List;
 public class JourneeController implements JourneeEndPoints {
     private final JourneeService journeeService;
     @Override
-    public List<JourneeResponseDTO> getAllJournees(){
+    public List<JourneeDetailResponseDTO> getAllJournees(){
         return journeeService.getAllJournees();
     }
     @Override
@@ -27,7 +27,7 @@ public class JourneeController implements JourneeEndPoints {
     }
 
     @Override
-    public JourneeResponseDTO createJournee(JourneeRequest journeeRequest){
+    public JourneeDetailResponseDTO createJournee(JourneeRequest journeeRequest){
         return journeeService.createJournee(journeeRequest) ;
     }
 

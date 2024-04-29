@@ -27,12 +27,16 @@ public class TourneeService {
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
         try {
 
-            List<TourneeEntity> tourneeEntities;
+            List<TourneeEntity> tourneeEntities = null;
 
-            if (etatsDeTournee == null && referenceJournee == null) {
-                tourneeEntities = tourneeComponent.findAllTournee();
-            } else {
+            if (etatsDeTournee != null || referenceJournee != null ) {
                 tourneeEntities = tourneeComponent.findAllTourneesByEtatOrReferenceJournee(etatsDeTournee, referenceJournee);
+                System.out.println("STEP 1 CA MARCHE");
+
+            }
+            if (etatsDeTournee == null && referenceJournee == null ){
+                tourneeEntities = tourneeComponent.findAllTournee();
+                System.out.println("STEP 2 CA MARCHE");
             }
 
             return tourneeMapper.toTourneeResponseDTO(tourneeEntities);
@@ -53,7 +57,9 @@ public class TourneeService {
                 TourneeEntity tourneeEntity = tourneeMapper.toEntity(tourneeCreationRequest);
                 tourneeEntity.setReference(journee.getReference());
                 tourneeComponent.createTournee(tourneeEntity);
+                System.out.println(tourneeEntity.toString());
             }
+
             return new TourneeCreationResponseDTO(true,"Toutes les tournées ont été créés avec succès");
 
         }

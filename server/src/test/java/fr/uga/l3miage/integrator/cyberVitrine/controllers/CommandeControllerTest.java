@@ -1,11 +1,7 @@
-package fr.uga.l3miage.integrator.cyberVitrine.contollers;
+package fr.uga.l3miage.integrator.cyberVitrine.controllers;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
-import fr.uga.l3miage.integrator.cyberVitrine.controllers.CommandeController;
-import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
-import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
-import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
