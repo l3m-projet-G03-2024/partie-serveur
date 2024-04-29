@@ -121,7 +121,7 @@ public class CommandeServiceTest {
 
         List<CommandeResponseDTO> result = commandeService.getCommandes(etatsDeCommande);
 
-        assertEquals(1, result.size(), "Should return one commande");
+        assertEquals(1, result.size(), "devrait renvoyer une commande");
         verify(commandeComponent).findCommandByEtat(etatsDeCommande);
         assertEquals("1ABDR",result.get(0).getReference());
         verify(commandeMapper,times(2)).toCommandeResponseDTO(commandes);
