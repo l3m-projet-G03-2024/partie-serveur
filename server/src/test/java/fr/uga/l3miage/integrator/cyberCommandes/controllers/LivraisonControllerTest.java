@@ -36,7 +36,7 @@ public class LivraisonControllerTest {
     private LivraisonComponent livraisonComponent;
 
     @AfterEach
-    public void clear(){
+    public void clear() {
         this.livraisonRepository.deleteAll();
     }
 
@@ -53,35 +53,19 @@ public class LivraisonControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
     }
-    /*void getAllTourneeByEtatOrReferenceJourneeNotFound(){
-         final  HttpHeaders headers = new HttpHeaders();
-         final Map<String, Object> urlParams = new HashMap<>();
-         urlParams.put("journee", "il n'existe aucune journée qui a MN comme etat");
-        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENPARCOURS,null)).thenReturn(Collections.emptyList());
+
+    @Test
+    void getLivraisonNotFound() {
+        final HttpHeaders headers = new HttpHeaders();
+        final Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("etat", "il n'existe aucune livraison qui a MN comme etat");
+        when(livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.EFFECTUEE)).thenReturn(Collections.emptyList());
 
         // When
-        ResponseEntity<NotFoundErrorResponse> response = template.exchange("/api/tournees?etat=MN",
+        ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/livraisons/MN",
                 HttpMethod.GET, new HttpEntity<>(null, headers), NotFoundErrorResponse.class, urlParams);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }*/
-
-    @Test
-    void getLivraisonNotFound() {
-        final  HttpHeaders headers = new HttpHeaders();
-        final Map<String, Object> urlParams = new HashMap<>();
-
-        urlParams.put("livraisons", "il n'existe aucune livaison qui a EM comme etat");
-        when(livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.EFFECTUEE)).thenReturn(Collections.emptyList());
-
-        //when
-
-        ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/livraisons?etat=MP",
-                HttpMethod.GET, new HttpEntity<>(null, headers), NotFoundErrorResponse.class, urlParams);
-
-        //Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
     }
 }
