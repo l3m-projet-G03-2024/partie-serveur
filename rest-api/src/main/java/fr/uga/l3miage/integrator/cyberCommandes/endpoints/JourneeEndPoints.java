@@ -2,7 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.CreateJourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -46,4 +46,11 @@ public interface JourneeEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{reference}")
     JourneeDetailResponseDTO getJourneeById(@PathVariable String reference);
+
+    @Operation(description = "Update d'une journée")
+    @ApiResponse(responseCode = "200", description = "La journée a bien été créée")
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("{referenceJournee}")
+    JourneeDetailResponseDTO updateJournee(@PathVariable(name = "referenceJournee") String reference, @RequestBody JourneeUpdateRequestDTO journeeDetailRequestDTO) ;
+
 }

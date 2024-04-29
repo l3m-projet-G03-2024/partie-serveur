@@ -6,10 +6,18 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.BadRequestRestEx
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
+<<<<<<< HEAD
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
+=======
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeDetailRequestDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequestDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
+>>>>>>> 6b3db46 (feat: update journee complet)
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import lombok.RequiredArgsConstructor;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,5 +56,26 @@ public class JourneeService {
         } catch (Exception e) {
             throw new NotFoundEntityRestException(e.getMessage());
         }   
+    }
+
+    @SneakyThrows
+    public JourneeDetailResponseDTO updateJournee(String reference, JourneeUpdateRequestDTO journeeUpdate){
+        JourneeEntity journeeExist = journeeComponent.getJourneeById(reference);
+        if (journeeUpdate.getDate() != null){
+            journeeExist.setDate(journeeUpdate.getDate());
+        }
+        if (journeeUpdate.getEtat() != null){
+            journeeExist.setEtat(journeeUpdate.getEtat());
+        }
+        if (journeeUpdate.getMontant() != null){
+            journeeExist.setMontant(journeeUpdate.getMontant());
+        }
+        if(journeeUpdate.getTdmTheorique() != null){
+            journeeExist.setTdmTheorique(journeeUpdate.getTdmTheorique());
+        }
+        if(journeeUpdate.getDistanceAParcourir() !=  null){
+            journeeExist.setDistanceAParcourir(journeeUpdate.getDistanceAParcourir());
+        }
+        return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.updateJournee(journeeExist));
     }
 }

@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
+import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @Component
@@ -30,5 +33,9 @@ public class JourneeComponent {
         return journeeRepository.findById(reference)
                 .orElseThrow(() -> new JourneeNotFoundException(String.format(reference, "La journée [%s] n'a pas été trouvé",reference)));
     }
-    
+
+    public JourneeEntity updateJournee(JourneeEntity journee){
+        return journeeRepository.save(journee);
+    }
+
 }
