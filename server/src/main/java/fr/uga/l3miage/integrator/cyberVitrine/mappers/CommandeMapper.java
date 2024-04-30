@@ -17,7 +17,6 @@ public interface CommandeMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCommandeFromDTO(CommandeUpdatingRequest commandeUpdatingRequest, @MappingTarget CommandeEntity commandeEntity) ;
 
-    @Mapping(source = "etat", target = "etatDeCommande")
     @Mapping(source = "clientEntity", target = "client")
     @Mapping(source = "livraisonEntity", target = "livraison")
     CommandeResponseDTO toCommandeResponseDTO(CommandeEntity commandeEntity) ;
