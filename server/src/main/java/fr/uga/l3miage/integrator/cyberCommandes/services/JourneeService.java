@@ -3,7 +3,9 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.BadRequestRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.EntityNotDeletedRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
@@ -39,6 +41,9 @@ public class JourneeService {
         }catch (NotFoundEntityRestException e){
             throw new NotFoundEntityRestException(e.getMessage());
         }
+        catch (EntityNotDeletedRestException e){
+            throw new EntityNotDeletedRestException(e.getMessage());
+        }
 
     }
 
@@ -65,8 +70,11 @@ public class JourneeService {
             JourneeEntity journeeExist = journeeComponent.getJourneeById(reference);
             journeeMapper.updateJourneeFromDTO(journeeUpdate, journeeExist);
             return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.updateJournee(journeeExist));
-        }catch (Exception e){
+        }catch (BadRequestRestException e){
             throw new BadRequestRestException(e.getMessage());
+        } catch (JourneeNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
     }
 }
