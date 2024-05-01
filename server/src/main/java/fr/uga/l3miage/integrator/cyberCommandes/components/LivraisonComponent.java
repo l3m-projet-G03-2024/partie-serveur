@@ -4,24 +4,20 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonEn
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
+
+
 import org.springframework.stereotype.Component;
 
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.LivraisonRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class LivraisonComponent {
     private final LivraisonRepository livraisonRepository;
-    private final CommandeRepository commandeRepository;
-
-    public LivraisonEntity createLivraison(LivraisonEntity livraison, CommandeEntity commande){
-        commande.setLivraisonEntity(livraison);
-        commandeRepository.save(commande);
-        return livraisonRepository.save(livraison);
-    }
 
 
 
@@ -37,5 +33,14 @@ public class LivraisonComponent {
         return livraisonRepository.findById(reference)
                 .orElseThrow(() ->  new LivraisonEntityNotFoundException(String.format(reference, "La livraison [%s] n'a pas été trouvée", reference))) ;
     }
+    public List<LivraisonEntity> getLivraisonEntities(Set<LivraisonEntity> livraisonEntities){
+         return livraisonRepository.saveAll(livraisonEntities);
+    }
+
+    public List<LivraisonEntity> createLivraisons(List<LivraisonEntity> livraisonEntities) {
+        return livraisonRepository.saveAll(livraisonEntities);
+    }
+
+
 }
 

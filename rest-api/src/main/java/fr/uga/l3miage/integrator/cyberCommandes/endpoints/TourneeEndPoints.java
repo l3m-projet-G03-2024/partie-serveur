@@ -29,8 +29,8 @@ public interface TourneeEndPoints {
     @Operation(description = "crée des tournées pour une journée")
     @ApiResponse(responseCode = "200",description = "les tournées ont été créés")
     @ApiResponse(responseCode = "404",description ="les tournées n'ont pas été créés")
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
     TourneeCreationResponseDTO createTournee(@RequestBody List<TourneeCreationRequest> tourneeCreationRequests,@RequestParam String refJournee);
 
 

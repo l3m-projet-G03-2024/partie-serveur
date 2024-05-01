@@ -9,5 +9,4 @@ public class TourneeCreationRequest {
 
     private final String reference;
     private final EtatsDeTournee etat;
-    private final double distance;
 }

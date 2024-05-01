@@ -9,6 +9,5 @@ import java.util.Date;
 @Builder
 public class LivraisonCreationRequest {
     private final String referenceCommande;
-
     private final String dateLivraison;
 }

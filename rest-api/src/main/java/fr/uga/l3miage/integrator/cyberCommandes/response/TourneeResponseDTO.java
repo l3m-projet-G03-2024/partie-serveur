@@ -25,7 +25,7 @@ public class TourneeResponseDTO {
     @Schema(description="liste des livraisons")
     private Set<LivraisonResponseDTO> livraisonEntities;
 
-    @Schema(description="reference d'une ")
+    @Schema(description="reference d'une journée ")
     private JourneeDetailResponseDTO journee;
 
 }
