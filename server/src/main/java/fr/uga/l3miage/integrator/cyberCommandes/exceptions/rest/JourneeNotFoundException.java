@@ -8,8 +8,7 @@ public class JourneeNotFoundException extends RuntimeException {
 
     public JourneeNotFoundException(String message, String reference) {
         super(message);
-        this.reference = reference 
-        ;
+        this.reference = reference;
     }
 
 }

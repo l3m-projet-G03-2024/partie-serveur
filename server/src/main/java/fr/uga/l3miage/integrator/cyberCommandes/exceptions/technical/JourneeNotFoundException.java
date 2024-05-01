@@ -7,7 +7,6 @@ public class JourneeNotFoundException extends Exception {
 
     public JourneeNotFoundException(String message){
         super(message);
-
     }
 
 

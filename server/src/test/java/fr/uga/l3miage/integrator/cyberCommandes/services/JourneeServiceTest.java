@@ -1,14 +1,14 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
-import static org.mockito.Mockito.when;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
@@ -26,6 +26,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -34,7 +35,6 @@ public class JourneeServiceTest {
     private JourneeService journeeService;
     @MockBean
     private JourneeComponent journeeComponent;
-
     @SpyBean
     private JourneeMapper journeeMapper;
 
@@ -51,9 +51,10 @@ public class JourneeServiceTest {
         when(journeeComponent.getJourneeById(anyString())).thenReturn(journeeEntity);
         assertEquals("1j", journeeEntity.getReference());
     }
-    // Test de recuperation de tous les journées 
+
+    // Test de recuperation de toutes les journées
     @Test
-    void RequestGetAllJournee()throws JourneeNotFoundException{
+    void RequestGetAllJournee(){
         // Création de deux journées simulées
         JourneeEntity journeeEntity = JourneeEntity
             .builder()
@@ -69,18 +70,21 @@ public class JourneeServiceTest {
             .build();
 
         // Création d'une liste de journée simulée
-        List<JourneeEntity> journeeEntities = new ArrayList<JourneeEntity>();
+        Set<JourneeEntity> journeeEntities = new HashSet<>();
         journeeEntities.add(journeeEntity);
         journeeEntities.add(journeeEntity2);
         // Configuration de la Mock pour retourner la liste simulée l'orsque la methode findAllJournee est appelé
         when(journeeComponent.findAllJournees()).thenReturn(journeeEntities);
 
-        List<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.getAllJournees();
+        Set<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.findAllJournees();
         // Verification du resultat
         assertNotNull(journeeResponseDTOs);
         assertEquals(2, journeeEntities.size());
     }
 
+    /*
+        Teste de la creation d'une journée
+     */
     @Test
     void createJournee(){
         //Given
@@ -100,4 +104,67 @@ public class JourneeServiceTest {
         //Then
         assertThat(response).usingRecursiveComparison().isEqualTo(responseExpected);
     }
+
+    /*
+        Test delete une journée
+     */
+    @Test
+    void deleteJourneeByIdWhenJourneeExist() throws JourneeNotFoundException {
+        // Given
+        JourneeEntity journeeEntity = JourneeEntity
+                .builder()
+                .reference("j1")
+                .etat(EtatsDeJournee.NONPLANIFIEE)
+                .date(LocalDate.of(2024,04 , 26))
+                .build();
+
+        when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenReturn(journeeEntity);
+
+        // When
+        journeeService.deleteJourneeById(journeeEntity.getReference());
+
+        // Then
+        when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenThrow(new NotFoundEntityRestException("Entity not found"));
+        assertThrows(NotFoundEntityRestException.class, () -> journeeComponent.getJourneeById(journeeEntity.getReference()));
+    }
+
+    /*
+        Test Update Journée
+     */
+    @Test
+    void updateJourneeWhenJourneeExists() throws JourneeNotFoundException {
+        // Given
+        JourneeEntity journeeEntity = JourneeEntity
+                .builder()
+                .reference("j1")
+                .etat(EtatsDeJournee.NONPLANIFIEE)
+                .date(LocalDate.of(2024, 04, 26))
+                .build();
+        JourneeUpdateRequest journeeUpdate = JourneeUpdateRequest
+                .builder()
+                .etat(EtatsDeJournee.PLANIFIEE)
+                .date(LocalDate.of(2024, 04, 27))
+                .build();
+
+        JourneeEntity updatedJourneeEntity = JourneeEntity
+                .builder()
+                .reference("j1")
+                .etat(journeeUpdate.getEtat())
+                .date(journeeUpdate.getDate())
+                .build();
+
+        JourneeDetailResponseDTO journeeResponse = journeeMapper.toJourneeDetailResponseDTO(updatedJourneeEntity);
+
+        when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenReturn(journeeEntity);
+        when(journeeComponent.updateJournee(journeeEntity)).thenReturn(updatedJourneeEntity);
+        when(journeeMapper.toJourneeDetailResponseDTO(updatedJourneeEntity)).thenReturn(journeeResponse);
+
+        // When
+        JourneeDetailResponseDTO result = journeeService.updateJournee(journeeEntity.getReference(), journeeUpdate);
+
+        // Then
+        assertEquals(journeeResponse, result);
+        verify(journeeMapper).updateJourneeFromDTO(journeeUpdate, journeeEntity);
+    }
+
 }
