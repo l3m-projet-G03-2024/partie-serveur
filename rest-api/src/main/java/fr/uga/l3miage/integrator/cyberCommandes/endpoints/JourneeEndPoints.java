@@ -2,7 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.CreateJourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @Tag(name = "Journee endpoints")
@@ -21,11 +21,10 @@ import java.util.List;
 @CrossOrigin("*")
 public interface JourneeEndPoints {
 
-    @ApiResponse(responseCode = "200",description = "liste de journée envoie avec succes")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de journée n'a pas été trouvé")
+    @ApiResponse(responseCode = "200",description = "liste de journée envoie avec success")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("")
-    List<JourneeDetailResponseDTO> getAllJournees();
+    @GetMapping("/")
+    Set<JourneeDetailResponseDTO> findAllJournees();
 
     @Operation(description = "Création d'une journée")
     @ApiResponse(responseCode = "201", description = "La journée a bien été créée")
@@ -38,7 +37,7 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la journée n'a pas été supprimée")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{referenceJourner}")
-    void deleteJourneeById(String reference);
+    void deleteJourneeById(@PathVariable String referenceJourner);
 
     @Operation(description = "Prend une  journee")
     @ApiResponse(responseCode= "200", description = "La journée a est présent dans la base de donnée")
@@ -46,4 +45,11 @@ public interface JourneeEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{reference}")
     JourneeDetailResponseDTO getJourneeById(@PathVariable String reference);
+
+    @Operation(description = "Update d'une journée")
+    @ApiResponse(responseCode = "200", description = "La journée a bien été créée")
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{referenceJournee}")
+    JourneeDetailResponseDTO updateJournee(@PathVariable(name = "referenceJournee") String reference, @RequestBody JourneeUpdateRequest journeeRequestDTO) ;
+
 }

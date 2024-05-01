@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
 import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -16,10 +17,9 @@ public class JourneeComponent {
     private final JourneeRepository journeeRepository;
 
 
-    public List<JourneeEntity> findAllJournees(){
-        return journeeRepository.findAll();
+    public Set<JourneeEntity> findAllJournees(){
+        return journeeRepository.findAllBy();
     }
-
     public JourneeEntity createJourneeEntity(JourneeEntity journeeEntity) {
         return journeeRepository.save(journeeEntity);
     }
@@ -29,6 +29,10 @@ public class JourneeComponent {
     public JourneeEntity getJourneeById(String reference) throws JourneeNotFoundException {
         return journeeRepository.findById(reference)
                 .orElseThrow(() -> new JourneeNotFoundException(String.format(reference, "La journée [%s] n'a pas été trouvé",reference)));
+    }
+
+    public JourneeEntity updateJournee(JourneeEntity journee){
+        return journeeRepository.save(journee);
     }
     
 }

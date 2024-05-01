@@ -12,23 +12,23 @@ import lombok.Data;
 @Builder
 @Schema(description = "présentation d'une journée")
 public class JourneeDetailResponseDTO {
-    @Schema(description = "represente la reference de la journee")
+    @Schema(description = "represente la reference de la journée")
     private String reference;
 
-    @Schema(description = "etat de la journée")
+    @Schema(description = "état de la journée")
     private EtatsDeJournee etat;
 
-    @Schema(description = "date de la journéee")
+    @Schema(description = "date de la journée")
     private LocalDate date;
-//pour ce premier increment pas necessairement besoin de calculer ces attributs
-// Pour le sécond incrément on ajoutera les information manquantes
+
     @Schema(description = "somme des distances a parcourir dans la journée")
     private Double distanceAParcourir;
+    
     @Schema(description = "montant total de la journée")
     private Double montant;
 
-    // @Schema(description = "temps de retour estimer")
-    // private Integer tdrTheorique;
+    @Schema(description = "temps de retour estimer")
+    private Integer tdrTheorique;
     
 
 }

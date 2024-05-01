@@ -7,6 +7,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRe
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,15 +23,23 @@ public class JourneeService {
     private final JourneeComponent journeeComponent;
     private final JourneeMapper journeeMapper;
 
-    public List<JourneeDetailResponseDTO> getAllJournees(){
-        List<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();
-        List<JourneeDetailResponseDTO> journeeResponseDTOS = new ArrayList<>();
-        journeeResponseDTOS = journeeMapper.toJourneeDetailResponseDTOS(journeeEntities);
-        return journeeResponseDTOS;
+    public Set<JourneeDetailResponseDTO> findAllJournees(){
+        try {
+            Set<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();
+            return journeeMapper.toJourneeDetailResponseDTOS(journeeEntities);
+        }catch (Exception e){
+            throw new NotFoundEntityRestException(e.getMessage());
+        }
+
     }
 
     public void deleteJourneeById(String reference){
-        journeeComponent.deleteJourneeById(reference);
+        try {
+            journeeComponent.deleteJourneeById(reference);
+        }catch (NotFoundEntityRestException e){
+            throw new NotFoundEntityRestException(e.getMessage());
+        }
+
     }
 
     public JourneeDetailResponseDTO createJournee(JourneeCreationRequest journeeRequest){
@@ -48,5 +58,15 @@ public class JourneeService {
         } catch (Exception e) {
             throw new NotFoundEntityRestException(e.getMessage());
         }   
+    }
+
+    public JourneeDetailResponseDTO updateJournee(String reference, JourneeUpdateRequest journeeUpdate){
+        try {
+            JourneeEntity journeeExist = journeeComponent.getJourneeById(reference);
+            journeeMapper.updateJourneeFromDTO(journeeUpdate, journeeExist);
+            return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.updateJournee(journeeExist));
+        }catch (Exception e){
+            throw new BadRequestRestException(e.getMessage());
+        }
     }
 }

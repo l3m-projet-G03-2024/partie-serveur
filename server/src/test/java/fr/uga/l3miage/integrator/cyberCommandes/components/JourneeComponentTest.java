@@ -1,12 +1,13 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -20,8 +21,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -59,7 +58,7 @@ public class JourneeComponentTest {
                 .date(LocalDate.of(2024, 04, 26))
                 .build();
 
-        // Configure le mock pour retourner un Optional contenent une instance  de journée 
+        // Configure le mock pour retourner un Optional contenent une instance de journée
         when(journeeRepository.findById(anyString())).thenReturn(Optional.of(journeeEntity));
         // verifie qu'aucune exception n'est levée
         assertDoesNotThrow(() -> journeeComponent.getJourneeById("2L"));
@@ -82,6 +81,99 @@ public class JourneeComponentTest {
         //Then
         assertEquals(resultat, journeeEntity);
         verify(journeeRepository, times(1)).save(any());
+    }
+
+    /*
+        Teste pour la liste complete des journées
+    */
+    @Test
+    void findAllJourneesMultipleEntries(){
+        //Given
+        JourneeEntity journee1 = JourneeEntity
+                .builder()
+                .reference("j028G")
+                .etat(EtatsDeJournee.PLANIFIEE)
+                .date(LocalDate.of(2024, 04, 26))
+                .build();
+
+        JourneeEntity journee2 = JourneeEntity
+                .builder()
+                .reference("j029G")
+                .etat(EtatsDeJournee.PLANIFIEE)
+                .date(LocalDate.of(2024, 04, 27))
+                .build();
+        Set<JourneeEntity> expectedJournees = new HashSet<>();
+        expectedJournees.add(journee1);
+        expectedJournees.add(journee2);
+        when(journeeRepository.findAllBy()).thenReturn(expectedJournees);
+
+        //When
+        Set<JourneeEntity> results = journeeComponent.findAllJournees();
+
+        //Then
+        assertEquals(expectedJournees.size(), results.size(), "La taille doit être égal à 2");
+        assertTrue(results.containsAll(expectedJournees), "Doit contenir toutes les journées");
+
+
+    }
+
+    @Test
+    void findAllJourneesEmpty(){
+        //Given
+        Set<JourneeEntity> emptyJournees = new HashSet<>();
+        when(journeeRepository.findAllBy()).thenReturn(emptyJournees);
+
+        //When
+        Set<JourneeEntity> results = journeeComponent.findAllJournees();
+
+        //Then
+        assertTrue(results.isEmpty(), "La journée doit être vide");
+    }
+
+    /*
+      Test de Delete une journée par reference
+     */
+    @Test
+    void deleteJourneeByReferenceWhenExistElement(){
+        //Given
+        JourneeEntity journeeEntity = JourneeEntity
+                .builder()
+                .reference("j021L")
+                .date(LocalDate.of(2024, 04, 29))
+                .build();
+
+        //When
+        journeeRepository.save(journeeEntity);
+        journeeComponent.deleteJourneeById(journeeEntity.getReference());
+
+        //Then
+        assertFalse(journeeRepository.findById(journeeEntity.getReference()).isPresent());
+    }
+
+    /*
+        Test update journée
+     */
+    @Test
+    void updateJourneeSuccess() {
+        // Given
+        JourneeEntity journee1 = JourneeEntity
+                .builder()
+                .reference("j028G")
+                .etat(EtatsDeJournee.PLANIFIEE)
+                .date(LocalDate.of(2024, 04, 26))
+                .build();
+        when(journeeRepository.save(journee1)).thenReturn(journee1);
+
+        // When
+        journee1.setEtat(EtatsDeJournee.NONPLANIFIEE);
+        journee1.setDate(LocalDate.of(2024, 04, 25));
+        JourneeEntity result = journeeComponent.updateJournee(journee1);
+
+        // Then
+        assertEquals(journee1.getReference(), result.getReference(), "");
+        assertEquals(journee1.getDate(), result.getDate());
+        assertEquals(journee1.getEtat(), result.getEtat());
+        verify(journeeRepository, times(1)).save(journee1);
     }
 
 }

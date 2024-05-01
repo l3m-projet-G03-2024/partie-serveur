@@ -4,6 +4,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 
 
+import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.services.JourneeService;
 import fr.uga.l3miage.integrator.cyberCommandes.endpoints.JourneeEndPoints;
 import lombok.RequiredArgsConstructor;
@@ -14,14 +15,15 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDT
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
 public class JourneeController implements JourneeEndPoints {
     private final JourneeService journeeService;
     @Override
-    public List<JourneeDetailResponseDTO> getAllJournees(){
-        return journeeService.getAllJournees();
+    public Set<JourneeDetailResponseDTO> findAllJournees(){
+        return journeeService.findAllJournees();
     }
     @Override
     public void deleteJourneeById(String reference){
@@ -33,8 +35,13 @@ public class JourneeController implements JourneeEndPoints {
         return journeeService.createJournee(journeeRequest) ;
     }
 
-    @Override
+     @Override
      public JourneeDetailResponseDTO getJourneeById(String reference) {
          return journeeService.getJournee(reference);
      }
+
+    @Override
+    public JourneeDetailResponseDTO updateJournee(String reference, JourneeUpdateRequest journeeUpdate){
+        return journeeService.updateJournee(reference, journeeUpdate);
+    }
 }
