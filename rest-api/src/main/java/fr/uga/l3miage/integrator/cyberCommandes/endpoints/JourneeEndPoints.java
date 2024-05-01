@@ -1,6 +1,8 @@
 package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.CreateJourneeErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.DeleteJourneeErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.UpdateJourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,11 +35,12 @@ public interface JourneeEndPoints {
     @PostMapping("")
     JourneeDetailResponseDTO createJournee(@RequestBody JourneeCreationRequest journeeRequest) ;
 
-    @ApiResponse(responseCode = "200",description = "liste de journée supprime avec succes")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la journée n'a pas été supprimée")
+    @ApiResponse(responseCode = "200",description = "liste de journée supprime avec success")
+    @ApiResponse(responseCode = "404", description = "La journée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = DeleteJourneeErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "400", description = "Requisition invalide", content = @Content(schema = @Schema(implementation = DeleteJourneeErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{referenceJourner}")
-    void deleteJourneeById(@PathVariable String referenceJourner);
+    void deleteJourneeById(@PathVariable(name = "referenceJourner") String referenceJourner);
 
     @Operation(description = "Prend une  journee")
     @ApiResponse(responseCode= "200", description = "La journée a est présent dans la base de donnée")
@@ -48,6 +51,8 @@ public interface JourneeEndPoints {
 
     @Operation(description = "Update d'une journée")
     @ApiResponse(responseCode = "200", description = "La journée a bien été créée")
+    @ApiResponse(responseCode = "404", description = "La journée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = UpdateJourneeErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "400", description = "Requisition invalide", content = @Content(schema = @Schema(implementation = UpdateJourneeErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceJournee}")
     JourneeDetailResponseDTO updateJournee(@PathVariable(name = "referenceJournee") String reference, @RequestBody JourneeUpdateRequest journeeRequestDTO) ;

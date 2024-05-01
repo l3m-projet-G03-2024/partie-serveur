@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Set;
 
@@ -23,16 +24,27 @@ public class JourneeComponent {
     public JourneeEntity createJourneeEntity(JourneeEntity journeeEntity) {
         return journeeRepository.save(journeeEntity);
     }
-    public void deleteJourneeById(String reference) {
-        journeeRepository.deleteById(reference);
+
+    public void deleteJourneeById(String reference) throws EntityNotFoundException{
+        if(reference != null){
+            journeeRepository.deleteById(reference);
+        }else {
+            throw new EntityNotFoundException("L'entité à supprimer n'a pas été trouvée");
+        }
+
     }
     public JourneeEntity getJourneeById(String reference) throws JourneeNotFoundException {
         return journeeRepository.findById(reference)
                 .orElseThrow(() -> new JourneeNotFoundException(String.format(reference, "La journée [%s] n'a pas été trouvé",reference)));
     }
 
-    public JourneeEntity updateJournee(JourneeEntity journee){
-        return journeeRepository.save(journee);
+    public JourneeEntity updateJournee(JourneeEntity journee) throws EntityNotFoundException{
+        JourneeEntity journeeUpdate = journeeRepository.save(journee);
+        if(journeeUpdate != null){
+            return journeeUpdate;
+        }else{
+            throw new EntityNotFoundException("Aucune entité n'a été trouvé pour la description [%s]");
+        }
     }
     
 }

@@ -28,7 +28,7 @@ public class JourneeDetailResponseDTO {
     private Double montant;
 
     @Schema(description = "temps de retour estimer")
-    private Integer tdrTheorique;
+    private Integer tdmTheorique;
     
 
 }
