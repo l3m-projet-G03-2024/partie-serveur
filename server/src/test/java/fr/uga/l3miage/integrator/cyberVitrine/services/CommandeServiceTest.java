@@ -1,27 +1,31 @@
 package fr.uga.l3miage.integrator.cyberVitrine.services;
 
+import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonEntityNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
+import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.ClientDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 public class CommandeServiceTest {
 
@@ -31,6 +35,9 @@ public class CommandeServiceTest {
     private CommandeComponent commandeComponent;
     @SpyBean
     private CommandeMapper commandeMapper;
+
+    @MockBean
+    private LivraisonComponent livraisonComponent ;
 
 
     @Test
@@ -129,9 +136,61 @@ public class CommandeServiceTest {
 
     }
 
+    @Test
+    public void testUpdateCommandes() throws CommandeEntityNotFoundException, LivraisonEntityNotFoundException {
 
+        // Given
+        CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF1")
+                .etat(EtatsDeCommande.ENLIVRAISON)
+                .referenceLivraison("REF_LIVRAISON_1")
+                .build();
 
+        CommandeUpdatingRequest commande2 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF2")
+                .etat(EtatsDeCommande.LIVREE)
+                .referenceLivraison("REF_LIVRAISON_2")
+                .build();
 
+        List<CommandeUpdatingRequest> commandes = new ArrayList<>();
+        commandes.add(commande1);
+        commandes.add(commande2);
 
+        CommandeEntity commandeEntity1 = new CommandeEntity();
+        commandeEntity1.setReference("REF1");
+
+        CommandeEntity commandeEntity2 = new CommandeEntity();
+        commandeEntity2.setReference("REF2");
+
+        when(commandeComponent.getCommandeByReference("REF1")).thenReturn(commandeEntity1);
+        when(commandeComponent.getCommandeByReference("REF2")).thenReturn(commandeEntity2);
+
+        LivraisonEntity livraisonEntity1 = new LivraisonEntity();
+        LivraisonEntity livraisonEntity2 = new LivraisonEntity();
+
+        when(livraisonComponent.getLivraisonByReference("REF_LIVRAISON_1")).thenReturn(livraisonEntity1);
+        when(livraisonComponent.getLivraisonByReference("REF_LIVRAISON_2")).thenReturn(livraisonEntity2);
+
+        CommandeResponseDTO commandeResponseDTO1 = new CommandeResponseDTO();
+        CommandeResponseDTO commandeResponseDTO2 = new CommandeResponseDTO();
+
+        when(commandeMapper.toCommandeResponseDTO(commandeEntity1)).thenReturn(commandeResponseDTO1);
+        when(commandeMapper.toCommandeResponseDTO(commandeEntity2)).thenReturn(commandeResponseDTO2);
+
+        // When
+        List<CommandeResponseDTO> result = commandeService.updateCommandes(commandes);
+
+        // Then
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(commandeResponseDTO1, result.get(0));
+        assertEquals(commandeResponseDTO2, result.get(1));
+        verify(commandeComponent, times(2)).getCommandeByReference(anyString()) ;
+        verify(livraisonComponent, times(2)).getLivraisonByReference(anyString()) ;
+        assertEquals(commandeComponent.getCommandeByReference("REF1").getEtat(), EtatsDeCommande.ENLIVRAISON);
+        assertEquals(commandeComponent.getCommandeByReference("REF2").getEtat(), EtatsDeCommande.LIVREE);
+    }
 
 }
