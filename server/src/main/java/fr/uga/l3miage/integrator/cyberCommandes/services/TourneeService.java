@@ -25,12 +25,7 @@ import lombok.AllArgsConstructor;
 public class TourneeService {
     private final TourneeComponent tourneeComponent;
     private final TourneeMapper tourneeMapper;
-    private final JourneeRepository journeeRepository;
     private final JourneeComponent journeeComponent;
-
-
-
-
 
 
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
