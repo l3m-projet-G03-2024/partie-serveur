@@ -14,6 +14,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.services.TourneeService;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import org.junit.jupiter.api.AfterEach;
@@ -24,6 +25,7 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -46,6 +48,8 @@ public class TourneeControllerTest {
     @SpyBean
     private TourneeComponent tourneeComponent;
     @SpyBean
+    private TourneeService tourneeService;
+    @SpyBean
     private TourneeMapper tourneeMapper;
     @Autowired
     private JourneeRepository journeeRepository;
@@ -55,61 +59,74 @@ public class TourneeControllerTest {
         this.tourneeRepository.deleteAll();
     }
 
-    @Test
-    void getAllTourneeByEtatOrReferenceJourneeFound() {
-        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENPARCOURS, null))
-                .thenReturn(Collections.emptyList());
 
-        // When
-        ResponseEntity<String> response = template.getForEntity("/api/v1/tournees?etat=ENPARCOURS", String.class);
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
 
     @Test
-    void getAllTourneeByEtatOrReferenceJourneeNotFound() {
+    void getAllTourneesTest() {
         final HttpHeaders headers = new HttpHeaders();
-        final Map<String, Object> urlParams = new HashMap<>();
-        urlParams.put("journee", "il n'existe aucune journée qui a MN comme etat");
-        when(tourneeComponent.findAllTourneesByEtatOrReferenceJournee(EtatsDeTournee.ENPARCOURS, null))
-                .thenReturn(Collections.emptyList());
+        final Map<String, Object> urlParams1 = new HashMap<>();
 
+        urlParams1.put("etat", EtatsDeTournee.EFFECTUEE);
+
+        final Map<String, Object> urlParams2 = new HashMap<>();
+        urlParams2.put("reference", "J1");
+
+
+        JourneeEntity journee  = JourneeEntity
+                .builder()
+                .reference("J1")
+                .build();
+        journeeRepository.save(journee);
+
+        TourneeEntity tourneeEntity1 = TourneeEntity
+                .builder()
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .reference("T1")
+                .journee(journee)
+                .build();
+        TourneeEntity tourneeEntity2 = TourneeEntity
+                .builder()
+                .reference("T2")
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .build();
+
+        Set<TourneeEntity> tournees = new HashSet<>();
+        tournees.add(tourneeEntity1);
+        tournees.add(tourneeEntity2);
+        tourneeRepository.saveAll(tournees);
+
+        journee.setTournees(tournees);
         // When
-        ResponseEntity<NotFoundErrorResponse> response = template.exchange("/api/tournees?etat=MN",
-                HttpMethod.GET, new HttpEntity<>(null, headers), NotFoundErrorResponse.class, urlParams);
-
+     ResponseEntity<List<TourneeResponseDTO>> response1 = template
+                .exchange(
+                        "/api/v1/tournees/?etat=EFFECTUEE",
+                        HttpMethod.GET,
+                        new HttpEntity<>(headers),
+                        new ParameterizedTypeReference<List<TourneeResponseDTO>>() {}
+                );
+     ResponseEntity<List<TourneeResponseDTO>> response2 = template
+                .exchange(
+                        "/api/v1/tournees/?reference=J1",
+                        HttpMethod.GET,
+                        new HttpEntity<>(headers),
+                        new ParameterizedTypeReference<List<TourneeResponseDTO>>() {},
+                        urlParams2
+                );
         // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+
+        // Vérifie si la réponse contient des données
+        assertThat(response1.getBody()).isNotEmpty();
+        assertThat(response1.getBody()).hasSize(2); // Nombre de tournees dans l'état EFFECTUEE
+        assertThat(response2.getBody()).isNotEmpty();;
+        assertThat(response2.getBody()).hasSize(1); // Nombre de tournees associées à la référence de la journée "J1"
+
     }
 
-    @Test
-    void getAllTourneeFound() {
-        //given
-        when(tourneeComponent.findAllTournee()).thenReturn(Collections.emptyList());
 
-        // When
-        ResponseEntity<String> response = template.getForEntity("/api/v1/tournees", String.class);
 
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-    }
-
-    @Test
-    void getAllTourneeNotFound() {
-        final HttpHeaders headers = new HttpHeaders();
-        final Map<String, Object> urlParams = new HashMap<>();
-        urlParams.put("tournees", "il n'existe aucune tournee");
-
-        when(tourneeComponent.findAllTournee()).thenReturn(Collections.emptyList());
-
-        // When
-        ResponseEntity<NotFoundErrorResponse> response = template.exchange("/api/tournees?etat=MN",
-                HttpMethod.GET, new HttpEntity<>(null, headers), NotFoundErrorResponse.class, urlParams);
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-    }
 
     @Test
     void canCreateTournee() {
@@ -132,6 +149,7 @@ public class TourneeControllerTest {
         tournees.add(tourneeCreationRequest1);
         tournees.add(tourneeCreationRequest2);
 
+
         String referenceJournee = "J1";
 
         JourneeEntity journee = JourneeEntity
@@ -148,7 +166,7 @@ public class TourneeControllerTest {
 
         // When
         ResponseEntity<TourneeCreationResponseDTO> response = template
-                .exchange("/api/v1/tournees",
+                .exchange("/api/v1/tournees/",
                 HttpMethod.POST,
                 new HttpEntity<>(tourneesCreationBodyRequest,headers),
                 TourneeCreationResponseDTO.class);

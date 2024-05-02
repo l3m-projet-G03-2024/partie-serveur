@@ -50,7 +50,7 @@ public class LivraisonControllerTest {
 
 
     @Test
-    void getLivraisonFound() {
+    void getLivraisonsTest() {
         final HttpHeaders headers = new HttpHeaders();
         final Map<String, Object> urlParams = new HashMap<>();
         urlParams.put("etat", "EFFECTUEE");
@@ -68,7 +68,6 @@ public class LivraisonControllerTest {
         livraisonEntities.add(livraison2);
 
         livraisonRepository.saveAll(livraisonEntities);
-        when(livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.EFFECTUEE)).thenReturn(livraisonEntities);
 
         ResponseEntity<List<LivraisonResponseDTO>> response = testRestTemplate.exchange(
                 "/api/v1/livraisons/?etat=EFFECTUEE",
@@ -78,6 +77,9 @@ public class LivraisonControllerTest {
         );
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        List<LivraisonResponseDTO> livraisons = response.getBody();
+        assertThat(livraisons).isNotNull();
+        assertEquals(2,livraisons.size());
     }
 
     @Test

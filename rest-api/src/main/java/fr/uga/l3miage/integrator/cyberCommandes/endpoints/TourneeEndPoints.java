@@ -23,14 +23,14 @@ public interface TourneeEndPoints {
     @Operation(description = "recupère une tournée")
     @ApiResponse(responseCode = "200",description ="la tournée a été trouvée")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("")
-    List<TourneeResponseDTO> getAllTournee(@RequestParam(required = false) EtatsDeTournee etat, @RequestParam(required = false) String referenceJournee);
+    @GetMapping("/")
+    List<TourneeResponseDTO> getAllTournees(@RequestParam(required = false) EtatsDeTournee etat, @RequestParam(required = false) String referenceJournee);
 
     @Operation(description = "crée des tournées pour une journée")
     @ApiResponse(responseCode = "201",description = "les tournées ont été créés")
     @ApiResponse(responseCode = "404",description ="les tournées n'ont pas été créés")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
+    @PostMapping("/")
     TourneeCreationResponseDTO createTournees(@RequestBody TourneesCreationBodyRequest tourneeCreationBodyRequest);
 
 
