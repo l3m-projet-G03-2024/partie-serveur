@@ -129,7 +129,6 @@ public class TourneeControllerTest {
                 .etat(EtatsDeTournee.ENPARCOURS)
                 .build();
 
-        // Add the items to the list
         tournees.add(tourneeCreationRequest1);
         tournees.add(tourneeCreationRequest2);
 
