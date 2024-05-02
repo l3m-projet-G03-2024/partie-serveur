@@ -14,5 +14,5 @@ public class TourneesCreationBodyRequest {
     private final String referenceJournee;
 
     @Schema(description = "liste des tournées à créer pour une journée spécifique")
-    private final List<TourneeCreationRequest> tourneeCreationRequests;
+    private final List<TourneeCreationRequest> tournees;
 }

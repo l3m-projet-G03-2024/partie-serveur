@@ -132,7 +132,7 @@ public class TourneeServiceTest {
 
         TourneesCreationBodyRequest tourneesCreationBodyRequest = TourneesCreationBodyRequest
                 .builder()
-                .tourneeCreationRequests(tourneeCreationRequests)
+                .tournees(tourneeCreationRequests)
                 .referenceJournee(journee1.getReference())
                 .build();
         TourneeEntity tourneeEntity1 = TourneeEntity.builder()
