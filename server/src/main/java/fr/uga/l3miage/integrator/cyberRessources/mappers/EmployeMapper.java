@@ -6,5 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface EmployeMapper {
-    EmployeResponseDTO toResponse(EmployeEntity employeEntity);
+    EmployeResponseDTO toEmployeResponseDTO(EmployeEntity employeEntity);
+    EmployeEntity toEmployeEntity(EmployeResponseDTO employeResponseDTO);
 }
