@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberVitrine.components;
 
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
 import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
@@ -10,13 +11,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @AutoConfigureTestDatabase
@@ -107,6 +108,29 @@ public class CommandeComponentTest {
         assertEquals(commandes.get(0).getEtat(),EtatsDeCommande.PLANIFIEE);
         assertEquals(commandes.get(1).getEtat(),EtatsDeCommande.PLANIFIEE);
 
+    }
+
+    @Test
+    void getCommandeByReferenceNotFound(){
+        // Given
+        when(commandeRepository.findById(anyString())).thenReturn(Optional.empty()) ;
+
+        // then - when
+        assertThrows(CommandeEntityNotFoundException.class, () -> commandeComponent.getCommandeByReference("test")) ;
+    }
+
+    @Test
+    void getCommandeByReferenceFound() {
+        // Given
+        CommandeEntity commandeEntity = CommandeEntity
+                .builder()
+                .reference("c123")
+                .etat(EtatsDeCommande.PLANIFIEE)
+                .build();
+        when(commandeRepository.findById(anyString())).thenReturn(Optional.of(commandeEntity)) ;
+
+        // when - then
+        assertDoesNotThrow(() -> commandeComponent.getCommandeByReference("test"));
     }
 
 
