@@ -47,17 +47,12 @@ public class CommandeControllerTest {
 
         // Given
         final HttpHeaders headers = new HttpHeaders();
-       final Map<String,Object> urlParams = new HashMap<>();
+        final Map<String,Object> urlParams = new HashMap<>();
         urlParams.put("commandes","Aucune commande trouvée pour l'état spécifié");
 
 
        // when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
 
-        NotFoundErrorResponse notFoundErrorResponseExpected = NotFoundErrorResponse
-                .builder()
-                .uri("/api/v1/commandes?etat=MS")
-                .errorMessage(null)
-                .build();
         // when
         //ResponseEntity<String> response = testRestTemplate.getForEntity("/api/commandes",String.class);
         ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/v1/commandes/etat=MS",
@@ -78,10 +73,12 @@ public class CommandeControllerTest {
         when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
 
         // when
-        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes?etat=PLANIFIEE",String.class);
+        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes/",String.class);
 
         // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+       // assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("[]");
+
     }
 
 

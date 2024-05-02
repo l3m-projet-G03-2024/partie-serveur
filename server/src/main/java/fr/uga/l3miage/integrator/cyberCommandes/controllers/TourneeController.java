@@ -2,7 +2,9 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
 import java.util.List;
 
-import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
+
+
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,8 +27,8 @@ public class TourneeController implements TourneeEndPoints {
     }
 
     @Override
-    public TourneeCreationResponseDTO createTournee(List<TourneeCreationRequest> tourneeCreationRequests,String refJournee) {
-        return tourneeService.createTournee(tourneeCreationRequests,refJournee);
+    public TourneeCreationResponseDTO createTournees(TourneesCreationBodyRequest tourneeCreationBodyRequest) {
+        return tourneeService.createTournees(tourneeCreationBodyRequest);
     }
 
 

@@ -18,11 +18,6 @@ public class LivraisonComponent {
     private final LivraisonRepository livraisonRepository;
     private final CommandeRepository commandeRepository;
 
-    public LivraisonEntity createLivraison(LivraisonEntity livraison, CommandeEntity commande){
-        commande.setLivraisonEntity(livraison);
-        commandeRepository.save(commande);
-        return livraisonRepository.save(livraison);
-    }
 
 
 

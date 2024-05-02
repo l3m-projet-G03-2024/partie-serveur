@@ -12,4 +12,5 @@ public interface CommandeRepository extends JpaRepository<CommandeEntity, String
 
 
     List<CommandeEntity> findAllByEtat(EtatsDeCommande etatDeCommande);
+
 }

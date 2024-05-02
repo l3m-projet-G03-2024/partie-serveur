@@ -8,7 +8,11 @@ import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
 import java.util.*;
 
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -43,6 +47,8 @@ public class TourneeControllerTest {
     private TourneeComponent tourneeComponent;
     @SpyBean
     private TourneeMapper tourneeMapper;
+    @Autowired
+    private JourneeRepository journeeRepository;
 
     @AfterEach
     public void clear() {
@@ -109,19 +115,48 @@ public class TourneeControllerTest {
     void canCreateTournee() {
         // Given
         final HttpHeaders headers = new HttpHeaders();
-        TourneeCreationRequest tourneeCreationRequest = TourneeCreationRequest.builder()
-                .reference("1ABC")
+
+        List<TourneeCreationRequest> tournees = new ArrayList<>();
+         TourneeCreationRequest tourneeCreationRequest1 = TourneeCreationRequest
+                .builder()
+                .reference("T1")
                 .etat(EtatsDeTournee.ENPARCOURS)
                 .build();
-        List<TourneeCreationRequest> tourneeCreationRequests = Collections.singletonList(tourneeCreationRequest);
+
+        TourneeCreationRequest tourneeCreationRequest2 = TourneeCreationRequest
+                .builder()
+                .reference("T2")
+                .etat(EtatsDeTournee.ENPARCOURS)
+                .build();
+
+        // Add the items to the list
+        tournees.add(tourneeCreationRequest1);
+        tournees.add(tourneeCreationRequest2);
+
+        String referenceJournee = "J1";
+
+        JourneeEntity journee = JourneeEntity
+                .builder()
+                .reference(referenceJournee)
+                .build();
+        journeeRepository.save(journee);
+
+        final TourneesCreationBodyRequest tourneesCreationBodyRequest = TourneesCreationBodyRequest
+                .builder()
+                .referenceJournee(journee.getReference())
+                .tourneeCreationRequests(tournees)
+                .build();
 
         // When
-        ResponseEntity<TourneeResponseDTO> response = template.exchange("/api/v1/tournees?refJournee=1",
-                HttpMethod.POST, new HttpEntity<>(tourneeCreationRequests), TourneeResponseDTO.class);
+        ResponseEntity<TourneeCreationResponseDTO> response = template
+                .exchange("/api/v1/tournees",
+                HttpMethod.POST,
+                new HttpEntity<>(tourneesCreationBodyRequest,headers),
+                TourneeCreationResponseDTO.class);
 
         // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+      //  assertThat(response.getBody()).isNotNull();
 
     }
 

@@ -8,8 +8,6 @@ import java.util.Set;
 
 @Repository
 public interface JourneeRepository extends JpaRepository<JourneeEntity, String> {
-    JourneeEntity findByReference(String refJournee);
-
     Set<JourneeEntity> findAllBy();
 }
 
