@@ -11,6 +11,5 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 @Repository
 public interface TourneeRepository extends JpaRepository<TourneeEntity, String> {
     List<TourneeEntity> findByEtatOrJourneeReference(EtatsDeTournee etatsDeTournee,String referenceJournee);
-    //List<TourneeEntity> findAllByEtatOrReference(EtatsDeTournee etatsDeTournee,String refJournee);
 
 }

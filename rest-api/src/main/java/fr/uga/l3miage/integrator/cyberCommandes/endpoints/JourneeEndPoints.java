@@ -41,7 +41,6 @@ public interface JourneeEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/{referenceJourner}")
     void deleteJourneeById(@PathVariable(name = "referenceJourner") String referenceJourner);
-
     @Operation(description = "Prend une  journee")
     @ApiResponse(responseCode= "200", description = "La journée a est présent dans la base de donnée")
     @ApiResponse(responseCode = "404", description = "Cette journée n'exist pas")

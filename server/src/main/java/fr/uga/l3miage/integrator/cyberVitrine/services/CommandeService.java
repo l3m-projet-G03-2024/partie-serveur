@@ -2,7 +2,7 @@ package fr.uga.l3miage.integrator.cyberVitrine.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
+import fr.uga.l3miage.integrator.cyberVitrine.errors.rest.BadRequestRestException;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
@@ -22,14 +22,9 @@ public class CommandeService {
     private final LivraisonComponent livraisonComponent ;
 
     public List<CommandeResponseDTO> getCommandes(EtatsDeCommande etat) {
-        List<CommandeEntity> commandeEntities ;
-        if (etat==null) {
-            commandeEntities = commandeComponent.findAllCommandes();
-        }
-        else {
-
-            commandeEntities = commandeComponent.findCommandByEtat(etat);
-        }
+        List<CommandeEntity> commandeEntities = etat==null ?
+                commandeComponent.findAllCommandes() :
+                commandeComponent.findCommandByEtat(etat);
         return commandeMapper.toCommandesResponseDTO(commandeEntities);
     }
 

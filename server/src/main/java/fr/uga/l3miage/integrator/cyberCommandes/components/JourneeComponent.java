@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class JourneeComponent {
     }
     public JourneeEntity getJourneeById(String reference) throws JourneeNotFoundException {
         return journeeRepository.findById(reference)
-                .orElseThrow(() -> new JourneeNotFoundException(String.format(reference, "La journée [%s] n'a pas été trouvé",reference)));
+                .orElseThrow(() -> new JourneeNotFoundException("Journée non trouvée pour la référence : " ,reference));
     }
 
     public JourneeEntity updateJournee(JourneeEntity journee) throws EntityNotFoundException{
@@ -47,4 +48,11 @@ public class JourneeComponent {
         }
     }
     
+
+    public JourneeEntity findJourneeByReference(String refJournee) throws JourneeNotFoundException  {
+        return journeeRepository.findById(refJournee)
+                .orElseThrow(() -> new JourneeNotFoundException("Journée non trouvée pour la référence : ", refJournee));
+    }
+
+
 }

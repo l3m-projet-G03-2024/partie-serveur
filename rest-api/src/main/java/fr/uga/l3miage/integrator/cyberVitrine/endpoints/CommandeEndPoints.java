@@ -18,15 +18,14 @@ public interface CommandeEndPoints {
 
 
     @ApiResponse(responseCode = "200",description = "liste de commande envoyée avec succès")
-    @ApiResponse(responseCode = "404", description = "Aucune commande trouvée pour l'état spécifié")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("")
+    @GetMapping("/")
     List<CommandeResponseDTO> getCommandes(@RequestParam(required = false) EtatsDeCommande etat);
 
     @ApiResponse(responseCode = "200", description = "la liste des commandes a été modifiée avec succès")
     @ApiResponse(responseCode = "400", description = "données fournies incorrectes ou manquantes")
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("")
+    @PatchMapping("/")
     List<CommandeResponseDTO> updateCommandes(@RequestBody List<CommandeUpdatingRequest> commandes) ;
 
 
