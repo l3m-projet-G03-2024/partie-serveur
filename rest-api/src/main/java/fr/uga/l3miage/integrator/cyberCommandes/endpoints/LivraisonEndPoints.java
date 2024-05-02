@@ -2,6 +2,8 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
@@ -30,5 +32,12 @@ public interface LivraisonEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("")
     List<LivraisonResponseDTO> getLivraisons(@RequestParam(required = false) EtatsDeLivraison etat);
+
+    @ApiResponse(responseCode = "200",description = "Livraisons crées avec succès")
+    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit l'ors de la création ")
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("")
+    LivraisonCreationResponseDTO createLivraisons(@RequestBody() LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest);
+
 
 }

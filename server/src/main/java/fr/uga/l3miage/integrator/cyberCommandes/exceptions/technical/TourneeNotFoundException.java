@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class TourneeNotFoundException  extends Exception {
-    private final  String  reference;
 
+    private final  String  reference;
     public TourneeNotFoundException( String message, String reference){
         super(message);
         this.reference = reference;

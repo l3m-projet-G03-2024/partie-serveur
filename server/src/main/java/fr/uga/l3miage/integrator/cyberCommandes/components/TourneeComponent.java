@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 
 
@@ -28,6 +29,12 @@ public class TourneeComponent {
 
     public List<TourneeEntity> createTournees(List<TourneeEntity> tourneeEntities) {
         return tourneeRepository.saveAll(tourneeEntities);
+    }
+
+
+    public TourneeEntity findTourneeByReference(String referenceTournee) throws TourneeNotFoundException  {
+        return tourneeRepository.findById(referenceTournee)
+                .orElseThrow(() -> new TourneeNotFoundException("Tournée non trouvée pour la référence : ", referenceTournee));
     }
 
     
