@@ -1,17 +1,20 @@
 package fr.uga.l3miage.integrator.cyberVitrine.controllers;
 
-import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
+
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.ConflictWithRessourceRestException;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.services.CommandeService;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -26,7 +29,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 @AutoConfigureTestDatabase
 @AutoConfigureWebTestClient
@@ -44,6 +48,7 @@ public class CommandeControllerTest {
     @MockBean
     private CommandeService commandeService ;
 
+
     @BeforeEach
     public void setup() {
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
@@ -56,43 +61,48 @@ public class CommandeControllerTest {
    }
 
 
+
     @Test
-    void getAllCommandeNotFound() {
-
-
+    void getCommandesTest() {
         // Given
         final HttpHeaders headers = new HttpHeaders();
         final Map<String,Object> urlParams = new HashMap<>();
-        urlParams.put("commandes","Aucune commande trouvée pour l'état spécifié");
+        urlParams.put("etat","PLANIFIEE");
+
+        CommandeEntity commande1 = CommandeEntity
+                .builder()
+                .reference("c01")
+                .etat(EtatsDeCommande.PLANIFIEE)
+                .build();
+        CommandeEntity commande2 = CommandeEntity
+                .builder()
+                .reference("c02")
+                .etat(EtatsDeCommande.PLANIFIEE)
+                .build();
+
+        List<CommandeEntity> commandes = new ArrayList<>();
+        commandes.add(commande1);
+        commandes.add(commande2);
+        commandeRepository.saveAll(commandes);
 
 
-       // when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
 
         // when
-        //ResponseEntity<String> response = testRestTemplate.getForEntity("/api/commandes",String.class);
-        ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/v1/commandes/etat=MS",
-                HttpMethod.GET,new HttpEntity<>(null,headers),
-                NotFoundErrorResponse.class
+      //  ResponseEntity<> response = testRestTemplate.getForEntity("/api/v1/commandes/?etat=PLANIFIEE",String.class);
+
+        ResponseEntity<List<CommandeResponseDTO>> response = testRestTemplate
+                .exchange(
+                        "/api/v1/commandes/?etat=PLANIFIEE",
+                        HttpMethod.GET,
+                        new HttpEntity<>(headers),
+                        new ParameterizedTypeReference<List<CommandeResponseDTO>>() {},
+                        urlParams
                 );
-
-
-        // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-
-
-    }
-
-    @Test
-    void getAllCommandeFound() {
-        // Given
-        when(commandeComponent.findAllCommandes()).thenReturn(Collections.emptyList());
-
-        // when
-        ResponseEntity<String> response = testRestTemplate.getForEntity("/api/v1/commandes/",String.class);
-
         // Then
-       // assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("[]");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        List<CommandeResponseDTO> commandeResponseDTOS = response.getBody();
+        assertThat(commandeResponseDTOS).isNotNull();
+        assertEquals(2,commandes.size());
 
     }
 

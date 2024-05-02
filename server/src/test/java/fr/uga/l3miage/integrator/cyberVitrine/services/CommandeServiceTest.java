@@ -80,7 +80,7 @@ public class CommandeServiceTest {
 
         List<CommandeEntity> commandes = Arrays.asList(commande1,commande2);
 
-        // Configurations et mocks
+
         when(commandeComponent.findAllCommandes()).thenReturn(commandes);
         when(commandeMapper.toCommandesResponseDTO(commandes)).thenReturn(Arrays.asList(
                new CommandeResponseDTO("1ABC",null,null,clientDetailResponseDTO1, new LivraisonResponseDTO()),
