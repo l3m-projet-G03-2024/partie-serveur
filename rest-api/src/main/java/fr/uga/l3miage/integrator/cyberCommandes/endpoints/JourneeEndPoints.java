@@ -32,7 +32,7 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "201", description = "La journée a bien été créée")
     @ApiResponse(responseCode = "409", description = "Conflit avec l'état actuel de la ressource", content = @Content(schema = @Schema(implementation = CreateJourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
+    @PostMapping("/")
     JourneeDetailResponseDTO createJournee(@RequestBody JourneeCreationRequest journeeRequest) ;
 
     @ApiResponse(responseCode = "200",description = "liste de journée supprime avec success")
