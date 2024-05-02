@@ -1,9 +1,9 @@
 package fr.uga.l3miage.integrator.cyberVitrine.controllers;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.ConflictWithRessourceRestException;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
@@ -12,7 +12,6 @@ import fr.uga.l3miage.integrator.cyberVitrine.services.CommandeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -24,7 +23,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
-import java.lang.reflect.Type;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -177,11 +175,11 @@ public class CommandeControllerTest {
         commandes.add(commande2);
 
         // when
-        ResponseEntity<BadRequestRestException> response = testRestTemplate.exchange(
+        ResponseEntity<ConflictWithRessourceRestException> response = testRestTemplate.exchange(
                 "/api/v1/commandes/",
                 HttpMethod.PATCH,
                 new HttpEntity<>(null, headers),
-                BadRequestRestException.class
+                ConflictWithRessourceRestException.class
         ) ;
 
         // then
