@@ -17,7 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RestController
 @Tag(name = "Gestion tournee", description="tous les endpoint de gestion d'une tournée")
 @RequestMapping("api/v1/tournees")
-@CrossOrigin(value = "*")
+@CrossOrigin("*")
 public interface TourneeEndPoints {
     
     @Operation(description = "recupère une tournée")
