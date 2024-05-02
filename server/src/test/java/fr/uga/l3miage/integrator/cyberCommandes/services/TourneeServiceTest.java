@@ -13,6 +13,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,8 @@ public class TourneeServiceTest {
     @MockBean
     private TourneeComponent tourneeComponent;
 
-    @MockBean
-    private JourneeRepository journeeComponent;
+    @Autowired
+    private JourneeRepository journeeRepository;
 
 
 
@@ -127,7 +128,13 @@ public class TourneeServiceTest {
         JourneeEntity journee1 = JourneeEntity.builder()
                 .reference("1Ab")
                 .build();
+        journeeRepository.save(journee1);
 
+        TourneesCreationBodyRequest tourneesCreationBodyRequest = TourneesCreationBodyRequest
+                .builder()
+                .tourneeCreationRequests(tourneeCreationRequests)
+                .referenceJournee(journee1.getReference())
+                .build();
         TourneeEntity tourneeEntity1 = TourneeEntity.builder()
                 .reference("T1")
                 .etat(EtatsDeTournee.EFFECTUEE)
@@ -145,14 +152,11 @@ public class TourneeServiceTest {
         //when(journeeComponent)
         when(tourneeComponent.createTournees(List.of(tourneeEntity1, tourneeEntity2))).thenReturn(List.of(tourneeEntity1, tourneeEntity2));
 
-       /* TourneeCreationResponseDTO tourneeCreationResponseDTO = tourneeService.createTournee(
-                tourneeCreationRequests,
-                journee1.getReference()
-        ); // On appelle la méthode à tester
+       TourneeCreationResponseDTO tourneeCreationResponseDTO = tourneeService.createTournees(tourneesCreationBodyRequest); // On appelle la méthode à tester
 
 
         assertThat(tourneeCreationResponseDTO.isSuccess()).isTrue();
-        assertThat(tourneeCreationResponseDTO.getMessage()).isEqualTo("Toutes les tournées ont été créés avec succès");*/
+        assertThat(tourneeCreationResponseDTO.getMessage()).isEqualTo("Toutes les tournées ont été créés avec succès");
 
     }
 
