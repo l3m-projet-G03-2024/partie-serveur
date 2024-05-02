@@ -2,7 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.BadRequestRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.ConflictWithRessourceRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.EntityNotDeletedRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
@@ -15,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -53,7 +51,7 @@ public class JourneeService {
             journeeEntity.setEtat(EtatsDeJournee.NONPLANIFIEE) ;
             return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.createJourneeEntity(journeeEntity)) ;
         } catch (Exception e) {
-            throw new BadRequestRestException(e.getMessage()) ;
+            throw new ConflictWithRessourceRestException(e.getMessage()) ;
         }
     }
     public JourneeDetailResponseDTO getJournee(String reference) {
@@ -70,8 +68,8 @@ public class JourneeService {
             JourneeEntity journeeExist = journeeComponent.getJourneeById(reference);
             journeeMapper.updateJourneeFromDTO(journeeUpdate, journeeExist);
             return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.updateJournee(journeeExist));
-        }catch (BadRequestRestException e){
-            throw new BadRequestRestException(e.getMessage());
+        }catch (ConflictWithRessourceRestException e){
+            throw new ConflictWithRessourceRestException(e.getMessage());
         } catch (JourneeNotFoundException e) {
             throw new RuntimeException(e);
         }

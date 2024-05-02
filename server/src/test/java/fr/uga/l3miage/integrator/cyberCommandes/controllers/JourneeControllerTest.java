@@ -62,7 +62,7 @@ public class JourneeControllerTest {
 
         //When
         ResponseEntity<JourneeResponseDTO> request = testRestTemplate
-                .exchange("/api/v1/journees",
+                .exchange("/api/v1/journees/",
                         HttpMethod.POST,
                         new HttpEntity<>(journeeCreationRequest, headers),
                         JourneeResponseDTO.class);
