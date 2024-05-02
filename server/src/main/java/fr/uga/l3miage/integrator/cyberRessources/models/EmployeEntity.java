@@ -11,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "employe")
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeEntity {
@@ -23,7 +24,7 @@ public class EmployeEntity {
 
     private String nom;
 
-    private String image;
+    private String photo;
 
     @Column(length = 10)
     private String telephone;
