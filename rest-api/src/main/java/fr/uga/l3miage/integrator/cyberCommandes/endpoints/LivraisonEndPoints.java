@@ -20,23 +20,16 @@ import java.util.List;
 @RequestMapping("/api/livraisons")
 public interface LivraisonEndPoints {
 
-    // @Operation(description = "Création d'une Livraison")
-    // @ApiResponse(responseCode = "201",description = "La Livraison à bien été créé")
-    // @ApiResponse(responseCode = "400",description = "une erreur c'est produit avec la requête")
-    // @ResponseStatus(HttpStatus.CREATED)
-    // @PostMapping("/create")
-    // LivraisonResponseDTO createLivraison(@RequestBody LivraisonCreationRequest livraisonCreationRequest);
 
     @ApiResponse(responseCode = "200",description = "liste de livraison envoyer avec succès")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la liste de livraison n'a pas été trouvé")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("")
+    @GetMapping("/")
     List<LivraisonResponseDTO> getLivraisons(@RequestParam(required = false) EtatsDeLivraison etat);
 
     @ApiResponse(responseCode = "200",description = "Livraisons crées avec succès")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit l'ors de la création ")
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("")
+    @PostMapping("/")
     LivraisonCreationResponseDTO createLivraisons(@RequestBody() LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest);
 
 
