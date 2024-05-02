@@ -20,7 +20,7 @@ public class EmployeService {
     public Set<EmployeResponseDTO> listeEmployeByEmploi(Emploi emploi){
         Set<EmployeEntity> employeEntities = employeComponent.listEmployesByEmploi(emploi);
         return employeEntities.stream()
-                .map(employeMapper::toResponse)
+                .map(employeMapper::toEmployeResponseDTO)
                 .collect(Collectors.toSet());
     }
 }
