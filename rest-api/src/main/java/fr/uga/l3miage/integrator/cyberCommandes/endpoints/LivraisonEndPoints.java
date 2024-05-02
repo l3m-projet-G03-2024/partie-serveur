@@ -1,13 +1,9 @@
 package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
-import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
-import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
-import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -17,7 +13,8 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Gestion des Livraisons")
-@RequestMapping("/api/livraisons")
+@RequestMapping("/api/v1/livraisons")
+@CrossOrigin("*")
 public interface LivraisonEndPoints {
 
 

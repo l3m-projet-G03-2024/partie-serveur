@@ -71,7 +71,7 @@ public class LivraisonControllerTest {
         when(livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.EFFECTUEE)).thenReturn(livraisonEntities);
 
         ResponseEntity<List<LivraisonResponseDTO>> response = testRestTemplate.exchange(
-                "/api/livraisons/?etat=EFFECTUEE",
+                "/api/v1/livraisons/?etat=EFFECTUEE",
                 HttpMethod.GET,
                 new HttpEntity<>(headers),
                 new ParameterizedTypeReference<List<LivraisonResponseDTO>>() {}
@@ -121,7 +121,7 @@ public class LivraisonControllerTest {
         // when
 
         ResponseEntity<LivraisonCreationResponseDTO> response = testRestTemplate
-                .exchange("/api/livraisons/",
+                .exchange("/api/v1/livraisons/",
                         HttpMethod.POST,
                         new HttpEntity<>(livraisonsCreationTourneeRequest,headers),
                         LivraisonCreationResponseDTO.class);

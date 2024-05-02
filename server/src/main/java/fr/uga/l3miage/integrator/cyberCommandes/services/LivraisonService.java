@@ -15,6 +15,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +44,13 @@ public class LivraisonService {
     
     public LivraisonCreationResponseDTO createLivraisons(LivraisonsCreationTourneeRequest livraisons) {
         List<LivraisonEntity> livraisonEntities = new ArrayList<>();
+        LocalDateTime creationDate = LocalDateTime.now();
 
         livraisons.getLivraisons().stream()
             .map(livraison -> {
                 TourneeEntity tourneeEntity;
                 LivraisonEntity livraisonEntity = livraisonMapper.toEntity(livraison);
+                livraisonEntity.setDate(creationDate);
                 try {
                     tourneeEntity = tourneeComponent.findTourneeByReference(livraison.getReferenceTournee());
                     livraisonEntity.setTourneeEntity(tourneeEntity);
