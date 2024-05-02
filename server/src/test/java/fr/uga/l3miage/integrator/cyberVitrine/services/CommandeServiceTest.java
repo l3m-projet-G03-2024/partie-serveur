@@ -137,7 +137,7 @@ public class CommandeServiceTest {
     }
 
     @Test
-    public void testUpdateCommandes() throws CommandeEntityNotFoundException, LivraisonEntityNotFoundException {
+    void testUpdateCommandes() throws CommandeEntityNotFoundException, LivraisonEntityNotFoundException {
 
         // Given
         CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
