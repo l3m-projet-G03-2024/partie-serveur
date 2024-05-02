@@ -144,7 +144,7 @@ public class TourneeControllerTest {
         final TourneesCreationBodyRequest tourneesCreationBodyRequest = TourneesCreationBodyRequest
                 .builder()
                 .referenceJournee(journee.getReference())
-                .tourneeCreationRequests(tournees)
+                .tournees(tournees)
                 .build();
 
         // When

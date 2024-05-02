@@ -14,8 +14,8 @@ public class LivraisonTourneeRequest {
     private final String reference;
     @Schema(description =" ordre de la livraison")
     private final int ordre;
-    @Schema(description = "eatat de la livraison")
-    private final EtatsDeLivraison etatsDeLivraison;
+    @Schema(description = "etat de la livraison")
+    private final EtatsDeLivraison etat;
     @Schema(description = "reference de la tournee")
     private final String referenceTournee;
 

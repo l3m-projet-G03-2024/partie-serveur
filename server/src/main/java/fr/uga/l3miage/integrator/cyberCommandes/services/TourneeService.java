@@ -49,7 +49,7 @@ public class TourneeService {
         try {
             List<TourneeEntity> tourneeEntities = new ArrayList<>();
             JourneeEntity journee = journeeComponent.findJourneeByReference(tournees.getReferenceJournee());
-            tournees.getTourneeCreationRequests()
+            tournees.getTournees()
                     .stream()
                     .map(tourneeMapper::toEntity)
                     .peek(tournee -> tournee.setJournee(journee))
