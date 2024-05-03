@@ -1,22 +1,23 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
-import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
-import lombok.RequiredArgsConstructor;
-
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
-import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
+import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
+import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class TourneeComponent {
     private final TourneeRepository tourneeRepository;
+    private final EmployeRepository employeRepository;
 
     public List<TourneeEntity> findAllTournee(){
         return tourneeRepository.findAll();
@@ -37,5 +38,22 @@ public class TourneeComponent {
                 .orElseThrow(() -> new TourneeNotFoundException("Tournée non trouvée pour la référence : ", referenceTournee));
     }
 
-    
+    public TourneeEntity addEmployeInTournee(String referenceTournee, String idEmploye) throws TourneeNotFoundException, NotFoundEmployeEntityException {
+        TourneeEntity tourneeEntity = tourneeRepository.findById(referenceTournee)
+                .orElseThrow(() -> new TourneeNotFoundException("La tournée %s n'a pas été trouvée", referenceTournee));
+        EmployeEntity employeEntity = employeRepository.findById(idEmploye)
+                .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
+
+        if (tourneeEntity.getEmployeEntities() == null) {
+            tourneeEntity.setEmployeEntities(new HashSet<>());
+        }
+        tourneeEntity.getEmployeEntities().add(employeEntity);
+
+        if (employeEntity.getTourneeEntities() == null) {
+            employeEntity.setTourneeEntities(new HashSet<>());
+        }
+        employeEntity.getTourneeEntities().add(tourneeEntity);
+
+        return tourneeRepository.save(tourneeEntity);
+    }
 }

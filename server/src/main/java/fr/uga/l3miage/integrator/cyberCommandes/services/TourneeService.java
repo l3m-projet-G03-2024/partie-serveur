@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.AddingEmployeRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
+import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import org.springframework.stereotype.Service;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
@@ -26,6 +30,7 @@ public class TourneeService {
     private final TourneeComponent tourneeComponent;
     private final TourneeMapper tourneeMapper;
     private final JourneeComponent journeeComponent;
+    private final EmployeComponent employeComponent;
 
 
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
@@ -57,4 +62,12 @@ public class TourneeService {
         }
     }
 
+    public TourneeResponseDTO addEmployeInTournee(String referenceJournee, String idEmploye){
+        try{
+            TourneeEntity tourneeEntity = tourneeComponent.addEmployeInTournee(referenceJournee, idEmploye);
+            return tourneeMapper.toTourneeResponseDTO(tourneeEntity);
+        } catch (NotFoundEmployeEntityException | TourneeNotFoundException e) {
+            throw new AddingEmployeRestException(e.getMessage());
+        }
+    }
 }

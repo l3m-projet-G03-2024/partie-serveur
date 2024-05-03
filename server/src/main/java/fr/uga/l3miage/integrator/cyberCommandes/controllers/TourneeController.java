@@ -31,5 +31,8 @@ public class TourneeController implements TourneeEndPoints {
         return tourneeService.createTournees(tourneeCreationBodyRequest);
     }
 
-
+    @Override
+    public TourneeResponseDTO addEmployeInTournee(String referenceTournee, String idEmploye){
+        return tourneeService.addEmployeInTournee(referenceTournee, idEmploye);
+    }
 }

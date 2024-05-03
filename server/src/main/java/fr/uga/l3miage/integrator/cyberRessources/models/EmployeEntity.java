@@ -12,6 +12,7 @@ import java.util.Set;
 @Table(name = "employe")
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeEntity {
