@@ -2,6 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.response;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeLivraisonResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -24,6 +25,6 @@ public class LivraisonResponseDTO {
     @Schema(description = "l'ordre de livraison", example = "1")
     private Integer ordre;
 
-    private Set<CommandeLivraisonResponseDTO> commandeLivraisonResponseDTOS;
+    private Set<CommandeResponseDTO> commandes;
 
 }
