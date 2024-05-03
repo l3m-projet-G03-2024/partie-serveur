@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @Tag(name = "Journee endpoints")
@@ -26,7 +26,7 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "200",description = "liste de journée envoie avec success")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    Set<JourneeDetailResponseDTO> findAllJournees();
+    List<JourneeDetailResponseDTO> findAllJournees();
 
     @Operation(description = "Création d'une journée")
     @ApiResponse(responseCode = "201", description = "La journée a bien été créée")
@@ -39,8 +39,8 @@ public interface JourneeEndPoints {
     @ApiResponse(responseCode = "404", description = "La journée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = DeleteJourneeErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "400", description = "Requisition invalide", content = @Content(schema = @Schema(implementation = DeleteJourneeErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/{referenceJourner}")
-    void deleteJourneeById(@PathVariable(name = "referenceJourner") String referenceJourner);
+    @DeleteMapping("/{referenceJournee}")
+    void deleteJourneeById(@PathVariable(name = "referenceJournee") String referenceJournee);
     @Operation(description = "Prend une  journee")
     @ApiResponse(responseCode= "200", description = "La journée a est présent dans la base de donnée")
     @ApiResponse(responseCode = "404", description = "Cette journée n'exist pas")

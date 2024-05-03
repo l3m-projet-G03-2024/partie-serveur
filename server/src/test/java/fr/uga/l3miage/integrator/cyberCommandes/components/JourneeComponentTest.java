@@ -5,9 +5,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -102,13 +100,13 @@ public class JourneeComponentTest {
                 .etat(EtatsDeJournee.PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 27))
                 .build();
-        Set<JourneeEntity> expectedJournees = new HashSet<>();
+        List<JourneeEntity> expectedJournees = new ArrayList<>();
         expectedJournees.add(journee1);
         expectedJournees.add(journee2);
-        when(journeeRepository.findAllBy()).thenReturn(expectedJournees);
+        when(journeeRepository.findAll()).thenReturn(expectedJournees);
 
         //When
-        Set<JourneeEntity> results = journeeComponent.findAllJournees();
+        List<JourneeEntity> results = journeeComponent.findAllJournees();
 
         //Then
         assertEquals(expectedJournees.size(), results.size(), "La taille doit être égal à 2");
@@ -120,11 +118,11 @@ public class JourneeComponentTest {
     @Test
     void findAllJourneesEmpty(){
         //Given
-        Set<JourneeEntity> emptyJournees = new HashSet<>();
-        when(journeeRepository.findAllBy()).thenReturn(emptyJournees);
+        List<JourneeEntity> emptyJournees = new ArrayList<>();
+        when(journeeRepository.findAll()).thenReturn(emptyJournees);
 
         //When
-        Set<JourneeEntity> results = journeeComponent.findAllJournees();
+        List<JourneeEntity> results = journeeComponent.findAllJournees();
 
         //Then
         assertTrue(results.isEmpty(), "La journée doit être vide");
@@ -144,7 +142,7 @@ public class JourneeComponentTest {
 
         //When
         journeeRepository.save(journeeEntity);
-        journeeComponent.deleteJourneeById(journeeEntity.getReference());
+        journeeRepository.deleteById(journeeEntity.getReference());
 
         //Then
         assertFalse(journeeRepository.findById(journeeEntity.getReference()).isPresent());

@@ -6,18 +6,16 @@
     import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
     import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
     import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
-    import org.mapstruct.BeanMapping;
-    import org.mapstruct.Mapper;
-    import org.mapstruct.MappingTarget;
-    import org.mapstruct.NullValuePropertyMappingStrategy;
+    import org.mapstruct.*;
 
     import java.util.List;
     import java.util.Set;
 
     @Mapper
     public interface JourneeMapper {
-        Set<JourneeDetailResponseDTO> toJourneeDetailResponseDTOS(Set<JourneeEntity> journeeEntities);
-        public JourneeDetailResponseDTO toJourneeDetailResponseDTO(JourneeEntity journeeEntity);
+        List<JourneeDetailResponseDTO> toJourneeDetailResponseDTOS(List<JourneeEntity> journeeEntities);
+        @Mapping(target = "entrepot", source = "entrepotEntity")
+        JourneeDetailResponseDTO toJourneeDetailResponseDTO(JourneeEntity journeeEntity);
 
         JourneeEntity toEntity(JourneeCreationRequest journeeRequest) ;
 

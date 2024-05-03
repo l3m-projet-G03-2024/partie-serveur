@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
@@ -14,6 +16,8 @@ import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
+import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -37,6 +41,8 @@ public class JourneeServiceTest {
     private JourneeComponent journeeComponent;
     @SpyBean
     private JourneeMapper journeeMapper;
+    @Autowired
+    private EntrepotRepository entrepotRepository;
 
     // Test de recuperation d'une journée via son id
     @Test
@@ -70,13 +76,13 @@ public class JourneeServiceTest {
             .build();
 
         // Création d'une liste de journée simulée
-        Set<JourneeEntity> journeeEntities = new HashSet<>();
+        List<JourneeEntity> journeeEntities = new ArrayList<>();
         journeeEntities.add(journeeEntity);
         journeeEntities.add(journeeEntity2);
         // Configuration de la Mock pour retourner la liste simulée l'orsque la methode findAllJournee est appelé
         when(journeeComponent.findAllJournees()).thenReturn(journeeEntities);
 
-        Set<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.findAllJournees();
+        List<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.findAllJournees();
         // Verification du resultat
         assertNotNull(journeeResponseDTOs);
         assertEquals(2, journeeEntities.size());
@@ -134,6 +140,11 @@ public class JourneeServiceTest {
     @Test
     void updateJourneeWhenJourneeExists() throws JourneeNotFoundException {
         // Given
+        EntrepotEntity entrepotEntity = EntrepotEntity
+                .builder()
+                .nom("Albis")
+                .build();
+
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
                 .reference("j1")
@@ -144,6 +155,7 @@ public class JourneeServiceTest {
                 .builder()
                 .etat(EtatsDeJournee.PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 27))
+                .nomEntrepot("Albis")
                 .build();
 
         JourneeEntity updatedJourneeEntity = JourneeEntity
@@ -153,6 +165,7 @@ public class JourneeServiceTest {
                 .date(journeeUpdate.getDate())
                 .build();
 
+        entrepotRepository.save(entrepotEntity);
         JourneeDetailResponseDTO journeeResponse = journeeMapper.toJourneeDetailResponseDTO(updatedJourneeEntity);
 
         when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenReturn(journeeEntity);
