@@ -16,7 +16,7 @@
 
     @Mapper
     public interface JourneeMapper {
-        Set<JourneeDetailResponseDTO> toJourneeDetailResponseDTOS(Set<JourneeEntity> journeeEntities);
+        List<JourneeDetailResponseDTO> toJourneeDetailResponseDTOS(List<JourneeEntity> journeeEntities);
         public JourneeDetailResponseDTO toJourneeDetailResponseDTO(JourneeEntity journeeEntity);
 
         JourneeEntity toEntity(JourneeCreationRequest journeeRequest) ;

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,9 +24,9 @@ public class JourneeService {
     private final JourneeComponent journeeComponent;
     private final JourneeMapper journeeMapper;
 
-    public Set<JourneeDetailResponseDTO> findAllJournees(){
+    public List<JourneeDetailResponseDTO> findAllJournees(){
         try {
-            Set<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();
+            List<JourneeEntity> journeeEntities = journeeComponent.findAllJournees();
             return journeeMapper.toJourneeDetailResponseDTOS(journeeEntities);
         }catch (Exception e){
             throw new NotFoundEntityRestException(e.getMessage());
@@ -41,6 +42,8 @@ public class JourneeService {
         }
         catch (EntityNotDeletedRestException e){
             throw new EntityNotDeletedRestException(e.getMessage());
+        } catch (JourneeNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }

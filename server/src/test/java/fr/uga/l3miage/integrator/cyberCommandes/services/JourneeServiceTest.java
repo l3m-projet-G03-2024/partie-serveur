@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
@@ -70,13 +72,13 @@ public class JourneeServiceTest {
             .build();
 
         // Création d'une liste de journée simulée
-        Set<JourneeEntity> journeeEntities = new HashSet<>();
+        List<JourneeEntity> journeeEntities = new ArrayList<>();
         journeeEntities.add(journeeEntity);
         journeeEntities.add(journeeEntity2);
         // Configuration de la Mock pour retourner la liste simulée l'orsque la methode findAllJournee est appelé
         when(journeeComponent.findAllJournees()).thenReturn(journeeEntities);
 
-        Set<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.findAllJournees();
+        List<JourneeDetailResponseDTO> journeeResponseDTOs = journeeService.findAllJournees();
         // Verification du resultat
         assertNotNull(journeeResponseDTOs);
         assertEquals(2, journeeEntities.size());

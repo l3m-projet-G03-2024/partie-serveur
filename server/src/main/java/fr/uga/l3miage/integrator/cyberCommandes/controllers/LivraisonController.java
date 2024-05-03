@@ -3,6 +3,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 import fr.uga.l3miage.integrator.cyberCommandes.endpoints.LivraisonEndPoints;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
@@ -26,6 +27,11 @@ public class LivraisonController implements LivraisonEndPoints {
     @Override
     public LivraisonCreationResponseDTO createLivraisons(LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest) {
         return livraisonService.createLivraisons(livraisonsCreationTourneeRequest);
+    }
+
+    @Override
+    public LivraisonResponseDTO updateLivraison(String livraison, LivraisonUpdateRequest livraisonUpdateRequest){
+        return livraisonService.updateLivraison(livraison, livraisonUpdateRequest);
     }
 
 }

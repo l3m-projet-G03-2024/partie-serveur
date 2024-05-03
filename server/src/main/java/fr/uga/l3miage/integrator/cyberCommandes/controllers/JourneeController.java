@@ -12,17 +12,14 @@ import org.springframework.stereotype.Controller;
 
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 
-import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
-
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
 public class JourneeController implements JourneeEndPoints {
     private final JourneeService journeeService;
     @Override
-    public Set<JourneeDetailResponseDTO> findAllJournees(){
+    public List<JourneeDetailResponseDTO> findAllJournees(){
         return journeeService.findAllJournees();
     }
     @Override

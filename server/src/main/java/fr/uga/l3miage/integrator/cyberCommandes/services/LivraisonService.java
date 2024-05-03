@@ -9,15 +9,23 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotF
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.LivraisonMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+
+import fr.uga.l3miage.integrator.cyberVitrine.services.CommandeService.*;
 
 @Service
 @RequiredArgsConstructor
@@ -65,5 +73,29 @@ public class LivraisonService {
         return new LivraisonCreationResponseDTO(true, "Livraisons créées avec succès");
 }
 
+
+    @SneakyThrows
+    public LivraisonResponseDTO updateLivraison(String referenceLivraison, LivraisonUpdateRequest livraisonUpdateRequest){
+        LivraisonEntity livraisonExist = livraisonComponent.getLivraisonByReference(referenceLivraison);
+        livraisonMapper.updateLivraisonFromDTO(livraisonUpdateRequest, livraisonExist);
+        if(livraisonUpdateRequest.getEtat() == EtatsDeLivraison.EFFECTUEE || livraisonUpdateRequest.getEtat() == EtatsDeLivraison.ENPARCOURS){
+            Set<CommandeEntity> commandeEntities =  updateCommandesLinkedWithLivraison(livraisonExist.getCommandeEntities(), livraisonUpdateRequest.getEtat());
+            livraisonExist.setCommandeEntities(commandeEntities);
+        }
+        return livraisonMapper.toResponse(livraisonComponent.updateLivraison(livraisonExist));
+    }
+
+    Set<CommandeEntity> updateCommandesLinkedWithLivraison(Set<CommandeEntity> commandeEntities, EtatsDeLivraison etatsDeLivraison){
+        if(EtatsDeLivraison.EFFECTUEE == etatsDeLivraison){
+            for (CommandeEntity commande : commandeEntities){
+                commande.setEtat(EtatsDeCommande.LIVREE);
+            }
+        }else{
+            for (CommandeEntity commande : commandeEntities){
+                commande.setEtat(EtatsDeCommande.ENLIVRAISON);
+            }
+        }
+        return commandeEntities;
+    }
     
 }

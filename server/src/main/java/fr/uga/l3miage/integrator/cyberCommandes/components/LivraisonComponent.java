@@ -41,5 +41,9 @@ public class LivraisonComponent {
         return livraisonRepository.saveAll(livraisonEntities);
     }
 
+    public LivraisonEntity updateLivraison(LivraisonEntity livraison){
+        return livraisonRepository.save(livraison);
+    }
+
 }
 

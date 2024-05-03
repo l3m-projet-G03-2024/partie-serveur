@@ -19,15 +19,17 @@ public class JourneeComponent {
     private final JourneeRepository journeeRepository;
 
 
-    public Set<JourneeEntity> findAllJournees(){
-        return journeeRepository.findAllBy();
+    public List<JourneeEntity> findAllJournees(){
+        return journeeRepository.findAll();
     }
     public JourneeEntity createJourneeEntity(JourneeEntity journeeEntity) {
         return journeeRepository.save(journeeEntity);
     }
 
-    public void deleteJourneeById(String reference) throws EntityNotFoundException{
+    public void deleteJourneeById(String reference) throws JourneeNotFoundException{
+
         if(reference != null){
+            journeeRepository.findById(reference).orElseThrow(()-> new EntityNotFoundException("Journée non trouvée pour la référence : " + reference));
             journeeRepository.deleteById(reference);
         }else {
             throw new EntityNotFoundException("L'entité à supprimer n'a pas été trouvée");
@@ -47,7 +49,7 @@ public class JourneeComponent {
             throw new EntityNotFoundException("Aucune entité n'a été trouvé pour la description [%s]");
         }
     }
-    
+
 
     public JourneeEntity findJourneeByReference(String refJournee) throws JourneeNotFoundException  {
         return journeeRepository.findById(refJournee)
