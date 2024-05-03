@@ -11,7 +11,7 @@ run-name: Verify code in branch [${{ github.ref }}] by @${{ github.actor }}
 
 on:
   pull_request:
-    branches: [ "main", "dev"]
+    branches: [ "main", "dev", "staging"]
   push:
     branches:
       - "main"

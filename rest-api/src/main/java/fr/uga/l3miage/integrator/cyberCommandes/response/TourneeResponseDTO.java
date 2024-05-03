@@ -17,13 +17,13 @@ public class TourneeResponseDTO {
     private String reference;
 
     @Schema(description = "l'atat d'une tournée", example = "PLANIFIEE")
-    private EtatsDeTournee etatsDeTournee;
+    private EtatsDeTournee etat;
 
     @Schema(description = "la distance de la tournée",example = "")
     private Double distance;
 
     @Schema(description="liste des livraisons")
-    private Set<LivraisonResponseDTO> livraisonEntities;
+    private Set<LivraisonResponseDTO> livraisons;
 
     @Schema(description="details de la journée de la tournée")
     private JourneeDetailResponseDTO journee;

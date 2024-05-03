@@ -55,7 +55,7 @@ public class LivraisonEntity {
     private Integer ordre;
 
     @OneToMany(mappedBy = "livraisonEntity")
-    private Set<CommandeEntity> commandeEntities;
+    private Set<CommandeEntity> commandes;
 
     @ManyToOne
     private TourneeEntity tourneeEntity;
