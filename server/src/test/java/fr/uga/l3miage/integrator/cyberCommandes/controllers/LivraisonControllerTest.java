@@ -21,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.*;
 
@@ -55,6 +56,7 @@ public class LivraisonControllerTest {
         final Map<String, Object> urlParams = new HashMap<>();
         urlParams.put("etat", "EFFECTUEE");
 
+
         LivraisonEntity livraison1 = LivraisonEntity.builder()
                 .reference("LIV1")
                 .etat(EtatsDeLivraison.EFFECTUEE)
@@ -86,8 +88,8 @@ public class LivraisonControllerTest {
     void canCreateLivraison() {
         // Given
         final HttpHeaders headers = new HttpHeaders();
-
         List<LivraisonTourneeRequest> livraisons = new ArrayList<>();
+
 
         TourneeEntity tourneeEntity1 = TourneeEntity
                 .builder()
@@ -131,4 +133,5 @@ public class LivraisonControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
     }
+
 }
