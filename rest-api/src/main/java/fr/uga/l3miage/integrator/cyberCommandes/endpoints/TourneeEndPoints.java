@@ -2,10 +2,14 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
@@ -33,6 +37,11 @@ public interface TourneeEndPoints {
     @PostMapping("/")
     TourneeCreationResponseDTO createTournees(@RequestBody TourneesCreationBodyRequest tourneeCreationBodyRequest);
 
-
+    @Operation(description = "Ajouter un employé à une tournée")
+    @ApiResponse(responseCode = "200",description = "L'employe a été ajouté à la tournée")
+    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la tounee ou l'employe demandé n'a pas été trouvé",content = @Content(schema = @Schema(implementation = AddTourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @PatchMapping("/{referenceTournee}/add")
+    TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestParam String idEmploye);
 
 }
