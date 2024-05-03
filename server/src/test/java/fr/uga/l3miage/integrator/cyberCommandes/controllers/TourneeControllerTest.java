@@ -14,7 +14,13 @@ import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
+
 import fr.uga.l3miage.integrator.cyberCommandes.services.TourneeService;
+
+import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
+import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
+import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import org.junit.jupiter.api.AfterEach;
@@ -53,11 +59,10 @@ public class TourneeControllerTest {
     private TourneeMapper tourneeMapper;
     @Autowired
     private JourneeRepository journeeRepository;
+    @Autowired
+    private EmployeRepository employeRepository;
 
-    @AfterEach
-    public void clear() {
-        this.tourneeRepository.deleteAll();
-    }
+
 
 
 
@@ -173,10 +178,42 @@ public class TourneeControllerTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-      //  assertThat(response.getBody()).isNotNull();
-
     }
 
+    @Test
+    void canAddEmployeInTournee() {
+        // Given
+        final HttpHeaders headers = new HttpHeaders();
+        final EmployeEntity employe = EmployeEntity.builder()
+                .trigramme("test1")
+                .email("test1@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.LIVREUR)
+                .tourneeEntities(new HashSet<>())
+                .build();
 
+        final TourneeEntity tourneeEntity = TourneeEntity.builder()
+                .reference("test")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employeEntities(new HashSet<>())
+                .build();
+        employeRepository.save(employe);
+        tourneeRepository.save(tourneeEntity);
 
+        // When
+        ResponseEntity<TourneeResponseDTO> response = template
+                .exchange("/api/v1/tournees/{referenceTournee}/addEmploye",
+                        HttpMethod.PATCH,
+                        new HttpEntity<>(employe.getTrigramme(), headers),
+                        TourneeResponseDTO.class,
+                        tourneeEntity.getReference());
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+    }
 }
