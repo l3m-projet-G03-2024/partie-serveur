@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
+import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,9 @@ public class JourneeDetailResponseDTO {
 
     @Schema(description = "temps de retour estimer")
     private Integer tdmTheorique;
-    
+
+    @Schema(description = "")
+    private EntrepotResponseDetailDTO entrepot;
 
 }
 
