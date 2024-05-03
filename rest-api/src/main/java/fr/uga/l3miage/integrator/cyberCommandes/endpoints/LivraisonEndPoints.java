@@ -33,6 +33,7 @@ public interface LivraisonEndPoints {
     LivraisonCreationResponseDTO createLivraisons(@RequestBody() LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest);
 
     @ApiResponse(responseCode = "200", description= "Livraison a été bien changée")
+    @ApiResponse(responseCode = "404", description = "")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceLivraison}")
     LivraisonResponseDTO updateLivraison(@PathVariable(name = "referenceLivraison") String reference, @RequestBody LivraisonUpdateRequest livraisonUpdateRequest);

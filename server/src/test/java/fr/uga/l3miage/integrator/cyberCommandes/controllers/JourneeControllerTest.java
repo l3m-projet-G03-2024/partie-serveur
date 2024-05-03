@@ -19,6 +19,10 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.services.JourneeService;
+import fr.uga.l3miage.integrator.cyberProduit.components.EntrepotComponent;
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
+import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
+import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +47,10 @@ public class JourneeControllerTest {
     private JourneeRepository journeeRepository;
     @SpyBean
     private JourneeService journeeService;
+    @SpyBean
+    private EntrepotComponent entrepotComponent;
+    @Autowired
+    private EntrepotRepository  entrepotRepository;
 
     @BeforeEach
     public void setup() {
@@ -76,6 +84,15 @@ public class JourneeControllerTest {
     @Test
     void updateJourneeSuccess() {
         final HttpHeaders headers = new HttpHeaders();
+        EntrepotResponseDetailDTO entrepot =  EntrepotResponseDetailDTO
+                .builder()
+                .nom("Albis")
+                .build();
+
+        EntrepotEntity entrepotEntity = EntrepotEntity
+                .builder()
+                .nom("Albis")
+                .build();
         // Given
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
@@ -94,6 +111,7 @@ public class JourneeControllerTest {
                 .distanceAParcourir(123.1)
                 .montant(200.0)
                 .tdmTheorique(60)
+                .nomEntrepot("Albis")
                 .build();
 
         JourneeDetailResponseDTO updatedResponse = JourneeDetailResponseDTO
@@ -104,8 +122,11 @@ public class JourneeControllerTest {
                 .distanceAParcourir(123.1)
                 .montant(200.0)
                 .tdmTheorique(60)
+                .entrepot(entrepot)
                 .build();
         journeeRepository.save(journeeEntity);
+        entrepotRepository.save(entrepotEntity);
+       // when(entrepotComponent.getEntrepotByNom("Albis")).thenReturn(entrepotEntity);
 
         // When
         ResponseEntity<JourneeDetailResponseDTO> response = testRestTemplate.exchange(

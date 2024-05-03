@@ -11,6 +11,8 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
+import fr.uga.l3miage.integrator.cyberProduit.components.EntrepotComponent;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import java.util.Set;
 public class JourneeService {
     private final JourneeComponent journeeComponent;
     private final JourneeMapper journeeMapper;
+
+    private final EntrepotComponent entrepotComponent;
 
     public List<JourneeDetailResponseDTO> findAllJournees(){
         try {
@@ -67,9 +71,12 @@ public class JourneeService {
     }
 
     public JourneeDetailResponseDTO updateJournee(String reference, JourneeUpdateRequest journeeUpdate){
+
         try {
             JourneeEntity journeeExist = journeeComponent.getJourneeById(reference);
+            EntrepotEntity entrepotEntity = entrepotComponent.getEntrepotByNom(journeeUpdate.getNomEntrepot());
             journeeMapper.updateJourneeFromDTO(journeeUpdate, journeeExist);
+            journeeExist.setEntrepotEntity(entrepotEntity);
             return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.updateJournee(journeeExist));
         }catch (ConflictWithRessourceRestException e){
             throw new ConflictWithRessourceRestException(e.getMessage());

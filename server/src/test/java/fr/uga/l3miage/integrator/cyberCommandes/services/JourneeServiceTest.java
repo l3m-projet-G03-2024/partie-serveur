@@ -16,6 +16,8 @@ import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
+import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -39,6 +41,8 @@ public class JourneeServiceTest {
     private JourneeComponent journeeComponent;
     @SpyBean
     private JourneeMapper journeeMapper;
+    @Autowired
+    private EntrepotRepository entrepotRepository;
 
     // Test de recuperation d'une journée via son id
     @Test
@@ -136,6 +140,11 @@ public class JourneeServiceTest {
     @Test
     void updateJourneeWhenJourneeExists() throws JourneeNotFoundException {
         // Given
+        EntrepotEntity entrepotEntity = EntrepotEntity
+                .builder()
+                .nom("Albis")
+                .build();
+
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
                 .reference("j1")
@@ -146,6 +155,7 @@ public class JourneeServiceTest {
                 .builder()
                 .etat(EtatsDeJournee.PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 27))
+                .nomEntrepot("Albis")
                 .build();
 
         JourneeEntity updatedJourneeEntity = JourneeEntity
@@ -155,6 +165,7 @@ public class JourneeServiceTest {
                 .date(journeeUpdate.getDate())
                 .build();
 
+        entrepotRepository.save(entrepotEntity);
         JourneeDetailResponseDTO journeeResponse = journeeMapper.toJourneeDetailResponseDTO(updatedJourneeEntity);
 
         when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenReturn(journeeEntity);
