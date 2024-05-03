@@ -103,7 +103,7 @@ public class CommandeControllerTest {
 //
 //    @Test
 //    void updateCommandesSuccess() {
-//        //given
+//
 //        final HttpHeaders headers = new HttpHeaders();
 //
 //
@@ -140,7 +140,6 @@ public class CommandeControllerTest {
 //                .commandes(commandes)
 //                .build();
 //
-//        // when
 //        ResponseEntity<CommandeUpdateBodyResponseDTO> responseEntities = testRestTemplate.exchange(
 //                "/api/v1/commandes/",
 //                HttpMethod.PATCH,
@@ -149,13 +148,13 @@ public class CommandeControllerTest {
 //                }
 //        );
 //
-//        // then
+//
 //        assertThat(responseEntities.getStatusCode()).isEqualTo(HttpStatus.OK) ;
 //    }
-
+//
 //    @Test
 //    void updateCommandesFailure() {
-//        //given
+//
 //        final HttpHeaders headers = new HttpHeaders();
 //
 //        CommandeEntity commandeEntity1 = CommandeEntity.builder()
@@ -188,7 +187,7 @@ public class CommandeControllerTest {
 //
 //
 //
-//        // when
+//
 //        ResponseEntity<ConflictWithRessourceRestException> response = testRestTemplate.exchange(
 //                "/api/v1/commandes/",
 //                HttpMethod.PATCH,
@@ -196,7 +195,7 @@ public class CommandeControllerTest {
 //                ConflictWithRessourceRestException.class
 //        ) ;
 //
-//        // then
+//
 //        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST) ;
 //    }
 
