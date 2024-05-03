@@ -3,11 +3,13 @@ package fr.uga.l3miage.integrator.cyberVitrine.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
+import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
+import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,16 +30,18 @@ public class CommandeService {
         return commandeMapper.toCommandesResponseDTO(commandeEntities);
     }
 
-    public List<CommandeResponseDTO> updateCommandes(List<CommandeUpdatingRequest> commandes) {
+    public List<CommandeResponseDTO> updateCommandes(CommandeUpdatingBodyRequest commandes) {
         try {
-            List<CommandeResponseDTO> crd = new ArrayList<>();
-            for (CommandeUpdatingRequest cur : commandes) {
-                CommandeEntity ce = commandeComponent.getCommandeByReference(cur.getReference()) ;
-                ce.setLivraisonEntity(livraisonComponent.getLivraisonByReference(cur.getReferenceLivraison()));
-                commandeMapper.updateCommandeFromDTO(cur, ce);
-                crd.add(commandeMapper.toCommandeResponseDTO(ce)) ;
+            List<CommandeEntity> commandeEntities = new ArrayList<>();
+            for (CommandeUpdatingRequest commandeUpdatingRequest : commandes.getCommandes()) {
+                CommandeEntity commandeEntity = commandeComponent.getCommandeByReference(commandeUpdatingRequest.getReference()) ;
+                commandeMapper.updateCommandeFromDTO(commandeUpdatingRequest, commandeEntity);
+                commandeEntity.setLivraisonEntity(livraisonComponent.getLivraisonByReference(commandeUpdatingRequest.getReferenceLivraison()));
+                commandeEntities.add(commandeEntity);
             }
-            return crd ;
+            List<CommandeEntity> commandeUpdates = commandeComponent.updateCommandes(commandeEntities);
+
+            return commandeMapper.toCommandesResponseDTO(commandeUpdates);
         } catch (Exception e) {
             throw new BadRequestRestException(e.getMessage()) ;
         }

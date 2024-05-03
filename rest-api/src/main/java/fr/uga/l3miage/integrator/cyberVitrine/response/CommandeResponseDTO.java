@@ -16,10 +16,8 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Schema(description = "represente les commandes d'un client")
 public class CommandeResponseDTO {
 
@@ -35,7 +33,7 @@ public class CommandeResponseDTO {
 
     @Schema(description = "details necessaires du client")
     private ClientDetailResponseDTO client;
-
+/*
     @Schema(description = "référence de la livraison de la commande")
-    private LivraisonResponseDTO livraison ;
+    private LivraisonResponseDTO livraison ;*/
 }

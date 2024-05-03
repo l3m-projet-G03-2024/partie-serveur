@@ -45,7 +45,7 @@ public class LivraisonServiceTest {
             LivraisonEntity livraison1 = new LivraisonEntity();
             livraison1.setEtat(null); // No state set
             livraison1.setReference("1ABC");
-            livraison1.setCommandeEntities(Set.of(commande1));
+            livraison1.setCommandes(Set.of(commande1));
 
             List<LivraisonEntity> livraisons = List.of(livraison1);
 

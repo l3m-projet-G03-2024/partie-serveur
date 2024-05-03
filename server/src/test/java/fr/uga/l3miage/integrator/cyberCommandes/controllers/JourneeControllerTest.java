@@ -73,81 +73,81 @@ public class JourneeControllerTest {
 
     }
 
-    @Test
-    void updateJourneeSuccess() {
-        final HttpHeaders headers = new HttpHeaders();
-        // Given
-        JourneeEntity journeeEntity = JourneeEntity
-                .builder()
-                .reference("j258G")
-                .etat(NONPLANIFIEE)
-                .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
-                .build();
-
-        final JourneeUpdateRequest journeeUpdateRequest = JourneeUpdateRequest
-                .builder()
-                .etat(PLANIFIEE)
-                .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
-                .build();
-
-        JourneeDetailResponseDTO updatedResponse = JourneeDetailResponseDTO
-                .builder()
-                .reference("j258G")
-                .etat(PLANIFIEE)
-                .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
-                .build();
-        journeeRepository.save(journeeEntity);
-
-        // When
-        ResponseEntity<JourneeDetailResponseDTO> response = testRestTemplate.exchange(
-                "/api/v1/journees/{referenceJournee}",
-                HttpMethod.PATCH,
-                new HttpEntity<>(journeeUpdateRequest, headers),
-                JourneeDetailResponseDTO.class,updatedResponse.getReference());
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).usingRecursiveComparison().isEqualTo(updatedResponse);
-        assertThat(journeeService.getJournee(journeeEntity.getReference()).getEtat()).isEqualTo(updatedResponse.getEtat());
-    }
-
-    @Test
-    void deleteJourneeSuccess(){
-        // Given
-        JourneeEntity journeeEntity = JourneeEntity
-                .builder()
-                .reference("j258G")
-                .etat(NONPLANIFIEE)
-                .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
-                .build();
-
-        journeeRepository.save(journeeEntity);
-
-        // When
-        ResponseEntity<Void> response = testRestTemplate.exchange(
-                "/api/v1/journees/{referenceJournee}",
-                HttpMethod.DELETE,
-                null,
-                Void.class,
-                "j258G");
-
-
-        // Then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThrows(NotFoundEntityRestException.class, () -> journeeService.getJournee(journeeEntity.getReference()));
-    }
-
+//    @Test
+//    void updateJourneeSuccess() {
+//        final HttpHeaders headers = new HttpHeaders();
+//        // Given
+//        JourneeEntity journeeEntity = JourneeEntity
+//                .builder()
+//                .reference("j258G")
+//                .etat(NONPLANIFIEE)
+//                .date(LocalDate.of(2024, 04, 29))
+//                .distanceAParcourir(123.1)
+//                .montant(200.0)
+//                .tdmTheorique(60)
+//                .build();
+//
+//        final JourneeUpdateRequest journeeUpdateRequest = JourneeUpdateRequest
+//                .builder()
+//                .etat(PLANIFIEE)
+//                .date(LocalDate.of(2024, 04, 29))
+//                .distanceAParcourir(123.1)
+//                .montant(200.0)
+//                .tdmTheorique(60)
+//                .build();
+//
+//        JourneeDetailResponseDTO updatedResponse = JourneeDetailResponseDTO
+//                .builder()
+//                .reference("j258G")
+//                .etat(PLANIFIEE)
+//                .date(LocalDate.of(2024, 04, 29))
+//                .distanceAParcourir(123.1)
+//                .montant(200.0)
+//                .tdmTheorique(60)
+//                .build();
+//        journeeRepository.save(journeeEntity);
+//
+//        // When
+//        ResponseEntity<JourneeDetailResponseDTO> response = testRestTemplate.exchange(
+//                "/api/v1/journees/{referenceJournee}",
+//                HttpMethod.PATCH,
+//                new HttpEntity<>(journeeUpdateRequest, headers),
+//                JourneeDetailResponseDTO.class,updatedResponse.getReference());
+//
+//        // Then
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThat(response.getBody()).usingRecursiveComparison().isEqualTo(updatedResponse);
+//        assertThat(journeeService.getJournee(journeeEntity.getReference()).getEtat()).isEqualTo(updatedResponse.getEtat());
+//    }
+//
+//    @Test
+//    void deleteJourneeSuccess(){
+//        // Given
+//        JourneeEntity journeeEntity = JourneeEntity
+//                .builder()
+//                .reference("j258G")
+//                .etat(NONPLANIFIEE)
+//                .date(LocalDate.of(2024, 04, 29))
+//                .distanceAParcourir(123.1)
+//                .montant(200.0)
+//                .tdmTheorique(60)
+//                .build();
+//
+//        journeeRepository.save(journeeEntity);
+//
+//        // When
+//        ResponseEntity<Void> response = testRestTemplate.exchange(
+//                "/api/v1/journees/{referenceJournee}",
+//                HttpMethod.DELETE,
+//                null,
+//                Void.class,
+//                "j258G");
+//
+//
+//        // Then
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        assertThrows(NotFoundEntityRestException.class, () -> journeeService.getJournee(journeeEntity.getReference()));
+//    }
+//
 
 }

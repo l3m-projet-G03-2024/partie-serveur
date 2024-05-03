@@ -18,6 +18,6 @@ public class LivraisonCreationResponseDTO {
     public LivraisonCreationResponseDTO( boolean succes, String message){
         this.succes = succes;
         this.message = message;
-        //this.createdLivraisons = createdLivraisons;
+
     }
 }

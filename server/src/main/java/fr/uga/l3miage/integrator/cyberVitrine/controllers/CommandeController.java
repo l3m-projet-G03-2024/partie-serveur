@@ -2,8 +2,10 @@ package fr.uga.l3miage.integrator.cyberVitrine.controllers;
 
 import fr.uga.l3miage.integrator.cyberVitrine.endpoints.CommandeEndPoints;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.services.CommandeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ public class CommandeController implements CommandeEndPoints {
        return commandeService.getCommandes(etat);
     }
 
-    public List<CommandeResponseDTO> updateCommandes(List<CommandeUpdatingRequest> commandes) {
-        return commandeService.updateCommandes(commandes) ;
+    public List<CommandeResponseDTO> updateCommandes(CommandeUpdatingBodyRequest commandes) {
+        return commandeService.updateCommandes(commandes);
     }
 }

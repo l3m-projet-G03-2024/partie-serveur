@@ -28,8 +28,8 @@ public class CommandeComponent {
                 .orElseThrow(() -> new CommandeEntityNotFoundException(String.format(reference, "La commande [%s] n'a pas été trouvée", reference))) ;
     }
 
-    public CommandeEntity updateCommande(CommandeEntity commandeEntity) {
-        return commandeRepository.save(commandeEntity) ;
+    public List<CommandeEntity> updateCommandes(List<CommandeEntity> commandeEntity) {
+        return commandeRepository.saveAll(commandeEntity) ;
     }
 
 }

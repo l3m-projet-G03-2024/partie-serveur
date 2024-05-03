@@ -2,8 +2,10 @@ package fr.uga.l3miage.integrator.cyberVitrine.endpoints;
 
 
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -26,7 +28,7 @@ public interface CommandeEndPoints {
     @ApiResponse(responseCode = "400", description = "données fournies incorrectes ou manquantes")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/")
-    List<CommandeResponseDTO> updateCommandes(@RequestBody List<CommandeUpdatingRequest> commandes) ;
+    List<CommandeResponseDTO> updateCommandes(@RequestBody CommandeUpdatingBodyRequest commandeUpdatingBodyRequest) ;
 
 
 }
