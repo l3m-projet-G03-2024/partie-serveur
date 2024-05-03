@@ -13,8 +13,6 @@ import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,7 +32,7 @@ public class TourneeComponentTest {
     @MockBean
     private EmployeRepository employeRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(TourneeComponent.class);
+
   /*Ce test s'assure que la méthode findAllTournee() fonctionne correctement,
    dans le cas où aucune tournée n'est trouvée dans le repository,
    en retournant une liste vide. */
@@ -115,10 +113,13 @@ public class TourneeComponentTest {
 
         when(tourneeRepository.findById(any())).thenReturn(Optional.of(tourneeEntity));
         when(employeRepository.findById(any())).thenReturn(Optional.of(employe));
+        when(tourneeRepository.save(tourneeEntity)).thenReturn((tourneeEntity));
 
         TourneeEntity tourneeEntity1 = tourneeComponent.addEmployeInTournee("test", "test1");
         Set<EmployeEntity> employeEntities = tourneeEntity1.getEmployeEntities();
         assertNotNull(employeEntities);
+        assertEquals(tourneeEntity1, tourneeEntity);
+        assertTrue(tourneeEntity1.getEmployeEntities().contains(employe));
         assertEquals(1, employeEntities.size());
     }
 

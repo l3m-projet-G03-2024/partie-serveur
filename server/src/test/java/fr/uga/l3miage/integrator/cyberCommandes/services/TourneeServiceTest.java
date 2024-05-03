@@ -2,19 +2,28 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
-import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
+import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
+import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;
+import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
+import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,6 +34,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -37,6 +47,12 @@ public class TourneeServiceTest {
 
     @Autowired
     private JourneeRepository journeeRepository;
+
+    @SpyBean
+    private TourneeMapper tourneeMapper;
+
+    @SpyBean
+    private EmployeMapper employeMapper;
 
 
 
@@ -160,4 +176,37 @@ public class TourneeServiceTest {
 
     }
 
+    @Test
+    void canAddEmployeInTournee() throws TourneeNotFoundException, NotFoundEmployeEntityException {
+
+        EmployeEntity employe = EmployeEntity.builder()
+                .trigramme("test1")
+                .email("test1@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.LIVREUR)
+                .tourneeEntities(new HashSet<>())
+                .build();
+
+        TourneeEntity tourneeEntity = TourneeEntity.builder()
+                .reference("test")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employeEntities(new HashSet<>())
+                .build();
+        when(tourneeComponent.addEmployeInTournee(any(String.class), any(String.class)))
+                .thenReturn(tourneeEntity);
+
+        TourneeResponseDTO responseDTO = tourneeService.addEmployeInTournee(tourneeEntity.getReference(), employe.getTrigramme());
+
+        employe.getTourneeEntities().add(tourneeEntity);
+        tourneeEntity.getEmployeEntities().add(employe);
+        TourneeResponseDTO expectedResponseDTO = tourneeMapper.toTourneeResponseDTO(tourneeEntity);
+
+        assertThat(responseDTO).usingRecursiveComparison().isEqualTo(expectedResponseDTO);
+        assertTrue(tourneeEntity.getEmployeEntities().contains(employe));
+    }
 }

@@ -62,9 +62,9 @@ public class TourneeService {
         }
     }
 
-    public TourneeResponseDTO addEmployeInTournee(String referenceJournee, String idEmploye){
+    public TourneeResponseDTO addEmployeInTournee(String referenceTournee, String idEmploye){
         try{
-            TourneeEntity tourneeEntity = tourneeComponent.addEmployeInTournee(referenceJournee, idEmploye);
+            TourneeEntity tourneeEntity = tourneeComponent.addEmployeInTournee(referenceTournee, idEmploye);
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity);
         } catch (NotFoundEmployeEntityException | TourneeNotFoundException e) {
             throw new AddingEmployeRestException(e.getMessage());
