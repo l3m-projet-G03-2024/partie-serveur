@@ -64,28 +64,55 @@ public class EmployeComponentTest {
                 .telephone("1234567890")
                 .emploi(Emploi.LIVREUR)
                 .build();
-        //When (Emploi)
-        when(employeRepository.getEmployeEntitiesByEmploi(Emploi.LIVREUR)).thenReturn(Set.of(employe1, employe3));
-        Set<EmployeEntity> livreurs = employeComponent.listEmployesByEmploi(Emploi.LIVREUR);
-        //Then
+
+        when(employeRepository.findByEmploiOrEntrepotNom(Emploi.LIVREUR,"GRENIS")).thenReturn(Set.of(employe1,employe3));
+        when(employeRepository.findByEmploiOrEntrepotNom(Emploi.LIVREUR,null)).thenReturn(Set.of(employe1,employe3));
+        when(employeRepository.findByEmploiOrEntrepotNom(null,"GRENIS")).thenReturn(Set.of(employe1,employe2));
+
+
+        Set<EmployeEntity> livreurs = employeComponent.findEmployeByEmploiOrEntrepotNom(null,"GRENIS");
         assertEquals(2, livreurs.size());
 
-        //When (Null)
-        when(employeRepository.findAll()).thenReturn(List.of(employe1, employe2, employe3));
-        Set<EmployeEntity> employeEntities = employeComponent.listEmployesByEmploi(null);
-        //Then
-        assertEquals(3, employeEntities.size());
+
+        Set<EmployeEntity> employeEntities = employeComponent.findEmployeByEmploiOrEntrepotNom(Emploi.LIVREUR,null);
+        assertEquals(2, employeEntities.size());
+
+        Set<EmployeEntity> employeGrenis = employeComponent.findEmployeByEmploiOrEntrepotNom(Emploi.LIVREUR,"GRENIS");
+        assertEquals(2, employeGrenis.size());
 
     }
 
     @Test
-    void listEmployesEmpty(){
+    void listAllEmployes(){
         //Given - When
-        when(employeRepository.getEmployeEntitiesByEmploi(any())).thenReturn(Set.of());
 
-        Set<EmployeEntity> employeEntities = employeComponent.listEmployesByEmploi(null);
+        EmployeEntity employe2 = EmployeEntity
+                .builder()
+                .trigramme("test2")
+                .email("test2@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.PRODEUR)
+                .build();
+
+        EmployeEntity employe3 = EmployeEntity
+                .builder()
+                .trigramme("test3")
+                .email("test@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.LIVREUR)
+                .build();
+
+
+
+        when(employeRepository.findAll()).thenReturn(List.of(employe2,employe3));
+
+        Set<EmployeEntity> employeEntities = employeComponent.findAllEmployes();
 
         //Then
-        assertEquals(0, employeEntities.size());
+        assertEquals(2, employeEntities.size());
     }
 }

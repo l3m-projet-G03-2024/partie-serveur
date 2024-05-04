@@ -2,7 +2,6 @@ package fr.uga.l3miage.integrator.cyberRessources.controllers;
 
 import fr.uga.l3miage.integrator.cyberRessources.endpoints.EmployeEndPoints;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
-import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.services.EmployeService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ public class EmployeController implements EmployeEndPoints {
     private final EmployeService employeService;
 
     @Override
-    public Set<EmployeResponseDTO> listEmployeResponseDtoSet(Emploi emploi) {
-        return employeService.listeEmployeByEmploi(emploi);
+    public Set<EmployeResponseDTO> listEmployeByEmploiOrNomEntrepot(Emploi emploi, String nomEntrepot) {
+        return employeService.listeEmployeByEmploiOrNomEntrepot(emploi,nomEntrepot);
     }
 }

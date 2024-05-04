@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
@@ -105,9 +106,9 @@ public class TourneeComponentTest {
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
                 .tdrTheorique(1)
-                .employeEntities(new HashSet<>())
+                .employes(new HashSet<>())
                 .build();
-        tourneeEntity.getEmployeEntities().add(employe);
+        tourneeEntity.getEmployes().add(employe);
         employe.getTourneeEntities().add(tourneeEntity);
 
 
@@ -116,10 +117,10 @@ public class TourneeComponentTest {
         when(tourneeRepository.save(tourneeEntity)).thenReturn((tourneeEntity));
 
         TourneeEntity tourneeEntity1 = tourneeComponent.addEmployeInTournee("test", "test1");
-        Set<EmployeEntity> employeEntities = tourneeEntity1.getEmployeEntities();
+        Set<EmployeEntity> employeEntities = tourneeEntity1.getEmployes();
         assertNotNull(employeEntities);
         assertEquals(tourneeEntity1, tourneeEntity);
-        assertTrue(tourneeEntity1.getEmployeEntities().contains(employe));
+        assertTrue(tourneeEntity1.getEmployes().contains(employe));
         assertEquals(1, employeEntities.size());
     }
 

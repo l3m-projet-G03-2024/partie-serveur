@@ -4,6 +4,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
@@ -44,10 +45,10 @@ public class TourneeComponent {
         EmployeEntity employeEntity = employeRepository.findById(idEmploye)
                 .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
 
-        if (tourneeEntity.getEmployeEntities() == null) {
-            tourneeEntity.setEmployeEntities(new HashSet<>());
+        if (tourneeEntity.getEmployes() == null) {
+            tourneeEntity.setEmployes(new HashSet<>());
         }
-        tourneeEntity.getEmployeEntities().add(employeEntity);
+        tourneeEntity.getEmployes().add(employeEntity);
 
         if (employeEntity.getTourneeEntities() == null) {
             employeEntity.setTourneeEntities(new HashSet<>());

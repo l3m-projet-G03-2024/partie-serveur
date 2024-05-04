@@ -3,6 +3,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 import java.util.List;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
@@ -42,6 +43,6 @@ public interface TourneeEndPoints {
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la tounee ou l'employe demandé n'a pas été trouvé",content = @Content(schema = @Schema(implementation = AddTourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PatchMapping("/{referenceTournee}/addEmploye")
-    TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestBody String idEmploye);
+    TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestParam String idEmploye);
 
 }

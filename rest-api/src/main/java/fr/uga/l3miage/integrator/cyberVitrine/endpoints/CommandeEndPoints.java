@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Commande endoints")
 @RequestMapping("api/v1/commandes")
+@CrossOrigin("*")
 public interface CommandeEndPoints {
 
 

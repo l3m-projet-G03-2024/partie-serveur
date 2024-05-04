@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberRessources.services;
 
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
@@ -26,13 +27,20 @@ public class EmployeServiceTest {
     private EmployeComponent employeComponent;
     @Test
     void listEmployesByEmploi(){
+
         //Given
+        EntrepotEntity entrepot = EntrepotEntity
+                .builder()
+                .nom("GRENIS")
+                .build();
+
         EmployeEntity employe1 = EmployeEntity
                 .builder()
                 .trigramme("test1")
                 .email("test1@gmail.com")
                 .nom("nom")
                 .prenom("prenom")
+                .entrepot(entrepot)
                 .telephone("1234567890")
                 .emploi(Emploi.LIVREUR)
                 .build();
@@ -44,6 +52,7 @@ public class EmployeServiceTest {
                 .nom("nom")
                 .prenom("prenom")
                 .telephone("1234567890")
+                .entrepot(entrepot)
                 .emploi(Emploi.PRODEUR)
                 .build();
 
@@ -62,12 +71,19 @@ public class EmployeServiceTest {
         employeEntities.add(employe2);
         employeEntities.add(employe3);
 
-        when(employeComponent.listEmployesByEmploi(any())).thenReturn(employeEntities);
-        when(employeComponent.listEmployesByEmploi(Emploi.LIVREUR)).thenReturn(Set.of(employe1, employe3));
-        Set<EmployeResponseDTO> employeResponseDTOS = employeService.listeEmployeByEmploi(null);
-        Set<EmployeResponseDTO> livreurs = employeService.listeEmployeByEmploi(Emploi.LIVREUR);
+        when(employeComponent.findAllEmployes()).thenReturn(employeEntities);
+        when(employeComponent.findEmployeByEmploiOrEntrepotNom(Emploi.LIVREUR,null)).thenReturn(Set.of(employe1, employe3));
+        when(employeComponent.findEmployeByEmploiOrEntrepotNom(null,"GRENIS")).thenReturn(Set.of(employe1, employe2));
+        when(employeComponent.findEmployeByEmploiOrEntrepotNom(Emploi.LIVREUR,"GRENIS")).thenReturn(Set.of(employe1));
 
-        assertEquals(3, employeResponseDTOS.size());
+        Set<EmployeResponseDTO> employes = employeService.listeEmployeByEmploiOrNomEntrepot(null,null);
+        Set<EmployeResponseDTO> livreurs = employeService.listeEmployeByEmploiOrNomEntrepot(Emploi.LIVREUR,null);
+        Set<EmployeResponseDTO> employesByEntrepot = employeService.listeEmployeByEmploiOrNomEntrepot(null,"GRENIS");
+        Set<EmployeResponseDTO> livreursForGrenis = employeService.listeEmployeByEmploiOrNomEntrepot(Emploi.LIVREUR,"GRENIS");
+
+        assertEquals(3, employes.size());
         assertEquals(2, livreurs.size());
+        assertEquals(2, employesByEntrepot.size());
+        assertEquals(1, livreursForGrenis.size());
     }
 }
