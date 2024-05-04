@@ -13,11 +13,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class EmployeComponent {
     private final EmployeRepository employeRepository;
-    public Set<EmployeEntity> listEmployesByEmploi(Emploi emploi){
-        if(emploi != null){
-            return employeRepository.getEmployeEntitiesByEmploi(emploi);
-        }else {
-            return new HashSet<>(employeRepository.findAll());
-        }
+
+    public Set<EmployeEntity> findEmployeByEmploiOrEntrepotNom(Emploi emploi,String nomEntrepot) {
+        return employeRepository.findByEmploiOrEntrepotNom(emploi,nomEntrepot);
+    }
+
+    public Set<EmployeEntity> findAllEmployes() {
+        return new HashSet<>(employeRepository.findAll());
     }
 }

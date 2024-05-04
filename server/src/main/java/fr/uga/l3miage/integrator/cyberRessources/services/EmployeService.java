@@ -17,8 +17,15 @@ public class EmployeService {
     private final EmployeComponent employeComponent;
     private final EmployeMapper employeMapper;
 
-    public Set<EmployeResponseDTO> listeEmployeByEmploi(Emploi emploi){
-        Set<EmployeEntity> employeEntities = employeComponent.listEmployesByEmploi(emploi);
+    public Set<EmployeResponseDTO> listeEmployeByEmploiOrNomEntrepot(Emploi emploi, String nomEntrepot){
+        Set<EmployeEntity> employeEntities = null;
+        if(emploi != null || nomEntrepot != null ){
+            employeEntities = employeComponent.findEmployeByEmploiOrEntrepotNom(emploi,nomEntrepot);
+        }
+        if(emploi == null && nomEntrepot==null){
+           employeEntities = employeComponent.findAllEmployes();
+        }
+
         return employeEntities.stream()
                 .map(employeMapper::toEmployeResponseDTO)
                 .collect(Collectors.toSet());

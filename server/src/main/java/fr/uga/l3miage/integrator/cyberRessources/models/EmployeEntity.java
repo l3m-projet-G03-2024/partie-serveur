@@ -33,7 +33,7 @@ public class EmployeEntity {
     @Enumerated(EnumType.STRING)
     private Emploi emploi;
 
-    @OneToOne(optional = true)
+    @ManyToOne
     private EntrepotEntity entrepot;
 
     @ManyToMany

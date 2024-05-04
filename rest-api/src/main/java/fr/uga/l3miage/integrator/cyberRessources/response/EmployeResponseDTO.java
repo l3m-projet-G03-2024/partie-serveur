@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberRessources.response;
 
+import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -34,4 +35,7 @@ public class EmployeResponseDTO {
 
     @Schema(description = "L'emploi de l'employe")
     private Emploi emploi;
+
+    @Schema(description = "l'entrepot de l'employe")
+    private EntrepotResponseDetailDTO entrepot;
 }
