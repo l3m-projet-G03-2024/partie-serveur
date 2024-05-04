@@ -36,7 +36,7 @@ public class TourneeEntity {
     private Set<LivraisonEntity> livraisons;
 
     @ManyToMany(mappedBy = "tourneeEntities")
-    private Set<EmployeEntity> employeEntities;
+    private Set<EmployeEntity> employes;
 
     @ManyToOne
     private JourneeEntity journee;

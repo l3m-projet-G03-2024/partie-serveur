@@ -40,8 +40,8 @@ public class EntrepotEntity {
     @OneToMany(mappedBy = "entrepotEntity")
     private Set<StockEntity> stockEntities;
 
-    @OneToOne(mappedBy = "entrepot")
-    private EmployeEntity employeEntity;
+    @OneToMany(mappedBy = "entrepot")
+    private Set<EmployeEntity> employeEntities;
 
     @OneToMany(mappedBy = "entrepot")
     private Set<CamionEntity> camionEntities;

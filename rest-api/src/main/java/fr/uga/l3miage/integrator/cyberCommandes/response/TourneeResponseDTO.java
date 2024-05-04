@@ -4,6 +4,8 @@ import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 
+import fr.uga.l3miage.integrator.cyberRessources.response.CamionResponseDTO;
+import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +29,11 @@ public class TourneeResponseDTO {
 
     @Schema(description="details de la journée de la tournée")
     private JourneeDetailResponseDTO journee;
+
+     @Schema(description = "details des employes")
+     private Set<EmployeResponseDTO> employes;
+
+     @Schema(description = "details du camion")
+     private CamionResponseDTO camion;
 
 }

@@ -18,6 +18,6 @@ public interface EmployeEndPoints {
     @ApiResponse(responseCode = "200",description = "La liste des employes")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
-    Set<EmployeResponseDTO> listEmployeResponseDtoSet(@RequestParam(required = false) Emploi emploi);
+    Set<EmployeResponseDTO> listEmployeByEmploiOrNomEntrepot(@RequestParam(required = false) Emploi emploi, @RequestParam(required = false) String nomEntrepot);
 
 }

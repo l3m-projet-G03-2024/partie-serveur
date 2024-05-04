@@ -10,6 +10,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotF
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
@@ -41,7 +42,7 @@ public class TourneeService {
         if (etatsDeTournee == null && referenceJournee == null ){
             tourneeEntities = tourneeComponent.findAllTournee();
         }
-        return tourneeMapper.toTourneeResponseDTO(tourneeEntities);
+        return tourneeMapper.toTourneesResponseDTO(tourneeEntities);
     }
 
 
