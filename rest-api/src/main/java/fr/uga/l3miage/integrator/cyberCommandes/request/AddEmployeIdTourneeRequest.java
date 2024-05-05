@@ -7,4 +7,12 @@ import lombok.Data;
 @Builder
 public class AddEmployeIdTourneeRequest {
     private String idEmploye;
+
+    public AddEmployeIdTourneeRequest() {
+
+    }
+
+    public AddEmployeIdTourneeRequest (String idEmploye) {
+        this.idEmploye = idEmploye;
+    }
 }
