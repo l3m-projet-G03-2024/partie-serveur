@@ -32,7 +32,7 @@ public class TourneeController implements TourneeEndPoints {
     }
 
     @Override
-    public TourneeResponseDTO addEmployeInTournee(String referenceTournee, String idEmploye){
-        return tourneeService.addEmployeInTournee(referenceTournee, idEmploye);
+    public TourneeResponseDTO addEmployeInTournee(String referenceTournee, AddEmployeIdTourneeRequest addEmployeIdTourneeRequest){
+        return tourneeService.addEmployeInTournee(referenceTournee, addEmployeIdTourneeRequest.getIdEmploye());
     }
 }
