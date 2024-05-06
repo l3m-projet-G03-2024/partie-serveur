@@ -11,6 +11,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
+import fr.uga.l3miage.integrator.cyberProduit.exceptions.rest.EntrepotNotFoundException;
 import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberProduit.components.EntrepotComponent;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -55,10 +55,15 @@ public class JourneeService {
     public JourneeDetailResponseDTO createJournee(JourneeCreationRequest journeeRequest){
         try{
             JourneeEntity journeeEntity = journeeMapper.toEntity(journeeRequest) ;
+            EntrepotEntity entrepotEntity = entrepotComponent.getEntrepotByNom(journeeRequest.getNomEntrepot());
             journeeEntity.setEtat(EtatsDeJournee.NONPLANIFIEE) ;
+            journeeEntity.setEntrepotEntity(entrepotEntity);
             return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.createJourneeEntity(journeeEntity)) ;
-        } catch (Exception e) {
-            throw new ConflictWithRessourceRestException(e.getMessage()) ;
+        } catch (ConflictWithRessourceRestException e) {
+            throw new ConflictWithRessourceRestException(e.getMessage());
+        }
+        catch (EntrepotNotFoundException e){
+            throw new EntrepotNotFoundException(e.getMessage());
         }
     }
     public JourneeDetailResponseDTO getJournee(String reference) {
@@ -74,9 +79,7 @@ public class JourneeService {
 
         try {
             JourneeEntity journeeExist = journeeComponent.getJourneeById(reference);
-            EntrepotEntity entrepotEntity = entrepotComponent.getEntrepotByNom(journeeUpdate.getNomEntrepot());
             journeeMapper.updateJourneeFromDTO(journeeUpdate, journeeExist);
-            journeeExist.setEntrepotEntity(entrepotEntity);
             return journeeMapper.toJourneeDetailResponseDTO(journeeComponent.updateJournee(journeeExist));
         }catch (ConflictWithRessourceRestException e){
             throw new ConflictWithRessourceRestException(e.getMessage());

@@ -62,12 +62,18 @@ public class JourneeControllerTest {
         //Given
         final HttpHeaders headers = new HttpHeaders();
 
+        EntrepotEntity entrepot =  EntrepotEntity
+                .builder()
+                .nom("Albis")
+                .build();
+
         final JourneeCreationRequest journeeCreationRequest = JourneeCreationRequest
                 .builder()
                 .reference("test")
                 .date(LocalDate.of(2024, 04, 29))
+                .nomEntrepot("Albis")
                 .build();
-
+        entrepotRepository.save(entrepot);
         //When
         ResponseEntity<JourneeResponseDTO> request = testRestTemplate
                 .exchange("/api/v1/journees/",
@@ -84,15 +90,6 @@ public class JourneeControllerTest {
     @Test
     void updateJourneeSuccess() {
         final HttpHeaders headers = new HttpHeaders();
-        EntrepotResponseDetailDTO entrepot =  EntrepotResponseDetailDTO
-                .builder()
-                .nom("Albis")
-                .build();
-
-        EntrepotEntity entrepotEntity = EntrepotEntity
-                .builder()
-                .nom("Albis")
-                .build();
         // Given
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
@@ -111,7 +108,6 @@ public class JourneeControllerTest {
                 .distanceAParcourir(123.1)
                 .montant(200.0)
                 .tdmTheorique(60)
-                .nomEntrepot("Albis")
                 .build();
 
         JourneeDetailResponseDTO updatedResponse = JourneeDetailResponseDTO
@@ -122,10 +118,8 @@ public class JourneeControllerTest {
                 .distanceAParcourir(123.1)
                 .montant(200.0)
                 .tdmTheorique(60)
-                .entrepot(entrepot)
                 .build();
         journeeRepository.save(journeeEntity);
-        entrepotRepository.save(entrepotEntity);
        // when(entrepotComponent.getEntrepotByNom("Albis")).thenReturn(entrepotEntity);
 
         // When
