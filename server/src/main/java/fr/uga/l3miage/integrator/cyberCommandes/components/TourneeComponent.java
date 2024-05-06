@@ -4,7 +4,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
-import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -56,5 +56,11 @@ public class TourneeComponent {
         employeEntity.getTourneeEntities().add(tourneeEntity);
 
         return tourneeRepository.save(tourneeEntity);
+    }
+
+    public Set<TourneeEntity> getAllTourneesByEmployeId(String idEmploye) throws NotFoundEmployeEntityException {
+        EmployeEntity employe = employeRepository.findById(idEmploye)
+                .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
+        return new HashSet<>( tourneeRepository.findByEmployesTrigramme(idEmploye));
     }
 }
