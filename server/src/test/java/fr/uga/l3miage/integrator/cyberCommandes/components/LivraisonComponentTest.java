@@ -9,12 +9,14 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @AutoConfigureTestDatabase
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
@@ -76,6 +78,25 @@ public class LivraisonComponentTest {
 
         List<LivraisonEntity> result = livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.PLANIFIEE);
         assertEquals(1, result.size(), "La liste des commandes doit contenir un élément");
+    }
+    void canCreateLivraison() {
+        // Création d'une entité de livraison
+        LivraisonEntity livraisonEntity = LivraisonEntity
+                .builder()
+                .reference("1L")
+                .etat(EtatsDeLivraison.PLANIFIEE)
+                .date(LocalDateTime.of(2024, 5, 3, 15, 30))
+                .build();
+        livraisonRepository.save(livraisonEntity);
+
+        // Configuration du comportement du mock pour la méthode save
+        when(livraisonRepository.save(any())).thenReturn(livraisonEntity);
+
+        // Appel de la méthode createLivraisons avec une liste contenant une seule livraison
+        List<LivraisonEntity> livraisonEntities = livraisonComponent.createLivraisons(List.of(livraisonEntity));
+
+        // Vérification que la méthode save a bien été appelée une fois avec n'importe quelle entité de livraison
+        verify(livraisonRepository, times(1)).save(any(LivraisonEntity.class));
     }
 
 }

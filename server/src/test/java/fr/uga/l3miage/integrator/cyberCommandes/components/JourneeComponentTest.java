@@ -51,16 +51,20 @@ public class JourneeComponentTest {
         // Création d'une journée
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
-                .reference("2L")
+                .reference("J2")
                 .etat(EtatsDeJournee.PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 26))
                 .build();
 
         // Configure le mock pour retourner un Optional contenent une instance de journée
-        when(journeeRepository.findById(anyString())).thenReturn(Optional.of(journeeEntity));
-        // verifie qu'aucune exception n'est levée
-        assertDoesNotThrow(() -> journeeComponent.getJourneeById("2L"));
+        when(journeeRepository.findById ("J2")).thenReturn(Optional.of(journeeEntity));
 
+        // Vérification que la méthode findJourneeByReference retourne correctement la journée avec la référence "J2"
+        assertDoesNotThrow(() -> {
+            JourneeEntity foundJournee = journeeComponent.getJourneeById("J2");
+            assertNotNull(foundJournee);
+            assertEquals("J2", foundJournee.getReference());
+        });
     }
 
 
