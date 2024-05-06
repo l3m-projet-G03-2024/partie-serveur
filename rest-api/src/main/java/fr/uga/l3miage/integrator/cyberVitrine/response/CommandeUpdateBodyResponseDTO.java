@@ -9,4 +9,11 @@ import java.util.List;
 @Builder
 public class CommandeUpdateBodyResponseDTO {
     private List<CommandeResponseDTO> commandes;
+
+    public CommandeUpdateBodyResponseDTO(){
+
+    }
+    public CommandeUpdateBodyResponseDTO(List<CommandeResponseDTO> commandes){
+        this.commandes = commandes;
+    }
 }
