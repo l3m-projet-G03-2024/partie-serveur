@@ -3,6 +3,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 import java.util.List;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
@@ -43,5 +44,13 @@ public interface TourneeEndPoints {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PatchMapping("/{referenceTournee}/addEmploye")
     TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestBody AddEmployeIdTourneeRequest addEmployeIdTourneeRequest);
+
+
+    @Operation(description = "Récupération d'une tournée")
+    @ApiResponse(responseCode = "200", description = "La tournée a été récupérée avec succès")
+    @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée",content = @Content(schema = @Schema(implementation = TourneeNotFoundResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{referenceTournee}")
+    TourneeResponseDTO getTournee(@PathVariable(name = "referenceTournee") String referenceTournee) ;
 
 }

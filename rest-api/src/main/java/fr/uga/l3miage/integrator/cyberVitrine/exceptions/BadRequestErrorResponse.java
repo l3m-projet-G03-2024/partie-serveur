@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class BadRequestErrorResponse extends Exception{
+public class BadRequestErrorResponse {
     @Schema(description = "end point call", example = "/api/drone/")
     private final String uri;
     @Schema(description = "error message", example = "Mauvaise requête")

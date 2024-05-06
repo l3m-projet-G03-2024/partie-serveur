@@ -6,6 +6,7 @@ import java.util.List;
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.AddingEmployeRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -69,6 +70,15 @@ public class TourneeService {
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity);
         } catch (NotFoundEmployeEntityException | TourneeNotFoundException e) {
             throw new AddingEmployeRestException(e.getMessage());
+        }
+    }
+
+    public TourneeResponseDTO getTournee(String referenceTournee) {
+        try {
+            TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(referenceTournee) ;
+            return tourneeMapper.toTourneeResponseDTO(tourneeEntity) ;
+        } catch (TourneeNotFoundException e) {
+            throw new TourneeNotFoundRestException(e.getMessage(), referenceTournee) ;
         }
     }
 }
