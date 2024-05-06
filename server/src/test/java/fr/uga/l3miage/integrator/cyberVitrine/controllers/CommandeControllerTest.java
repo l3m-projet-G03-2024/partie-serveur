@@ -2,6 +2,8 @@ package fr.uga.l3miage.integrator.cyberVitrine.controllers;
 
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.ConflictWithRessourceRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.LivraisonRepository;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 
 
@@ -40,6 +42,9 @@ public class CommandeControllerTest {
 
     @Autowired
     private CommandeRepository commandeRepository;
+
+    @Autowired
+    private LivraisonRepository livraisonRepository;
 
 
 
@@ -100,103 +105,115 @@ public class CommandeControllerTest {
         assertEquals(2,commandes.size());
 
     }
-//
-//    @Test
-//    void updateCommandesSuccess() {
-//
-//        final HttpHeaders headers = new HttpHeaders();
-//
-//
-//        CommandeEntity commandeEntity1 = CommandeEntity.builder()
-//                .reference("REF1")
-//                .etat(EtatsDeCommande.OUVERTE).build();
-//        commandeRepository.save(commandeEntity1) ;
-//
-//        CommandeEntity commandeEntity2 = CommandeEntity.builder()
-//                .reference("REF2")
-//                .etat(EtatsDeCommande.PLANIFIEE).build();
-//        commandeRepository.save(commandeEntity2) ;
-//
-//        final CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
-//                .builder()
-//                .reference("REF1")
-//                .etat(EtatsDeCommande.ENLIVRAISON)
-//                .referenceLivraison("REF_LIVRAISON_1")
-//                .build();
-//
-//        final CommandeUpdatingRequest commande2 = CommandeUpdatingRequest
-//                .builder()
-//                .reference("REF2")
-//                .etat(EtatsDeCommande.LIVREE)
-//                .referenceLivraison("REF_LIVRAISON_2")
-//                .build();
-//
-//        List<CommandeUpdatingRequest> commandes = new ArrayList<>();
-//        commandes.add(commande1);
-//        commandes.add(commande2);
-//
-//        CommandeUpdatingBodyRequest commandeUpdatingBodyRequest = CommandeUpdatingBodyRequest
-//                .builder()
-//                .commandes(commandes)
-//                .build();
-//
-//        ResponseEntity<CommandeUpdateBodyResponseDTO> responseEntities = testRestTemplate.exchange(
-//                "/api/v1/commandes/",
-//                HttpMethod.PATCH,
-//                new HttpEntity<>(headers),
-//                new ParameterizedTypeReference<CommandeUpdateBodyResponseDTO>() {
-//                }
-//        );
-//
-//
-//        assertThat(responseEntities.getStatusCode()).isEqualTo(HttpStatus.OK) ;
-//    }
-//
-//    @Test
-//    void updateCommandesFailure() {
-//
-//        final HttpHeaders headers = new HttpHeaders();
-//
-//        CommandeEntity commandeEntity1 = CommandeEntity.builder()
-//                .reference("REF1")
-//                .etat(EtatsDeCommande.OUVERTE).build();
-//        commandeRepository.save(commandeEntity1) ;
-//
-//        CommandeEntity commandeEntity2 = CommandeEntity.builder()
-//                .reference("REF2")
-//                .etat(EtatsDeCommande.PLANIFIEE).build();
-//        commandeRepository.save(commandeEntity2) ;
-//
-//        final CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
-//                .builder()
-//                .reference("REF1 non existante")
-//                .etat(EtatsDeCommande.ENLIVRAISON)
-//                .referenceLivraison("REF_LIVRAISON_1")
-//                .build();
-//
-//        final CommandeUpdatingRequest commande2 = CommandeUpdatingRequest
-//                .builder()
-//                .reference("REF2 non existante")
-//                .etat(EtatsDeCommande.LIVREE)
-//                .referenceLivraison("REF_LIVRAISON_2")
-//                .build();
-//
-//        List<CommandeUpdatingRequest> commandes = new ArrayList<>();
-//        commandes.add(commande1);
-//        commandes.add(commande2);
-//
-//
-//
-//
-//        ResponseEntity<ConflictWithRessourceRestException> response = testRestTemplate.exchange(
-//                "/api/v1/commandes/",
-//                HttpMethod.PATCH,
-//                new HttpEntity<>(null, headers),
-//                ConflictWithRessourceRestException.class
-//        ) ;
-//
-//
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST) ;
-//    }
+
+    @Test
+    void updateCommandesSuccess() {
+
+        final HttpHeaders headers = new HttpHeaders();
+
+        LivraisonEntity livraisonEntity1 = LivraisonEntity
+                .builder()
+                .reference("REF_LIVRAISON_1")
+                .build();
+
+        livraisonRepository.save(livraisonEntity1);
+
+        LivraisonEntity livraisonEntity2 = LivraisonEntity
+                .builder()
+                .reference("REF_LIVRAISON_2")
+                .build();
+
+        livraisonRepository.save(livraisonEntity2);
+
+        CommandeEntity commandeEntity1 = CommandeEntity.builder()
+                .reference("REF1")
+                .etat(EtatsDeCommande.OUVERTE).build();
+        commandeRepository.save(commandeEntity1) ;
+
+        CommandeEntity commandeEntity2 = CommandeEntity.builder()
+                .reference("REF2")
+                .etat(EtatsDeCommande.PLANIFIEE).build();
+        commandeRepository.save(commandeEntity2) ;
+
+        final CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF1")
+                .etat(EtatsDeCommande.ENLIVRAISON)
+                .referenceLivraison(livraisonEntity1.getReference())
+                .build();
+
+        final CommandeUpdatingRequest commande2 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF2")
+                .etat(EtatsDeCommande.LIVREE)
+                .referenceLivraison(livraisonEntity2.getReference())
+                .build();
+
+        List<CommandeUpdatingRequest> commandes = new ArrayList<>();
+        commandes.add(commande1);
+        commandes.add(commande2);
+
+        CommandeUpdatingBodyRequest commandeUpdatingBodyRequest = CommandeUpdatingBodyRequest
+                .builder()
+                .commandes(commandes)
+                .build();
+
+        ResponseEntity<List<CommandeResponseDTO>> responseEntities = testRestTemplate.exchange(
+                "/api/v1/commandes/",
+                HttpMethod.PATCH,
+                new HttpEntity<>(commandeUpdatingBodyRequest,headers),
+                new ParameterizedTypeReference<List<CommandeResponseDTO>>() {}
+        );
+
+
+        assertThat(responseEntities.getStatusCode()).isEqualTo(HttpStatus.OK) ;
+    }
+
+    @Test
+    void updateCommandesFailure() {
+
+        final HttpHeaders headers = new HttpHeaders();
+
+        CommandeEntity commandeEntity1 = CommandeEntity.builder()
+                .reference("REF1")
+                .etat(EtatsDeCommande.OUVERTE).build();
+        commandeRepository.save(commandeEntity1) ;
+
+        CommandeEntity commandeEntity2 = CommandeEntity.builder()
+                .reference("REF2")
+                .etat(EtatsDeCommande.PLANIFIEE).build();
+        commandeRepository.save(commandeEntity2) ;
+
+        final CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF1 non existante")
+                .etat(EtatsDeCommande.ENLIVRAISON)
+                .referenceLivraison("REF_LIVRAISON_1")
+                .build();
+
+        final CommandeUpdatingRequest commande2 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF2 non existante")
+                .etat(EtatsDeCommande.LIVREE)
+                .referenceLivraison("REF_LIVRAISON_2")
+                .build();
+
+        List<CommandeUpdatingRequest> commandes = new ArrayList<>();
+        commandes.add(commande1);
+        commandes.add(commande2);
+
+
+
+
+        ResponseEntity<ConflictWithRessourceRestException> response = testRestTemplate.exchange(
+                "/api/v1/commandes/",
+                HttpMethod.PATCH,
+                new HttpEntity<>(null, headers),
+                ConflictWithRessourceRestException.class
+        ) ;
+
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST) ;
+    }
 
 }

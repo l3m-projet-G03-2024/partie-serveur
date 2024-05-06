@@ -13,4 +13,6 @@ public class CommandeUpdatingRequest {
     private EtatsDeCommande etat ;
 
     private String referenceLivraison ;
+
+
 }
