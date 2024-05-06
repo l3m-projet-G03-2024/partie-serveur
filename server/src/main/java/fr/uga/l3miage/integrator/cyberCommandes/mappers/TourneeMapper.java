@@ -21,6 +21,7 @@ public interface TourneeMapper {
     List<TourneeResponseDTO> toTourneesResponseDTO(List<TourneeEntity> tourneeEntities);
 
     TourneeEntity toEntity(TourneeCreationRequest tourneeCreationRequest);
-    
+
+    TourneeEntity toEntity(TourneeResponseDTO tourneeResponseDTO);
 
 }

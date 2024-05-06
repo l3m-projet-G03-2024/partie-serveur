@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
 import java.util.List;
+import java.util.Set;
 
 
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
@@ -37,7 +38,12 @@ public class TourneeController implements TourneeEndPoints {
     }
 
     @Override
-    public TourneeResponseDTO getTournee(String referenceTournee){
-        return tourneeService.getTournee(referenceTournee) ;
+    public TourneeResponseDTO getTournee(String referenceTournee) {
+        return tourneeService.getTournee(referenceTournee);
+    }
+    @Override
+    public Set<TourneeResponseDTO> getAllTourneesByEmployeId(String idEmploye){
+        return tourneeService.getAllTourneesByEmployeId(idEmploye);
+
     }
 }

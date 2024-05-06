@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -7,10 +8,8 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
-import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
-import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import org.junit.jupiter.api.Test;
@@ -146,4 +145,69 @@ public class TourneeComponentTest {
         assertDoesNotThrow(() -> tourneeComponent.findTourneeByReference("test"));
     }
 
+    void getAllTourneesByEmploye() throws NotFoundEmployeEntityException {
+        //Given
+        EmployeEntity employe = EmployeEntity.builder()
+                .trigramme("test")
+                .email("test1@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.LIVREUR)
+                .tourneeEntities(new HashSet<>())
+                .build();
+
+        TourneeEntity tourneeEntity1 = TourneeEntity.builder()
+                .reference("test1")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employes(new HashSet<>())
+                .build();
+
+        tourneeEntity1.getEmployes().add(employe);
+        employe.getTourneeEntities().add(tourneeEntity1);
+
+        TourneeEntity tourneeEntity2 = TourneeEntity.builder()
+                .reference("test2")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employes(new HashSet<>())
+                .build();
+        tourneeEntity2.getEmployes().add(employe);
+        employe.getTourneeEntities().add(tourneeEntity2);
+
+        TourneeEntity tourneeEntity3 = TourneeEntity.builder()
+                .reference("test2")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employes(new HashSet<>())
+                .build();
+
+        List<TourneeEntity> tourneeEntities = new ArrayList<>();
+        tourneeEntities.add(tourneeEntity1);
+        tourneeEntities.add(tourneeEntity2);
+        tourneeEntities.add(tourneeEntity3);
+
+        //When
+        when(tourneeRepository.findAll()).thenReturn(tourneeEntities);
+        when(employeRepository.findById(any())).thenReturn(Optional.of(employe));
+        when(tourneeRepository.findByEmployesTrigramme(anyString())).thenReturn(Set.of(tourneeEntity1, tourneeEntity2));
+
+        Set<TourneeEntity> entitiesExpected = tourneeComponent.getAllTourneesByEmployeId(employe.getTrigramme());
+        Set<TourneeEntity> entitiesByEmploye = employe.getTourneeEntities();
+
+        assertNotNull(entitiesExpected);
+        assertNotNull(entitiesByEmploye);
+        assertEquals(2, entitiesByEmploye.size());
+        assertEquals(2, entitiesExpected.size());
+        assertThat(entitiesByEmploye).usingRecursiveComparison().isEqualTo(entitiesExpected);
+        assertTrue(entitiesExpected.contains(tourneeEntity1));
+        assertFalse(entitiesExpected.contains(tourneeEntity3));
+    }
 }
