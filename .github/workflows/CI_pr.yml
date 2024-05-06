@@ -11,7 +11,7 @@ run-name: Verify code in branch [${{ github.ref }}] by @${{ github.actor }}
 
 on:
   pull_request:
-    branches: [ "main", "dev", "staging"]
+    branches: [ "main", "staging"]
   push:
     branches:
       - "main"
@@ -25,7 +25,7 @@ jobs:
     - name: Set up JDK 17 ⚙️
       uses: "./.github/template/setup/java"
     - name: setup bdd
-      uses: docker-compose -f docker/docker-compose-dev.yml up -d
+      run: docker-compose -f docker/docker-compose-dev.yml up -d
     - name: build 🛠️
       uses: "./.github/template/build"
     - name: test 🧪
