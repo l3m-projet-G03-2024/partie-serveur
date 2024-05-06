@@ -2,12 +2,17 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
+import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.LivraisonMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
-import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeLivraisonResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,10 +20,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -30,6 +36,9 @@ public class LivraisonServiceTest {
 
     @MockBean
     private LivraisonComponent livraisonComponent;
+
+    @MockBean
+    private TourneeRepository tourneeRepository;
 
     @SpyBean
     private LivraisonMapper livraisonMapper;
@@ -94,8 +103,40 @@ public class LivraisonServiceTest {
         verify(livraisonMapper,times(2)).toLivraisonResponse(livraisons);
     }
 
-    @Test
-    void createLivraisonSuccess() {
+   @Test
+   void createLivraisonsSucces() {
+       TourneeEntity tourneeEntity = TourneeEntity
+               .builder()
+               .reference("T23")
+               .etat(EtatsDeTournee.PLANIFIEE)
+               .build();
+       tourneeRepository.save(tourneeEntity);
+       LivraisonTourneeRequest livraisonTourneeRequest = LivraisonTourneeRequest
+               .builder()
+               .reference("2L")
+               .etat(EtatsDeLivraison.PLANIFIEE)
+               .ordre(2)
+               .referenceTournee("T23")
+               .build();
+       LivraisonTourneeRequest livraisonTourneeRequest1 = LivraisonTourneeRequest
+               .builder()
+               .reference("3L")
+               .etat(EtatsDeLivraison.EFFECTUEE)
+               .ordre(3)
+               .referenceTournee("T23")
+               .build();
 
+       LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest  = LivraisonsCreationTourneeRequest
+               .builder()
+               .livraisons(List.of(livraisonTourneeRequest,livraisonTourneeRequest1))
+               .build();
+       // Mock de la méthode findTourneeByReference pour renvoyer une tournée existante
+       when(tourneeRepository.findById("T23")).thenReturn(Optional.of(tourneeEntity));
+
+       LivraisonCreationResponseDTO response = livraisonService.createLivraisons(livraisonsCreationTourneeRequest);
+       assertTrue(response.isSucces());
+       //assertThat(response.getMessage()).isEqualTo("Livraisons crées avec succès");
+       assertThat(response.getMessage()).isEqualTo("Livraisons crées avec succès");
     }
+
 }
