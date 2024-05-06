@@ -124,4 +124,26 @@ public class TourneeComponentTest {
         assertEquals(1, employeEntities.size());
     }
 
+    @Test
+    void findTourneeByReferenceNotFound() {
+        // Given
+        when(tourneeRepository.findById(anyString())).thenReturn(Optional.empty()) ;
+
+        // when - then
+        assertThrows(TourneeNotFoundException.class, () -> tourneeComponent.findTourneeByReference("test")) ;
+    }
+
+    @Test
+    void findTourneeByReferenceFound() {
+        // Given
+        TourneeEntity tourneeEntity = TourneeEntity
+                .builder()
+                .reference("test")
+                .build();
+        when(tourneeRepository.findById(anyString())).thenReturn(Optional.of(tourneeEntity)) ;
+
+        // when - then
+        assertDoesNotThrow(() -> tourneeComponent.findTourneeByReference("test"));
+    }
+
 }
