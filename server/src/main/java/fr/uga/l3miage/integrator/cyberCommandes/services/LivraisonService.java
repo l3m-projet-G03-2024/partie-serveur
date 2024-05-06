@@ -70,7 +70,7 @@ public class LivraisonService {
             .forEach(livraisonEntities::add); 
 
         livraisonComponent.createLivraisons(livraisonEntities);
-        return new LivraisonCreationResponseDTO(true, "Livraisons créées avec succès");
+        return new LivraisonCreationResponseDTO(true, "Livraisons crées avec succès");
 }
 
 
