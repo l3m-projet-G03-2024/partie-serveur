@@ -13,7 +13,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;;;
 
 
-@Mapper(uses = {CommandeMapper.class, EmployeMapper.class})
+@Mapper(uses = CommandeMapper.class)
 public interface TourneeMapper {
 
 
