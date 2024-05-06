@@ -42,12 +42,7 @@ public class JourneeComponent {
     }
 
     public JourneeEntity updateJournee(JourneeEntity journee) throws EntityNotFoundException{
-        JourneeEntity journeeUpdate = journeeRepository.save(journee);
-        if(journeeUpdate != null){
-            return journeeUpdate;
-        }else{
-            throw new EntityNotFoundException("Aucune entité n'a été trouvé pour la description [%s]");
-        }
+        return journeeRepository.save(journee);
     }
 
 
