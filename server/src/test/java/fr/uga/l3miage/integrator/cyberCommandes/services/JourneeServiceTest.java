@@ -4,10 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
@@ -18,6 +15,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
+import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -93,12 +91,21 @@ public class JourneeServiceTest {
      */
     @Test
     void createJournee(){
+
         //Given
+
+        EntrepotEntity entrepot =  EntrepotEntity
+                .builder()
+                .nom("Albis")
+                .build();
+
         JourneeCreationRequest journeeRequest = JourneeCreationRequest
                 .builder()
                 .reference("test")
                 .date(LocalDate.of(2024, 04, 29))
+                .nomEntrepot("Albis")
                 .build();
+        entrepotRepository.save(entrepot);
 
         JourneeEntity journeeEntity = journeeMapper.toEntity(journeeRequest);
 
@@ -155,7 +162,6 @@ public class JourneeServiceTest {
                 .builder()
                 .etat(EtatsDeJournee.PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 27))
-                .nomEntrepot("Albis")
                 .build();
 
         JourneeEntity updatedJourneeEntity = JourneeEntity

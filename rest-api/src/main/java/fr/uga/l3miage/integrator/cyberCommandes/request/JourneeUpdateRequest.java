@@ -21,7 +21,5 @@ public class JourneeUpdateRequest {
     private final Double montant;
     @Schema(description = "")
     private final Integer tdmTheorique;
-    @Schema(description = "")
-    private final String nomEntrepot;
 }
 
