@@ -1,17 +1,18 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.AddingEmployeRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.EmployeRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
-import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
-import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
@@ -69,7 +70,21 @@ public class TourneeService {
             TourneeEntity tourneeEntity = tourneeComponent.addEmployeInTournee(referenceTournee, idEmploye);
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity);
         } catch (NotFoundEmployeEntityException | TourneeNotFoundException e) {
-            throw new AddingEmployeRestException(e.getMessage());
+            throw new EmployeRestException(e.getMessage());
+        }
+    }
+
+    public Set<TourneeResponseDTO> getAllTourneesByEmployeId (String idEmploye){
+        try{
+            Set<TourneeEntity> tourneeEntities = new HashSet<>();
+            if(idEmploye != null){
+                tourneeEntities = tourneeComponent.getAllTourneesByEmployeId(idEmploye);
+            }
+            return tourneeEntities.stream()
+                    .map(tourneeMapper::toTourneeResponseDTO)
+                    .collect(Collectors.toSet());
+        } catch (NotFoundEmployeEntityException e) {
+            throw new EmployeRestException(e.getMessage());
         }
     }
 

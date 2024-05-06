@@ -6,25 +6,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
-import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
-import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
-import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -51,9 +45,6 @@ public class TourneeServiceTest {
 
     @SpyBean
     private TourneeMapper tourneeMapper;
-
-    @SpyBean
-    private EmployeMapper employeMapper;
 
 
 
@@ -209,5 +200,66 @@ public class TourneeServiceTest {
 
 //        assertThat(responseDTO).usingRecursiveComparison().isEqualTo(expectedResponseDTO);
         assertTrue(tourneeEntity.getEmployes().contains(employe));
+    }
+
+    @Test
+    void getAllTourneesByEmployeId() throws NotFoundEmployeEntityException {
+
+        EmployeEntity employe = EmployeEntity.builder()
+                .trigramme("test")
+                .email("test1@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.LIVREUR)
+                .tourneeEntities(new HashSet<>())
+                .build();
+
+        TourneeEntity tourneeEntity1 = TourneeEntity.builder()
+                .reference("test1")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employes(new HashSet<>())
+                .build();
+        tourneeEntity1.getEmployes().add(employe);
+        employe.getTourneeEntities().add(tourneeEntity1);
+
+        TourneeEntity tourneeEntity2 = TourneeEntity.builder()
+                .reference("test2")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employes(new HashSet<>())
+                .build();
+        tourneeEntity2.getEmployes().add(employe);
+        employe.getTourneeEntities().add(tourneeEntity2);
+
+        TourneeEntity tourneeEntity3 = TourneeEntity.builder()
+                .reference("test3")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .tdrTheorique(1)
+                .employes(new HashSet<>())
+                .build();
+        Set<TourneeEntity> tourneeEntitiesByEmploi = new HashSet<>();
+        tourneeEntitiesByEmploi.add(tourneeEntity1);
+        tourneeEntitiesByEmploi.add(tourneeEntity2);
+
+        when(tourneeComponent.getAllTourneesByEmployeId(any(String.class))).thenReturn(Set.of(tourneeEntity1, tourneeEntity2));
+
+        Set<TourneeResponseDTO> tourneeResponseDTOS = tourneeService.getAllTourneesByEmployeId("test");
+        Set<TourneeEntity> tourneeEntities = employe.getTourneeEntities();
+
+        Set<TourneeResponseDTO> dtoSetExpected = tourneeEntitiesByEmploi.stream()
+                        .map(tourneeMapper::toTourneeResponseDTO)
+                                .collect(Collectors.toSet());
+
+        assertEquals(tourneeEntities.size(), tourneeResponseDTOS.size());
+        assertThat(tourneeResponseDTOS).usingRecursiveComparison().isEqualTo(dtoSetExpected);
+        assertEquals(2, dtoSetExpected.size());
     }
 }

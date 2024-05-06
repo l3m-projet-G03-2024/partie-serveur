@@ -5,6 +5,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -17,10 +18,12 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.services.TourneeService;
 
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
+import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 
 
+import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -58,6 +61,8 @@ public class TourneeControllerTest {
     private JourneeRepository journeeRepository;
     @Autowired
     private EmployeRepository employeRepository;
+    @SpyBean
+    private EmployeMapper employeMapper;
 
 
 
@@ -106,12 +111,12 @@ public class TourneeControllerTest {
                         new HttpEntity<>(headers),
                         new ParameterizedTypeReference<List<TourneeResponseDTO>>() {}
                 );
-     ResponseEntity<List<TourneeResponseDTO>> response2 = template
+     ResponseEntity<Set<TourneeResponseDTO>> response2 = template
                 .exchange(
                         "/api/v1/tournees/?reference=J1",
                         HttpMethod.GET,
                         new HttpEntity<>(headers),
-                        new ParameterizedTypeReference<List<TourneeResponseDTO>>() {},
+                        new ParameterizedTypeReference<Set<TourneeResponseDTO>>() {},
                         urlParams2
                 );
         // Then
@@ -213,4 +218,51 @@ public class TourneeControllerTest {
 //        // Then
 //        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
 //    }
+
+    @Test
+    void getAllTourneesByEmployeId() {
+        // Given
+        final HttpHeaders headers = new HttpHeaders();
+
+        // Création de l'employé
+        final EmployeResponseDTO employe = EmployeResponseDTO
+                .builder()
+                .trigramme("test1")
+                .email("test1@gmail.com")
+                .nom("nom")
+                .prenom("prenom")
+                .telephone("1234567890")
+                .emploi(Emploi.LIVREUR)
+                .build();
+
+        final TourneeResponseDTO tournee1 = TourneeResponseDTO.builder()
+                .reference("T1")
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .employes(new HashSet<>())
+                .build();
+        tournee1.getEmployes().add(employe);
+
+        final TourneeResponseDTO tournee2 = TourneeResponseDTO.builder()
+                .reference("T1")
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .employes(new HashSet<>())
+                .build();
+
+        final Set<TourneeResponseDTO> tourneesResponseDTOS = new HashSet<>();
+        tourneesResponseDTOS.add(tournee1);
+        tourneesResponseDTOS.add(tournee2);
+
+        employeRepository.save(employeMapper.toEmployeEntity(employe));
+        tourneeRepository.saveAll(tourneesResponseDTOS.stream().map(tourneeMapper::toEntity).collect(Collectors.toSet()));
+
+        // When
+        ResponseEntity<Set<TourneeResponseDTO>> request = template
+                .exchange("/api/v1/tournees/employes/{idEmploye}",
+                        HttpMethod.GET,
+                        new HttpEntity<>(null, headers),
+                        new ParameterizedTypeReference<Set<TourneeResponseDTO>>(){},
+                        employe.getTrigramme());
+        // Then
+        assertThat(request.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }

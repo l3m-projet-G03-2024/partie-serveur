@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import java.util.List;
+import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
@@ -46,11 +47,18 @@ public interface TourneeEndPoints {
     TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestBody AddEmployeIdTourneeRequest addEmployeIdTourneeRequest);
 
 
+
     @Operation(description = "Récupération d'une tournée")
     @ApiResponse(responseCode = "200", description = "La tournée a été récupérée avec succès")
     @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée",content = @Content(schema = @Schema(implementation = TourneeNotFoundResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{referenceTournee}")
     TourneeResponseDTO getTournee(@PathVariable(name = "referenceTournee") String referenceTournee) ;
+
+    @Operation(description = "Recupérer toutes les tournées d'un employé (livreur)")
+    @ApiResponse(responseCode = "200", description = "L'employé a été trouvé")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/employes/{idEmploye}")
+    Set<TourneeResponseDTO> getAllTourneesByEmployeId(@PathVariable(name = "idEmploye")String idEmploye);
 
 }
