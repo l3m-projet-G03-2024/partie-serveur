@@ -147,7 +147,8 @@ public class TourneeComponentTest {
         assertDoesNotThrow(() -> tourneeComponent.findTourneeByReference("test"));
     }
 
-    void getAllTourneesByEmploye() throws NotFoundEmployeEntityException {
+    @Test
+    void getAllTourneesByEmployeEmail() throws NotFoundEmployeEntityException {
         //Given
         EmployeEntity employe = EmployeEntity.builder()
                 .trigramme("test")
@@ -183,7 +184,7 @@ public class TourneeComponentTest {
         employe.getTourneeEntities().add(tourneeEntity2);
 
         TourneeEntity tourneeEntity3 = TourneeEntity.builder()
-                .reference("test2")
+                .reference("test3")
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
@@ -197,11 +198,12 @@ public class TourneeComponentTest {
         tourneeEntities.add(tourneeEntity3);
 
         //When
+        when(employeRepository.getByEmail(anyString())).thenReturn(employe);
         when(tourneeRepository.findAll()).thenReturn(tourneeEntities);
         when(employeRepository.findById(any())).thenReturn(Optional.of(employe));
-        when(tourneeRepository.findByEmployesTrigramme(anyString())).thenReturn(Set.of(tourneeEntity1, tourneeEntity2));
+        when(tourneeRepository.findByEmployesEmail(anyString())).thenReturn(Set.of(tourneeEntity1, tourneeEntity2));
 
-        Set<TourneeEntity> entitiesExpected = tourneeComponent.getAllTourneesByEmployeId(employe.getTrigramme());
+        Set<TourneeEntity> entitiesExpected = tourneeComponent.getAllTourneesByEmployeEmail("test1@gmail.com");
         Set<TourneeEntity> entitiesByEmploye = employe.getTourneeEntities();
 
         assertNotNull(entitiesExpected);
@@ -212,6 +214,7 @@ public class TourneeComponentTest {
         assertTrue(entitiesExpected.contains(tourneeEntity1));
         assertFalse(entitiesExpected.contains(tourneeEntity3));
     }
+
 
     @Test
     void addingCamionOk() throws CamionNotFoundException {
@@ -226,5 +229,13 @@ public class TourneeComponentTest {
 
         TourneeEntity resultExpected = tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity);
         assertEquals(resultExpected, tourneeEntity);
+    }
+    @Test
+    void getAllTourneesByEmployeNotFound(){
+        //Partie not Found (Cas d'exception)
+        //Given
+        when(tourneeRepository.findByEmployesEmail(anyString())).thenReturn(Set.of());
+        //then - when
+        assertThrows(NotFoundEmployeEntityException.class,()->tourneeComponent.getAllTourneesByEmployeEmail("test"));
     }
 }

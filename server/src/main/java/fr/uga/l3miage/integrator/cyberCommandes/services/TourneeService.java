@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.EmployeRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
@@ -18,7 +19,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequ
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
-import fr.uga.l3miage.integrator.cyberRessources.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
@@ -76,21 +76,21 @@ public class TourneeService {
             TourneeEntity tourneeEntity = tourneeComponent.addEmployeInTournee(referenceTournee, idEmploye);
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity);
         } catch (NotFoundEmployeEntityException | TourneeNotFoundException e) {
-            throw new EmployeRestException(e.getMessage());
+            throw new EmployeRestException(e.getMessage(), idEmploye);
         }
     }
 
-    public Set<TourneeResponseDTO> getAllTourneesByEmployeId (String idEmploye){
+    public Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(String emailEmploye){
         try{
             Set<TourneeEntity> tourneeEntities = new HashSet<>();
-            if(idEmploye != null){
-                tourneeEntities = tourneeComponent.getAllTourneesByEmployeId(idEmploye);
+            if(emailEmploye != null){
+                tourneeEntities = tourneeComponent.getAllTourneesByEmployeEmail(emailEmploye);
             }
             return tourneeEntities.stream()
                     .map(tourneeMapper::toTourneeResponseDTO)
                     .collect(Collectors.toSet());
         } catch (NotFoundEmployeEntityException e) {
-            throw new EmployeRestException(e.getMessage());
+            throw new EmployeRestException(e.getMessage(), emailEmploye);
         }
     }
 

@@ -1,7 +1,12 @@
 package fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest;
 
+import lombok.Getter;
+
+@Getter
 public class EmployeRestException extends RuntimeException{
-    public EmployeRestException(String message){
+    private final String emailEmploye;
+    public EmployeRestException(String message, String emailEmploye){
         super(message);
+        this.emailEmploye = emailEmploye;
     }
 }

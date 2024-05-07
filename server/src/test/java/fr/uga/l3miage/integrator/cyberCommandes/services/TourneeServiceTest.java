@@ -210,7 +210,7 @@ public class TourneeServiceTest {
     }
 
     @Test
-    void getAllTourneesByEmployeId() throws NotFoundEmployeEntityException {
+    void getAllTourneesByEmployeEmail() throws NotFoundEmployeEntityException {
 
         EmployeEntity employe = EmployeEntity.builder()
                 .trigramme("test")
@@ -256,9 +256,9 @@ public class TourneeServiceTest {
         tourneeEntitiesByEmploi.add(tourneeEntity1);
         tourneeEntitiesByEmploi.add(tourneeEntity2);
 
-        when(tourneeComponent.getAllTourneesByEmployeId(any(String.class))).thenReturn(Set.of(tourneeEntity1, tourneeEntity2));
+        when(tourneeComponent.getAllTourneesByEmployeEmail(any(String.class))).thenReturn(Set.of(tourneeEntity1, tourneeEntity2));
 
-        Set<TourneeResponseDTO> tourneeResponseDTOS = tourneeService.getAllTourneesByEmployeId("test");
+        Set<TourneeResponseDTO> tourneeResponseDTOS = tourneeService.getAllTourneesByEmployeEmail("test1@gmail.com");
         Set<TourneeEntity> tourneeEntities = employe.getTourneeEntities();
 
         Set<TourneeResponseDTO> dtoSetExpected = tourneeEntitiesByEmploi.stream()

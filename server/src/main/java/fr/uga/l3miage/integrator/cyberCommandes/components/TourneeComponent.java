@@ -59,10 +59,13 @@ public class TourneeComponent {
         return tourneeRepository.save(tourneeEntity);
     }
 
-    public Set<TourneeEntity> getAllTourneesByEmployeId(String idEmploye) throws NotFoundEmployeEntityException {
-        EmployeEntity employe = employeRepository.findById(idEmploye)
-                .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
-        return new HashSet<>( tourneeRepository.findByEmployesTrigramme(idEmploye));
+    public Set<TourneeEntity> getAllTourneesByEmployeEmail(String emailEmploye) throws NotFoundEmployeEntityException {
+        EmployeEntity employe = employeRepository.getByEmail(emailEmploye);
+        System.out.println(employe);
+        if(employe != null) {
+            System.out.println(employe);
+            return new HashSet<>(tourneeRepository.findByEmployesEmail(emailEmploye));
+        }else throw new NotFoundEmployeEntityException(String.format("L'email %s n'appartient à aucun employé", emailEmploye));
     }
 
     public TourneeEntity addingTourneeAfterAddedCamion(TourneeEntity tourneeEntity) throws CamionNotFoundException {
