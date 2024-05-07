@@ -3,10 +3,12 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doReturn;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
@@ -260,9 +262,59 @@ public class TourneeControllerTest {
                 .exchange("/api/v1/tournees/employes/{idEmploye}",
                         HttpMethod.GET,
                         new HttpEntity<>(null, headers),
-                        new ParameterizedTypeReference<Set<TourneeResponseDTO>>(){},
+                        new ParameterizedTypeReference<Set<TourneeResponseDTO>>() {
+                        },
                         employe.getTrigramme());
         // Then
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    void getTourneeNotFound() {
+        // Given
+        final HttpHeaders headers = new HttpHeaders();
+
+        final Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("referenceTournee", "ma tournee qui n'existe pas");
+
+        TourneeNotFoundResponse tourneeNotFoundResponseExpected = TourneeNotFoundResponse
+                .builder()
+                .referenceTournee("ma tournee qui n'existe pas")
+                .uri("/api/v1/tournees/ma%20tournee%20qui%20n%27existe%20pas")
+                .errorMessage("Tournée non trouvée pour la référence : ma tournee qui n'existe pas")
+                .build();
+
+        // when
+        ResponseEntity<TourneeNotFoundResponse> response = template.exchange("/api/v1/tournees/{referenceTournee}", HttpMethod.GET, new HttpEntity<>(null, headers),TourneeNotFoundResponse.class, urlParams);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).usingRecursiveComparison()
+                .isEqualTo(tourneeNotFoundResponseExpected) ;
+    }
+
+    @Test
+    void getTourneeFound() {
+        // Given
+        final String refTournee = "T1" ;
+
+        final HttpHeaders headers = new HttpHeaders();
+
+        final Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("T1", refTournee);
+
+        TourneeResponseDTO tourneeResponseDTOExpected = TourneeResponseDTO
+                .builder()
+                .reference(refTournee)
+                .etat(EtatsDeTournee.ENPARCOURS)
+                .build();
+
+        doReturn(tourneeResponseDTOExpected).when(tourneeService).getTournee(refTournee) ;
+
+        // when
+        ResponseEntity<TourneeResponseDTO> response = template.exchange("/api/v1/tournees/{T1}", HttpMethod.GET, new HttpEntity<>(null, headers), TourneeResponseDTO.class, urlParams) ;
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK) ;
+        assertThat(response.getBody()).usingRecursiveComparison().isEqualTo(tourneeResponseDTOExpected) ;
     }
 }
