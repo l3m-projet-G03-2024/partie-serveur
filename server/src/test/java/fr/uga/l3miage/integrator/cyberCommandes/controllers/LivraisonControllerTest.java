@@ -133,5 +133,25 @@ public class LivraisonControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
     }
+    @Test
+    void getNotFoundLivraisonDetailByCommande(){
+        final HttpHeaders headers = new HttpHeaders();
+        final Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("referenceLivraison", "La livraison n'existe pas");
+
+        NotFoundErrorResponse notFoundErrorResponseExpected = NotFoundErrorResponse
+                .builder()
+                .uri("/api/v1/livraisons/La%20livraison%20n%27existe%20pas")
+                .errorMessage("Livraison non trouvée pour la référence : ")
+                .build();
+
+        //when
+        ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/v1/livraisons/{referenceLivraison}", HttpMethod.GET, new HttpEntity<>(null, headers), NotFoundErrorResponse.class, urlParams);
+
+        //then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).usingRecursiveComparison()
+                .isEqualTo(notFoundErrorResponseExpected);
+    }
 
 }
