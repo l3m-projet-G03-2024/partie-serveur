@@ -6,6 +6,7 @@ import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyReque
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.DetailsCommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.services.CommandeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,4 +25,11 @@ public class CommandeController implements CommandeEndPoints {
     public List<CommandeResponseDTO> updateCommandes(CommandeUpdatingBodyRequest commandes) {
         return commandeService.updateCommandes(commandes);
     }
+
+    public DetailsCommandeResponseDTO getDetailsCommande(String referenceCommande) {
+        return commandeService.getDetailsCommande(referenceCommande);
+    }
+
+
+
 }
