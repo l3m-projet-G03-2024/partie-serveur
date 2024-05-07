@@ -13,4 +13,5 @@ public interface EmployeRepository extends JpaRepository<EmployeEntity, String> 
     Set<EmployeEntity> getEmployeEntitiesByEmploi(Emploi emploi);
 
     Set<EmployeEntity> findByEmploiOrEntrepotNom(Emploi emploi, String nomEntrepot);
+    EmployeEntity getByEmail(String email);
 }
