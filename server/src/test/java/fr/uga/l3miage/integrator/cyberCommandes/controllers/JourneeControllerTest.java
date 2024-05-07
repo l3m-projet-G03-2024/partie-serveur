@@ -7,11 +7,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
-import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
@@ -22,7 +20,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.services.JourneeService;
 import fr.uga.l3miage.integrator.cyberProduit.components.EntrepotComponent;
 import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
-import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +32,6 @@ import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @AutoConfigureTestDatabase
 @AutoConfigureWebClient
@@ -161,7 +157,7 @@ public class JourneeControllerTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThrows(NotFoundEntityRestException.class, () -> journeeService.getJournee(journeeEntity.getReference()));
+        assertThrows(NotFoundRestException.class, () -> journeeService.getJournee(journeeEntity.getReference()));
     }
 
 }
