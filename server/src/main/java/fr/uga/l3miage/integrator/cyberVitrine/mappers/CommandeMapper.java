@@ -18,5 +18,6 @@ public interface CommandeMapper {
     void updateCommandeFromDTO(CommandeUpdatingRequest commandeUpdatingRequest, @MappingTarget CommandeEntity commandeEntity) ;
 
     @Mapping(source = "clientEntity", target = "client")
+    @Mapping(source = "dateDeCreation", target = "dateDeCreation")
     CommandeResponseDTO toCommandeResponseDTO(CommandeEntity commandeEntity) ;
 }
