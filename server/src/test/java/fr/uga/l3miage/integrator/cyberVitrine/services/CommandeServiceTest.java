@@ -30,6 +30,8 @@ public class CommandeServiceTest {
     @SpyBean
     private CommandeMapper commandeMapper;
 
+
+
     @MockBean
     private LivraisonComponent livraisonComponent ;
 
@@ -44,27 +46,23 @@ public class CommandeServiceTest {
         ClientEntity client2 = new ClientEntity();
 
 
-        CommandeEntity commande1 = new CommandeEntity(
-                "1ABC",
-                null,
-                null,
-                10,
-                "magnifique",
-                client1,
-                null,
-                null
-        );
-        CommandeEntity commande2 = new CommandeEntity(
-                "1BC",
-                null,
-                null,
-                9,
-                "excellent",
-                client2,
-                null,
-                null
 
-        );
+
+        CommandeEntity commande1 = CommandeEntity
+                .builder()
+                .reference("1ABC")
+                .clientEntity(client1)
+                .note(10)
+                .commentaire("magnifique")
+                .build();
+
+        CommandeEntity commande2 = CommandeEntity
+                .builder()
+                .reference("1BC")
+                .clientEntity(client2)
+                .note(9)
+                .commentaire("excellent")
+                .build();
 
 
         ClientDetailResponseDTO clientDetailResponseDTO1 = new ClientDetailResponseDTO();
@@ -97,17 +95,13 @@ public class CommandeServiceTest {
     void getCommandeWithSpecificState() {
         EtatsDeCommande etatsDeCommande = EtatsDeCommande.LIVREE;
 
-        CommandeEntity commande = new CommandeEntity(
-                "1ABDR",
-                etatsDeCommande,
-                null,
-                6,
-                null,
-                null,
-                null,
-                null
 
-        );
+        CommandeEntity commande = CommandeEntity
+                .builder()
+                .reference("1ABDR")
+                .etat(etatsDeCommande)
+                .note(6)
+                .build();
 
         commande.setEtat(etatsDeCommande);
 

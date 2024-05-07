@@ -3,13 +3,13 @@ package fr.uga.l3miage.integrator.cyberVitrine.mappers;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
+import fr.uga.l3miage.integrator.cyberVitrine.response.DetailsCommandeResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper
 public interface CommandeMapper {
 
     List<CommandeResponseDTO> toCommandesResponseDTO(List<CommandeEntity> commandeEntities);
@@ -20,4 +20,7 @@ public interface CommandeMapper {
     @Mapping(source = "clientEntity", target = "client")
     @Mapping(source = "dateDeCreation", target = "dateDeCreation")
     CommandeResponseDTO toCommandeResponseDTO(CommandeEntity commandeEntity) ;
+
+    @Mapping(source = "ligneEntities",target = "lignes")
+    DetailsCommandeResponseDTO toDetailsCommandeResponseDTO(CommandeEntity commande);
 }

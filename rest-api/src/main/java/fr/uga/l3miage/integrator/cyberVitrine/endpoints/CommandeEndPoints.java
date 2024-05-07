@@ -7,6 +7,8 @@ import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyReque
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.DetailsCommandeResponseDTO;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,7 +26,7 @@ import java.util.List;
 @CrossOrigin("*")
 public interface CommandeEndPoints {
 
-
+    @Operation(description = "")
     @ApiResponse(responseCode = "200",description = "liste de commande envoyée avec succès")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
@@ -36,6 +38,15 @@ public interface CommandeEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/")
     List<CommandeResponseDTO> updateCommandes(@RequestBody CommandeUpdatingBodyRequest commandeUpdatingBodyRequest) ;
+
+
+
+    @Operation(description = "Récupération des details d'une Commande")
+    @ApiResponse(responseCode = "200",description = "détails de commande envoyées avec succès")
+    @ApiResponse(responseCode = "400", description = "Requête incorrecte ou mal formée", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/{referenceCommande}")
+    DetailsCommandeResponseDTO getDetailsCommande(@PathVariable(name = "referenceCommande")String referenceCommande);
 
 
 }
