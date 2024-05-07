@@ -2,11 +2,9 @@ package fr.uga.l3miage.integrator.cyberVitrine.endpoints;
 
 
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.BadRequestErrorResponse;
+import fr.uga.l3miage.integrator.cyberVitrine.errors.BadRequestErrorResponse;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
-import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
-import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

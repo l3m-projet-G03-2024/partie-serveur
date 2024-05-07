@@ -27,13 +27,9 @@ public class JourneeComponent {
     }
 
     public void deleteJourneeById(String reference) throws JourneeNotFoundException{
-
-        if(reference != null){
-            journeeRepository.findById(reference).orElseThrow(()-> new EntityNotFoundException("Journée non trouvée pour la référence : " + reference));
-            journeeRepository.deleteById(reference);
-        }else {
-            throw new EntityNotFoundException("L'entité à supprimer n'a pas été trouvée");
-        }
+        journeeRepository.findById(reference)
+                .orElseThrow(()-> new JourneeNotFoundException("Journée non trouvée pour la référence : ", reference));
+        journeeRepository.deleteById(reference);
 
     }
     public JourneeEntity getJourneeById(String reference) throws JourneeNotFoundException {

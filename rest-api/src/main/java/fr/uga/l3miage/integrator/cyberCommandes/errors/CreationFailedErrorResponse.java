@@ -6,9 +6,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class CreateJourneeErrorResponse {
-    @Schema(description = "end point call", example = "/api/drone/")
+public class CreationFailedErrorResponse {
     private final String uri;
-    @Schema(description = "error message", example = "La journée à créer présente un conflit")
     private final String errorMessage;
 }

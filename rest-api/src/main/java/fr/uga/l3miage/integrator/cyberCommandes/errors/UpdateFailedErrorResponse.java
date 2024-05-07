@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class NotFoundErrorResponse {
+public class UpdateFailedErrorResponse {
     private final String uri;
     private final String errorMessage;
 }

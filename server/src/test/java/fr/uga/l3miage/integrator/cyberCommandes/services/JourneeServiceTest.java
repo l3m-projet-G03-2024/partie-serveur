@@ -6,7 +6,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import java.time.LocalDate;
 import java.util.*;
 
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.JourneeDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
@@ -15,7 +15,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.JourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
-import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -137,8 +136,8 @@ public class JourneeServiceTest {
         journeeService.deleteJourneeById(journeeEntity.getReference());
 
         // Then
-        when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenThrow(new NotFoundEntityRestException("Entity not found"));
-        assertThrows(NotFoundEntityRestException.class, () -> journeeComponent.getJourneeById(journeeEntity.getReference()));
+        when(journeeComponent.getJourneeById(journeeEntity.getReference())).thenThrow(new NotFoundRestException("Entity not found"));
+        assertThrows(NotFoundRestException.class, () -> journeeComponent.getJourneeById(journeeEntity.getReference()));
     }
 
     /*

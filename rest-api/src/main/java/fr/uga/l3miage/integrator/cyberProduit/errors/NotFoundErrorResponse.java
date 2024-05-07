@@ -1,6 +1,5 @@
-package fr.uga.l3miage.integrator.cyberCommandes.errors;
+package fr.uga.l3miage.integrator.cyberProduit.errors;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 

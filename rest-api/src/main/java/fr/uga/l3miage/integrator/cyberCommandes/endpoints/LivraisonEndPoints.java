@@ -2,14 +2,22 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 
+import fr.uga.l3miage.integrator.cyberCommandes.errors.BadRequestErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.ForbiddenErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.UpdateFailedErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +40,12 @@ public interface LivraisonEndPoints {
     @PostMapping("/")
     LivraisonCreationResponseDTO createLivraisons(@RequestBody() LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest);
 
-    @ApiResponse(responseCode = "200", description= "Livraison a été bien changée")
-    @ApiResponse(responseCode = "404", description = "")
+    @Operation(description = "Update d'une livraison")
+    @ApiResponse(responseCode = "200", description = "Mise à jour réussie")
+    @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", description = "Livraison non trouvée", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "500", description = "Échec de la mise à jour", content = @Content(schema = @Schema(implementation = UpdateFailedErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceLivraison}")
     LivraisonResponseDTO updateLivraison(@PathVariable(name = "referenceLivraison") String reference, @RequestBody LivraisonUpdateRequest livraisonUpdateRequest);
