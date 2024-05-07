@@ -1,7 +1,7 @@
-package fr.uga.l3miage.integrator.cyberVitrine.exceptions.handler;
+package fr.uga.l3miage.integrator.cyberVitrine.errors.handler;
 
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.BadRequestErrorResponse;
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
+import fr.uga.l3miage.integrator.cyberVitrine.errors.BadRequestErrorResponse;
+import fr.uga.l3miage.integrator.cyberVitrine.errors.rest.BadRequestRestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
