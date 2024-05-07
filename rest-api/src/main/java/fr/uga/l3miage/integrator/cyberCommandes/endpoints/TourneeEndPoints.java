@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.EmployeNotFoundErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
@@ -59,9 +60,10 @@ public interface TourneeEndPoints {
 
     @Operation(description = "Recupérer toutes les tournées d'un employé (livreur)")
     @ApiResponse(responseCode = "200", description = "L'employé a été trouvé")
+    @ApiResponse(responseCode = "404", description = "Aucun employé n'a cette adresse mail", content = @Content(schema = @Schema(implementation = EmployeNotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/employes/{idEmploye}")
-    Set<TourneeResponseDTO> getAllTourneesByEmployeId(@PathVariable(name = "idEmploye")String idEmploye);
+    @GetMapping("/employes/{emailEmploye}")
+    Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(@PathVariable(name = "emailEmploye")String emailEmploye);
 
     @Operation(description = "Ajouter un camion dans tournee")
     @ApiResponse(responseCode = "200", description = "Camion a été ajouté dans tournee")

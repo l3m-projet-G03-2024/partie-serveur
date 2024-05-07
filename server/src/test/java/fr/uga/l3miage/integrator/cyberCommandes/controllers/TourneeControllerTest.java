@@ -229,7 +229,7 @@ public class TourneeControllerTest {
 //    }
 
     @Test
-    void getAllTourneesByEmployeId() {
+    void getAllTourneesByEmployEmail() {
         // Given
         final HttpHeaders headers = new HttpHeaders();
 
@@ -266,12 +266,11 @@ public class TourneeControllerTest {
 
         // When
         ResponseEntity<Set<TourneeResponseDTO>> request = template
-                .exchange("/api/v1/tournees/employes/{idEmploye}",
+                .exchange("/api/v1/tournees/employes/{emailEmploye}",
                         HttpMethod.GET,
                         new HttpEntity<>(null, headers),
-                        new ParameterizedTypeReference<Set<TourneeResponseDTO>>() {
-                        },
-                        employe.getTrigramme());
+                        new ParameterizedTypeReference<Set<TourneeResponseDTO>>(){},
+                        employe.getEmail());
         // Then
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.OK);
     }

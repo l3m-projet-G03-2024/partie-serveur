@@ -44,8 +44,8 @@ public class TourneeController implements TourneeEndPoints {
         return tourneeService.getTournee(referenceTournee);
     }
     @Override
-    public Set<TourneeResponseDTO> getAllTourneesByEmployeId(String idEmploye){
-        return tourneeService.getAllTourneesByEmployeId(idEmploye);
+    public Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(String emailEmploye){
+        return tourneeService.getAllTourneesByEmployeEmail(emailEmploye);
 
     }
 
