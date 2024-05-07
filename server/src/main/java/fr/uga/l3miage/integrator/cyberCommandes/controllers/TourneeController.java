@@ -5,7 +5,9 @@ import java.util.Set;
 
 
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +46,11 @@ public class TourneeController implements TourneeEndPoints {
     @Override
     public Set<TourneeResponseDTO> getAllTourneesByEmployeId(String idEmploye){
         return tourneeService.getAllTourneesByEmployeId(idEmploye);
+
+    }
+
+    public AddCamionOnTourneeResponseDTO addCamionOnTournee(String reference, CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest) {
+        return tourneeService.addCamionOnTournee(reference, camionImmatriculationTouneeRequest);
 
     }
 }

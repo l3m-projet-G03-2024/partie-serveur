@@ -7,16 +7,23 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
+import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
+import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
+import fr.uga.l3miage.integrator.cyberRessources.response.CamionResponseDTO;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -42,6 +49,9 @@ public class TourneeServiceTest {
 
     @SpyBean
     private TourneeMapper tourneeMapper;
+
+    @MockBean
+    private CamionRepository camionRepository;
 
 
 
@@ -286,5 +296,42 @@ public class TourneeServiceTest {
         when(tourneeComponent.findTourneeByReference(anyString())).thenThrow(TourneeNotFoundException.class) ;
         // when - then
         assertThrows(TourneeNotFoundRestException.class, () -> tourneeService.getTournee(anyString())) ;
+    }
+
+    @Test
+    void AddingCamionOnTourneeTest() throws TourneeNotFoundException, CamionNotFoundException {
+        // Arrange
+        CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest = CamionImmatriculationTouneeRequest.builder()
+                .immatriculation("C1")
+                .build();
+        CamionEntity camionEntity = CamionEntity.builder()
+                .immatriculation("C1")
+                .build();
+
+        TourneeEntity tourneeEntity = TourneeEntity.builder()
+                .reference("T1")
+                .build();
+
+        CamionResponseDTO camionResponseDTO = CamionResponseDTO.builder()
+                .immatriculation("T1")
+                .build();
+        AddCamionOnTourneeResponseDTO responseDTO = AddCamionOnTourneeResponseDTO.builder()
+                .camion(camionResponseDTO)
+                .reference("T1")
+                .build();
+
+        when(tourneeComponent.findTourneeByReference("T1")).thenReturn(tourneeEntity);
+        when(camionRepository.findById("C1")).thenReturn(Optional.ofNullable(camionEntity));
+        when(tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity)).thenReturn(tourneeEntity);
+        when(tourneeMapper.toTourneeCamionResponseDTO(tourneeEntity)).thenReturn(responseDTO);
+
+        // Act
+        AddCamionOnTourneeResponseDTO actualResponseDTO = tourneeService.addCamionOnTournee("T1", camionImmatriculationTouneeRequest);
+
+        // Assert
+        Assertions.assertThat(actualResponseDTO).isNotNull();
+        Assertions.assertThat(actualResponseDTO.getCamion()).isEqualTo(camionResponseDTO);
+        Assertions.assertThat(actualResponseDTO.getReference()).isEqualTo("T1");
+
     }
 }
