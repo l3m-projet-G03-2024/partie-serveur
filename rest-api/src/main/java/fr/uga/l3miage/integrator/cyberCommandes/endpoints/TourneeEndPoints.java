@@ -6,7 +6,9 @@ import java.util.Set;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -60,5 +62,11 @@ public interface TourneeEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/employes/{idEmploye}")
     Set<TourneeResponseDTO> getAllTourneesByEmployeId(@PathVariable(name = "idEmploye")String idEmploye);
+
+    @Operation(description = "Ajouter un camion dans tournee")
+    @ApiResponse(responseCode = "200", description = "Camion a été ajouté dans tournee")
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{referenceTournee}")
+    AddCamionOnTourneeResponseDTO addCamionOnTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest);
 
 }

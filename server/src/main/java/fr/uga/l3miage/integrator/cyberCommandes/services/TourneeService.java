@@ -13,10 +13,15 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundR
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
+import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
+import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
 import org.springframework.stereotype.Service;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
@@ -34,6 +39,7 @@ public class TourneeService {
     private final TourneeMapper tourneeMapper;
     private final JourneeComponent journeeComponent;
     private final EmployeComponent employeComponent;
+    private final CamionRepository camionRepository;
 
 
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
@@ -94,6 +100,17 @@ public class TourneeService {
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity) ;
         } catch (TourneeNotFoundException e) {
             throw new TourneeNotFoundRestException(e.getMessage(), referenceTournee) ;
+        }
+    }
+
+    public AddCamionOnTourneeResponseDTO addCamionOnTournee(String referenceTounee , CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest) {
+        try {
+            TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(referenceTounee);
+            CamionEntity camionEntity = camionRepository.findById(camionImmatriculationTouneeRequest.getImmatriculation()).orElseThrow();
+            tourneeEntity.setCamion(camionEntity);
+            return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity));
+        } catch (Exception e) {
+            throw new NotFoundEntityRestException(e.getMessage());
         }
     }
 }
