@@ -39,7 +39,7 @@ public class JourneeService {
         try {
             journeeComponent.deleteJourneeById(reference);
         }catch (JourneeNotFoundException | NotFoundRestException e) {
-            throw new NotFoundRestException(e.getMessage());
+            throw new NotFoundRestException(e.getMessage(), reference);
         }catch (BadRequestRestException e){
             throw new BadRequestRestException(e.getMessage());
         }catch (ForbiddenRestException e){
