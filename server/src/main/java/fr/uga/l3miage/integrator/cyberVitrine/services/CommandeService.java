@@ -3,13 +3,14 @@ package fr.uga.l3miage.integrator.cyberVitrine.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
-import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.DetailsCommandeResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,15 @@ public class CommandeService {
             return commandeMapper.toCommandesResponseDTO(commandeUpdates);
         } catch (Exception e) {
             throw new BadRequestRestException(e.getMessage()) ;
+        }
+    }
+
+    public DetailsCommandeResponseDTO getDetailsCommande(String referenceCommande) {
+        try {
+            CommandeEntity commande = commandeComponent.getCommandeByReference(referenceCommande);
+            return commandeMapper.toDetailsCommandeResponseDTO(commande);
+        } catch (CommandeEntityNotFoundException e) {
+            throw new BadRequestRestException(e.getMessage());
         }
     }
 
