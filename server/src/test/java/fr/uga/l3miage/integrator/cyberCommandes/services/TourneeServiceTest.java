@@ -1,14 +1,12 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.*;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -24,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
@@ -255,11 +252,39 @@ public class TourneeServiceTest {
         Set<TourneeEntity> tourneeEntities = employe.getTourneeEntities();
 
         Set<TourneeResponseDTO> dtoSetExpected = tourneeEntitiesByEmploi.stream()
-                        .map(tourneeMapper::toTourneeResponseDTO)
-                                .collect(Collectors.toSet());
+                .map(tourneeMapper::toTourneeResponseDTO)
+                .collect(Collectors.toSet());
 
         assertEquals(tourneeEntities.size(), tourneeResponseDTOS.size());
         assertThat(tourneeResponseDTOS).usingRecursiveComparison().isEqualTo(dtoSetExpected);
         assertEquals(2, dtoSetExpected.size());
+    }
+
+    void getTourneeFound() throws TourneeNotFoundException {
+        // Given
+        TourneeEntity tourneeEntity = TourneeEntity
+                .builder()
+                .reference("T1")
+                .build();
+
+        when(tourneeComponent.findTourneeByReference(anyString())).thenReturn(tourneeEntity) ;
+        TourneeResponseDTO expectedResponse = tourneeMapper.toTourneeResponseDTO(tourneeEntity) ;
+
+        // when
+        TourneeResponseDTO actualResponse = tourneeService.getTournee(tourneeEntity.getReference()) ;
+
+        // then
+        assertNotNull(actualResponse);
+        assertThat(expectedResponse).usingRecursiveComparison().isEqualTo(actualResponse) ;
+        verify(tourneeComponent, times(1)).findTourneeByReference(anyString()) ;
+        verify(tourneeMapper,times(2)).toTourneeResponseDTO(tourneeEntity) ;
+    }
+
+    @Test
+    void getTourneeNotFound() throws TourneeNotFoundException {
+        // Given
+        when(tourneeComponent.findTourneeByReference(anyString())).thenThrow(TourneeNotFoundException.class) ;
+        // when - then
+        assertThrows(TourneeNotFoundRestException.class, () -> tourneeService.getTournee(anyString())) ;
     }
 }
