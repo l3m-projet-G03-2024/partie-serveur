@@ -1,9 +1,9 @@
 package fr.uga.l3miage.integrator.cyberVitrine.controllers;
 
 
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.ConflictWithRessourceRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.LivraisonRepository;
+import fr.uga.l3miage.integrator.cyberProduit.exceptions.rest.CreationFailedRestException;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 
 
@@ -13,7 +13,6 @@ import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyReque
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 
-import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeUpdateBodyResponseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -205,11 +204,11 @@ public class CommandeControllerTest {
 
 
 
-        ResponseEntity<ConflictWithRessourceRestException> response = testRestTemplate.exchange(
+        ResponseEntity<CreationFailedRestException> response = testRestTemplate.exchange(
                 "/api/v1/commandes/",
                 HttpMethod.PATCH,
                 new HttpEntity<>(null, headers),
-                ConflictWithRessourceRestException.class
+                CreationFailedRestException.class
         ) ;
 
 
