@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class NotFoundErrorResponse {
+    private final String reference;
     @Schema(description = "end point call", example = "/api/v1/")
     private final String uri;
     @Schema(description = "error message", example = "La tournee n°1 n'existe pas")

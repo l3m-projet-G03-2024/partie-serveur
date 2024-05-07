@@ -45,7 +45,7 @@ public class TourneeComponent {
                 .orElseThrow(() -> new TourneeNotFoundException("La tournée %s n'a pas été trouvée", referenceTournee));
         EmployeEntity employeEntity = employeRepository.findById(idEmploye)
                 .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
-
+        System.out.println("Dans Tournee componente");
         if (tourneeEntity.getEmployes() == null) {
             tourneeEntity.setEmployes(new HashSet<>());
         }

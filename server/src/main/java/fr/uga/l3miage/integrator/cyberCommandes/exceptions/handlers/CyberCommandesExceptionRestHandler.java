@@ -41,7 +41,7 @@ public class CyberCommandesExceptionRestHandler {
         NotFoundRestException exception = (NotFoundRestException ) e;
         final NotFoundErrorResponse response = NotFoundErrorResponse
                 .builder()
-                .errorMessage(exception.getMessage())
+                .errorMessage(exception.getMessage()+exception.getReference())
                 .uri(httpServletRequest.getRequestURI())
                 .build();
                 log.warn(exception.getMessage());
@@ -65,7 +65,7 @@ public class CyberCommandesExceptionRestHandler {
         DeleteFailedRestException exception = (DeleteFailedRestException) e;
         final DeleteFailedErrorResponse response = DeleteFailedErrorResponse
                 .builder()
-                .errorMessage(exception.getMessage())
+                .errorMessage(exception.getMessage()+exception.getReference())
                 .uri(httpServletRequest.getRequestURI())
                 .build();
         log.warn(exception.getMessage());
