@@ -25,6 +25,7 @@ public class LivraisonResponseDTO {
     @Schema(description = "l'ordre de livraison", example = "1")
     private Integer ordre;
 
+    @Schema(description = "liste de commandes associe a une livraison")
     private Set<CommandeResponseDTO> commandes;
 
 }
