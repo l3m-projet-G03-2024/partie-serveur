@@ -15,5 +15,7 @@ public class NotFoundErrorResponse {
     private final String errorMessage2;
     @Schema(description = "error message", example = "Une erreur c'est produit, la journée n'a pas été supprimée")
     private final String errorMessage3;
+    @Schema(description = "error message", example = "La livraison n'existe pas")
+    private final String errorMessage4;
 
 }

@@ -3,8 +3,9 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonEntityNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.LivraisonMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
@@ -15,6 +16,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationRespon
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
+
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 
-import fr.uga.l3miage.integrator.cyberVitrine.services.CommandeService.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -82,7 +84,7 @@ public class LivraisonService {
             Set<CommandeEntity> commandeEntities =  updateCommandesLinkedWithLivraison(livraisonExist.getCommandes(), livraisonUpdateRequest.getEtat());
             livraisonExist.setCommandes(commandeEntities);
         }
-        return livraisonMapper.toResponse(livraisonComponent.updateLivraison(livraisonExist));
+        return livraisonMapper.toLivraisonResponseDTO(livraisonComponent.updateLivraison(livraisonExist));
     }
 
     Set<CommandeEntity> updateCommandesLinkedWithLivraison(Set<CommandeEntity> commandeEntities, EtatsDeLivraison etatsDeLivraison){
@@ -96,6 +98,14 @@ public class LivraisonService {
             }
         }
         return commandeEntities;
+    }
+    public LivraisonResponseDTO getLivraisonByCommandes(String referenceLivraison)  {
+       try {
+           LivraisonEntity livraisonEntity = livraisonComponent.getLivraisonByReference(referenceLivraison);
+           return livraisonMapper.toLivraisonResponseDTO(livraisonEntity);
+       }catch (LivraisonNotFoundException e){
+           throw  new NotFoundEntityRestException(e.getMessage());
+       }
     }
     
 }

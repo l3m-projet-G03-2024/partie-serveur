@@ -1,8 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonEntityNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
-import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
+
 
 @Component
 @RequiredArgsConstructor
@@ -29,9 +29,9 @@ public class LivraisonComponent {
         return livraisonRepository.findAllByEtat(etat);
     }
 
-    public LivraisonEntity getLivraisonByReference(String reference) throws LivraisonEntityNotFoundException {
+    public LivraisonEntity getLivraisonByReference(String reference) throws LivraisonNotFoundException {
         return livraisonRepository.findById(reference)
-                .orElseThrow(() ->  new LivraisonEntityNotFoundException(String.format(reference, "La livraison [%s] n'a pas été trouvée", reference))) ;
+                .orElseThrow(() ->  new LivraisonNotFoundException("Livraison non trouvée pour la référence : ", reference)) ;
     }
     public List<LivraisonEntity> getLivraisonEntities(Set<LivraisonEntity> livraisonEntities){
         return livraisonRepository.saveAll(livraisonEntities);

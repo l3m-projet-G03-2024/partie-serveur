@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,5 +18,9 @@ public class CommandeLivraisonResponseDTO {
 
     private String reference;
     private EtatsDeCommande etatsDeCommande;
+    private LocalDateTime dateDeCreation;
+    private Integer note;
+    private String commentaire;
+    private Double montantTotal;
 
 }
