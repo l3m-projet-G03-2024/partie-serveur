@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
@@ -62,5 +63,9 @@ public class TourneeComponent {
         EmployeEntity employe = employeRepository.findById(idEmploye)
                 .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
         return new HashSet<>( tourneeRepository.findByEmployesTrigramme(idEmploye));
+    }
+
+    public TourneeEntity addingTourneeAfterAddedCamion(TourneeEntity tourneeEntity) throws CamionNotFoundException {
+        return tourneeRepository.save(tourneeEntity);
     }
 }

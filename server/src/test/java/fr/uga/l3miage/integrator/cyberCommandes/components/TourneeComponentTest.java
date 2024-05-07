@@ -7,9 +7,11 @@ import static org.mockito.Mockito.*;
 
 import java.util.*;
 
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
+import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import org.junit.jupiter.api.Test;
@@ -209,5 +211,20 @@ public class TourneeComponentTest {
         assertThat(entitiesByEmploye).usingRecursiveComparison().isEqualTo(entitiesExpected);
         assertTrue(entitiesExpected.contains(tourneeEntity1));
         assertFalse(entitiesExpected.contains(tourneeEntity3));
+    }
+
+    @Test
+    void addingCamionOk() throws CamionNotFoundException {
+        TourneeEntity tourneeEntity = TourneeEntity
+                .builder()
+                .reference("1T")
+                .distance(7.00)
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .build();
+
+        when(tourneeRepository.save(tourneeEntity)).thenReturn(tourneeEntity);
+
+        TourneeEntity resultExpected = tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity);
+        assertEquals(resultExpected, tourneeEntity);
     }
 }

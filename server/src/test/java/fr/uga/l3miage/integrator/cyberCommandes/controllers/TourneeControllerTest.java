@@ -13,7 +13,9 @@ import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
 
@@ -21,10 +23,13 @@ import fr.uga.l3miage.integrator.cyberCommandes.services.TourneeService;
 
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;
+import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
+import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 
 
+import fr.uga.l3miage.integrator.cyberRessources.response.CamionResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +71,8 @@ public class TourneeControllerTest {
     @SpyBean
     private EmployeMapper employeMapper;
 
+    @Autowired
+    private CamionRepository camionRepository;
 
 
 
@@ -317,4 +324,62 @@ public class TourneeControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK) ;
         assertThat(response.getBody()).usingRecursiveComparison().isEqualTo(tourneeResponseDTOExpected) ;
     }
+
+    @Test
+    void AddingCamionTestOK() {
+        // Set up headers
+        final HttpHeaders headers = new HttpHeaders();
+
+        // URL parameters
+        final Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("referenceTournee", "1T");
+
+        // Request payload
+        CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest = CamionImmatriculationTouneeRequest
+                .builder()
+                .immatriculation("A123")
+                .build();
+        CamionEntity camionEntity = CamionEntity.builder()
+                .immatriculation("A123")
+                .build();
+
+        camionRepository.save(camionEntity);
+
+
+        // Tournee entity
+        TourneeEntity tourneeEntity = TourneeEntity
+                .builder()
+                .reference("1T")
+                .distance(7.00)
+                .etat(EtatsDeTournee.EFFECTUEE)
+                .build();
+        tourneeRepository.save(tourneeEntity);
+
+
+        // Prepare the request body
+        HttpEntity<CamionImmatriculationTouneeRequest> requestEntity = new HttpEntity<>(camionImmatriculationTouneeRequest, headers);
+
+        // Make the PATCH request
+        ResponseEntity<AddCamionOnTourneeResponseDTO> response = template
+                .exchange("/api/v1/tournees/{referenceTournee}",
+                        HttpMethod.PATCH,
+                        requestEntity,
+                        AddCamionOnTourneeResponseDTO.class,
+                        urlParams);
+
+        // Expected response data
+        CamionResponseDTO camionResponseDTO = CamionResponseDTO.builder()
+                .immatriculation("A123")
+                .build();
+        AddCamionOnTourneeResponseDTO expectedResponse = AddCamionOnTourneeResponseDTO
+                .builder()
+                .camion(camionResponseDTO)
+                .reference("1T")
+                .build();
+
+        // Assertions
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(expectedResponse);
+    }
+
 }

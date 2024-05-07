@@ -3,6 +3,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.mappers;
 import java.util.List;
 
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,5 +24,9 @@ public interface TourneeMapper {
     TourneeEntity toEntity(TourneeCreationRequest tourneeCreationRequest);
 
     TourneeEntity toEntity(TourneeResponseDTO tourneeResponseDTO);
+
+    @Mapping(source = "camion", target = "camion")
+    AddCamionOnTourneeResponseDTO toTourneeCamionResponseDTO(TourneeEntity tourneeEntity);
+
 
 }
