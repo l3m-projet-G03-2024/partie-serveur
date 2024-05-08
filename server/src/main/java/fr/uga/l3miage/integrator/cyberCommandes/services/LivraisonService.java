@@ -78,7 +78,7 @@ public class LivraisonService {
     public LivraisonResponseDTO updateLivraison(String referenceLivraison, LivraisonUpdateRequest livraisonUpdateRequest){
         LivraisonEntity livraisonExist = livraisonComponent.getLivraisonByReference(referenceLivraison);
         livraisonMapper.updateLivraisonFromDTO(livraisonUpdateRequest, livraisonExist);
-        if(livraisonUpdateRequest.getEtat() == EtatsDeLivraison.EFFECTUEE || livraisonUpdateRequest.getEtat() == EtatsDeLivraison.ENPARCOURS){
+        if(livraisonUpdateRequest.getEtat().equals(EtatsDeLivraison.EFFECTUEE) || livraisonUpdateRequest.getEtat().equals(EtatsDeLivraison.ENPARCOURS)){
             Set<CommandeEntity> commandeEntities =  updateCommandesLinkedWithLivraison(livraisonExist.getCommandes(), livraisonUpdateRequest.getEtat());
             livraisonExist.setCommandes(commandeEntities);
         }
@@ -86,14 +86,10 @@ public class LivraisonService {
     }
 
     Set<CommandeEntity> updateCommandesLinkedWithLivraison(Set<CommandeEntity> commandeEntities, EtatsDeLivraison etatsDeLivraison){
-        if(EtatsDeLivraison.EFFECTUEE == etatsDeLivraison){
-            for (CommandeEntity commande : commandeEntities){
-                commande.setEtat(EtatsDeCommande.LIVREE);
-            }
+        if(EtatsDeLivraison.EFFECTUEE.equals(etatsDeLivraison)){
+            commandeEntities.forEach(commandeEntity -> commandeEntity.setEtat(EtatsDeCommande.LIVREE));
         }else{
-            for (CommandeEntity commande : commandeEntities){
-                commande.setEtat(EtatsDeCommande.ENLIVRAISON);
-            }
+            commandeEntities.forEach(commandeEntity -> commandeEntity.setEtat(EtatsDeCommande.ENLIVRAISON));
         }
         return commandeEntities;
     }

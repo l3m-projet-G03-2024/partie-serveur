@@ -2,6 +2,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.components;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
@@ -10,6 +11,7 @@ import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,22 +41,7 @@ public class TourneeComponent {
                 .orElseThrow(() -> new TourneeNotFoundException("Tournée non trouvée pour la référence : ", referenceTournee));
     }
 
-    public TourneeEntity addEmployeInTournee(String referenceTournee, String idEmploye) throws TourneeNotFoundException, NotFoundEmployeEntityException {
-        TourneeEntity tourneeEntity = tourneeRepository.findById(referenceTournee)
-                .orElseThrow(() -> new TourneeNotFoundException("La tournée %s n'a pas été trouvée", referenceTournee));
-        EmployeEntity employeEntity = employeRepository.findById(idEmploye)
-                .orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
-        System.out.println("Dans Tournee componente");
-        if (tourneeEntity.getEmployes() == null) {
-            tourneeEntity.setEmployes(new HashSet<>());
-        }
-        tourneeEntity.getEmployes().add(employeEntity);
-
-        if (employeEntity.getTourneeEntities() == null) {
-            employeEntity.setTourneeEntities(new HashSet<>());
-        }
-        employeEntity.getTourneeEntities().add(tourneeEntity);
-
+    public TourneeEntity addEmployeInTournee(TourneeEntity tourneeEntity){
         return tourneeRepository.save(tourneeEntity);
     }
 

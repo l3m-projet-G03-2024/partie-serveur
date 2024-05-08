@@ -21,4 +21,8 @@ public class EmployeComponent {
     public Set<EmployeEntity> findAllEmployes() {
         return new HashSet<>(employeRepository.findAll());
     }
+
+    public EmployeEntity findEmployeByReference(String reference){
+        return employeRepository.findById(reference).orElseThrow();
+    }
 }

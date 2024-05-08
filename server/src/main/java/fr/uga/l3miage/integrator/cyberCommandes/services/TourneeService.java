@@ -17,6 +17,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequ
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
+import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import org.springframework.stereotype.Service;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
@@ -67,10 +68,35 @@ public class TourneeService {
 
     public TourneeResponseDTO addEmployeInTournee(String referenceTournee, String idEmploye){
         try{
-            TourneeEntity tourneeEntity = tourneeComponent.addEmployeInTournee(referenceTournee, idEmploye);
-            return tourneeMapper.toTourneeResponseDTO(tourneeEntity);
-        } catch (NotFoundEmployeEntityException | TourneeNotFoundException e) {
-            throw new EmployeRestException(e.getMessage());
+            TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(referenceTournee);
+            EmployeEntity employeEntity = employeComponent.findEmployeByReference(idEmploye);
+
+            Set<TourneeEntity> tourneeEntities = tourneeEntity.getJournee().getTournees();
+
+            TourneeEntity tourneeToDeleteEmploye =  tourneeEntities.stream().filter(tournee ->
+                    tournee.getEmployes().stream().anyMatch(employe -> employe.getTrigramme().equals(idEmploye))
+            ).findAny().orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
+
+            if (tourneeToDeleteEmploye != null) {
+                tourneeToDeleteEmploye.getEmployes().remove(employeEntity);
+                employeEntity.getTourneeEntities().remove(tourneeToDeleteEmploye);
+                tourneeComponent.addEmployeInTournee(tourneeToDeleteEmploye);
+            }
+
+            if (tourneeEntity.getEmployes() == null) {
+                tourneeEntity.setEmployes(new HashSet<>());
+            }
+
+            tourneeEntity.getEmployes().add(employeEntity);
+
+            if (employeEntity.getTourneeEntities() == null) {
+                employeEntity.setTourneeEntities(new HashSet<>());
+            }
+
+            employeEntity.getTourneeEntities().add(tourneeEntity);
+            return tourneeMapper.toTourneeResponseDTO(tourneeComponent.addEmployeInTournee(tourneeEntity));
+        } catch (TourneeNotFoundException | NotFoundEmployeEntityException e) {
+            throw new EmployeRestException(String.format(e.getMessage()));
         }
     }
 

@@ -13,12 +13,15 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotF
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
+import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
+import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -42,9 +45,12 @@ public class TourneeServiceTest {
 
     @Autowired
     private JourneeRepository journeeRepository;
-
+    @MockBean
+    private EmployeRepository employeRepository;
     @SpyBean
     private TourneeMapper tourneeMapper;
+    @MockBean
+    private TourneeRepository tourneeRepository;
 
 
 
@@ -169,8 +175,8 @@ public class TourneeServiceTest {
     }
 
     @Test
-    void canAddEmployeInTournee() throws TourneeNotFoundException, NotFoundEmployeEntityException {
-
+    void canAddEmployeInTournee() {
+        Set<EmployeEntity> employeEntities = new HashSet<>();
         EmployeEntity employe = EmployeEntity.builder()
                 .trigramme("test1")
                 .email("test1@gmail.com")
@@ -180,25 +186,23 @@ public class TourneeServiceTest {
                 .emploi(Emploi.LIVREUR)
                 .tourneeEntities(new HashSet<>())
                 .build();
-
+        employeEntities.add(employe);
         TourneeEntity tourneeEntity = TourneeEntity.builder()
                 .reference("test")
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
                 .tdrTheorique(1)
-                .employes(new HashSet<>())
+                .employes(employeEntities)
                 .build();
-        when(tourneeComponent.addEmployeInTournee(any(String.class), any(String.class)))
-                .thenReturn(tourneeEntity);
+        tourneeRepository.save(tourneeEntity);
+        employeRepository.save(employe);
 
         TourneeResponseDTO responseDTO = tourneeService.addEmployeInTournee(tourneeEntity.getReference(), employe.getTrigramme());
+        when(tourneeService.addEmployeInTournee(tourneeEntity.getReference(),employe.getTrigramme())).thenReturn(responseDTO);
 
         employe.getTourneeEntities().add(tourneeEntity);
         tourneeEntity.getEmployes().add(employe);
-        TourneeResponseDTO expectedResponseDTO = tourneeMapper.toTourneeResponseDTO(tourneeEntity);
-
-//        assertThat(responseDTO).usingRecursiveComparison().isEqualTo(expectedResponseDTO);
         assertTrue(tourneeEntity.getEmployes().contains(employe));
     }
 
