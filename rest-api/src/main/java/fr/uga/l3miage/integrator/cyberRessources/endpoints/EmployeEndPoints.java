@@ -1,8 +1,8 @@
 package fr.uga.l3miage.integrator.cyberRessources.endpoints;
 
+import fr.uga.l3miage.integrator.cyberCommandes.errors.BadRequestErrorResponse;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.BadRequestErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

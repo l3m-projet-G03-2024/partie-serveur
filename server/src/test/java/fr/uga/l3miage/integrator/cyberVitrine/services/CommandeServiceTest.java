@@ -5,7 +5,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNo
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
-import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
+import fr.uga.l3miage.integrator.cyberVitrine.errors.technical.CommandeEntityNotFoundException;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
