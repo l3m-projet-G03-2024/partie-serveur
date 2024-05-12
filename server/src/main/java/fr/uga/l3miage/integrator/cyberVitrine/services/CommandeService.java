@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberVitrine.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
+import fr.uga.l3miage.integrator.cyberProduit.mappers.ProduitMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
 import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
@@ -23,6 +24,7 @@ public class CommandeService {
     private final CommandeComponent commandeComponent ;
     private final CommandeMapper commandeMapper;
     private final LivraisonComponent livraisonComponent ;
+    private final ProduitMapper produitMapper;
 
     public List<CommandeResponseDTO> getCommandes(EtatsDeCommande etat) {
         List<CommandeEntity> commandeEntities = etat==null ?
