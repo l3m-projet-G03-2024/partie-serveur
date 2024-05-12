@@ -1,11 +1,16 @@
 package fr.uga.l3miage.integrator.cyberVitrine.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
+import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
+import fr.uga.l3miage.integrator.cyberVitrine.exceptions.technical.CommandeEntityNotFoundException;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.models.ClientEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
+import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
+import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.ClientDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 import org.junit.jupiter.api.Test;
@@ -14,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -123,9 +129,9 @@ public class CommandeServiceTest {
 
 
     }
-//
+
 //    @Test
-//    void testUpdateCommandes() throws CommandeEntityNotFoundException, LivraisonEntityNotFoundException {
+//    void testUpdateCommandes() throws CommandeEntityNotFoundException, LivraisonNotFoundException {
 //
 //
 //        CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
