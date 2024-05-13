@@ -18,4 +18,9 @@ public class EmployeController implements EmployeEndPoints {
     public Set<EmployeResponseDTO> listEmployeByEmploiOrNomEntrepot(Emploi emploi, String nomEntrepot) {
         return employeService.listeEmployeByEmploiOrNomEntrepot(emploi,nomEntrepot);
     }
+
+    @Override
+    public EmployeResponseDTO getDetailsEmploye(String emailEmploye) {
+        return employeService.getDetailsEmploye(emailEmploye);
+    }
 }
