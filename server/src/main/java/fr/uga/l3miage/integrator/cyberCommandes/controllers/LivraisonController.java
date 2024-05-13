@@ -2,11 +2,11 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
 import fr.uga.l3miage.integrator.cyberCommandes.endpoints.LivraisonEndPoints;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
-import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonUpdateResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.services.LivraisonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class LivraisonController implements LivraisonEndPoints {
     }
 
     @Override
-    public LivraisonResponseDTO updateLivraison(String livraison, LivraisonUpdateRequest livraisonUpdateRequest){
+    public LivraisonUpdateResponseDTO updateLivraison(String livraison, LivraisonUpdateRequest livraisonUpdateRequest){
         return livraisonService.updateLivraison(livraison, livraisonUpdateRequest);
     }
 

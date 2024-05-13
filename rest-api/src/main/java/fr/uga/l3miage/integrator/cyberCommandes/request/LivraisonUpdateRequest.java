@@ -6,13 +6,16 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Builder
 public class LivraisonUpdateRequest {
     @Schema(description = "etat de la livraison")
     private final EtatsDeLivraison etat;
-    @Schema(description = "date de livraison")
-    private final LocalDateTime date;
+    private final Integer tdpEffectif;
+    private final Integer tdcEffectif;
+    private final Integer tecEffectif;
+    private final Integer tdmEffectif;
 
 }

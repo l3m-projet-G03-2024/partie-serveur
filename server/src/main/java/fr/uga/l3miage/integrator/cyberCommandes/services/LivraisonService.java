@@ -14,14 +14,13 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonUpdateResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -51,10 +50,9 @@ public class LivraisonService {
         }
         return livraisonMapper.toLivraisonResponse(livraisonEntities);
     }
-    
+
     public LivraisonCreationResponseDTO createLivraisons(LivraisonsCreationTourneeRequest livraisons) {
         List<LivraisonEntity> livraisonEntities = new ArrayList<>();
-
         livraisons.getLivraisons().stream()
             .map(livraison -> {
                 TourneeEntity tourneeEntity;
@@ -67,22 +65,25 @@ public class LivraisonService {
                 }
                 return livraisonEntity;
             })
-            .forEach(livraisonEntities::add); 
-
+            .forEach(livraisonEntities::add);
         livraisonComponent.createLivraisons(livraisonEntities);
         return new LivraisonCreationResponseDTO(true, "Livraisons crées avec succès");
-}
+    }
 
 
-    @SneakyThrows
-    public LivraisonResponseDTO updateLivraison(String referenceLivraison, LivraisonUpdateRequest livraisonUpdateRequest){
-        LivraisonEntity livraisonExist = livraisonComponent.getLivraisonByReference(referenceLivraison);
-        livraisonMapper.updateLivraisonFromDTO(livraisonUpdateRequest, livraisonExist);
-        if(livraisonUpdateRequest.getEtat().equals(EtatsDeLivraison.EFFECTUEE) || livraisonUpdateRequest.getEtat().equals(EtatsDeLivraison.ENPARCOURS)){
-            Set<CommandeEntity> commandeEntities =  updateCommandesLinkedWithLivraison(livraisonExist.getCommandes(), livraisonUpdateRequest.getEtat());
-            livraisonExist.setCommandes(commandeEntities);
+    public LivraisonUpdateResponseDTO updateLivraison(String referenceLivraison, LivraisonUpdateRequest livraisonUpdateRequest){
+        try{
+            LivraisonEntity livraisonExist = livraisonComponent.getLivraisonByReference(referenceLivraison);
+
+            livraisonMapper.updateLivraisonFromDTO(livraisonUpdateRequest, livraisonExist);
+            if(livraisonUpdateRequest.getEtat() == EtatsDeLivraison.EFFECTUEE || livraisonUpdateRequest.getEtat() == EtatsDeLivraison.ENPARCOURS){
+                Set<CommandeEntity> commandeEntities =  updateCommandesLinkedWithLivraison(livraisonExist.getCommandes(), livraisonUpdateRequest.getEtat());
+                livraisonExist.setCommandes(commandeEntities);
+            }
+            return livraisonMapper.toLivraisonUpdateResponseDTO(livraisonComponent.updateLivraison(livraisonExist));
+        }catch (LivraisonNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        return livraisonMapper.toLivraisonResponseDTO(livraisonComponent.updateLivraison(livraisonExist));
     }
 
     Set<CommandeEntity> updateCommandesLinkedWithLivraison(Set<CommandeEntity> commandeEntities, EtatsDeLivraison etatsDeLivraison){
@@ -94,12 +95,12 @@ public class LivraisonService {
         return commandeEntities;
     }
     public LivraisonResponseDTO getLivraisonByCommandes(String referenceLivraison)  {
-       try {
-           LivraisonEntity livraisonEntity = livraisonComponent.getLivraisonByReference(referenceLivraison);
-           return livraisonMapper.toLivraisonResponseDTO(livraisonEntity);
-       }catch (LivraisonNotFoundException e){
-           throw  new NotFoundRestException(e.getMessage());
-       }
+        try {
+            LivraisonEntity livraisonEntity = livraisonComponent.getLivraisonByReference(referenceLivraison);
+            return livraisonMapper.toLivraisonResponseDTO(livraisonEntity);
+        }catch (LivraisonNotFoundException e){
+            throw  new NotFoundRestException(e.getMessage());
+        }
     }
-    
+
 }
