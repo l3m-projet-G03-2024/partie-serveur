@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -132,12 +131,11 @@ public class TourneeService {
     public AddCamionOnTourneeResponseDTO addCamionOnTournee(String referenceTounee , CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest) {
         try {
             TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(referenceTounee);
-            CamionEntity camionEntity = camionRepository.findById(camionImmatriculationTouneeRequest.getImmatriculation()).orElseThrow();
+            CamionEntity camionEntity = camionRepository.findById(camionImmatriculationTouneeRequest.getImmatriculation())
+                    .orElseThrow(() -> new NotFoundRestException(String.format("Camion non trouve %s", camionImmatriculationTouneeRequest.getImmatriculation())) );
             tourneeEntity.setCamion(camionEntity);
             return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.saveTournee(tourneeEntity));
-        } catch (Exception e) {
-            return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity));
-        } catch (CamionNotFoundException | TourneeNotFoundException e) {
+        } catch (TourneeNotFoundException e){
             throw new NotFoundRestException(e.getMessage());
         }
     }
