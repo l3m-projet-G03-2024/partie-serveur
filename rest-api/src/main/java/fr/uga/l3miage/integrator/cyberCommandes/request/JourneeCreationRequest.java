@@ -14,6 +14,6 @@ public class JourneeCreationRequest {
     private final String reference ;
     @Schema(description = "date de la journée")
     private final LocalDate date ;
-    @Schema(description = "")
+    @Schema(description = "entrepôts associée à une journée")
     private final String nomEntrepot;
 }
