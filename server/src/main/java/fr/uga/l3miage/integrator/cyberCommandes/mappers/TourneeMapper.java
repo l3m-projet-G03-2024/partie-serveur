@@ -5,6 +5,7 @@ import java.util.List;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.mappers.CommandeMapper;
+import fr.uga.l3miage.integrator.cyberCommandes.mappers.JourneeMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
