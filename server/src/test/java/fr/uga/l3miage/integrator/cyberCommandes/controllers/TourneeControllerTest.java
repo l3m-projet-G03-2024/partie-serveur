@@ -275,6 +275,7 @@ public class TourneeControllerTest {
         assertThat(request.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
+    @Test
     void getTourneeNotFound() {
         // Given
         final HttpHeaders headers = new HttpHeaders();
