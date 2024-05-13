@@ -1,7 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
@@ -53,7 +52,7 @@ public class TourneeComponent {
         }else throw new NotFoundEmployeEntityException(String.format("L'email %s n'appartient à aucun employé", emailEmploye));
     }
 
-    public TourneeEntity addingTourneeAfterAddedCamion(TourneeEntity tourneeEntity) throws CamionNotFoundException {
+    public TourneeEntity saveTournee(TourneeEntity tourneeEntity) {
         return tourneeRepository.save(tourneeEntity);
     }
 }

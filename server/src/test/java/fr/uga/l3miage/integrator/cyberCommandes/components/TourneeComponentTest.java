@@ -11,7 +11,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFo
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
-import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import org.junit.jupiter.api.Test;
@@ -227,7 +226,7 @@ public class TourneeComponentTest {
 
         when(tourneeRepository.save(tourneeEntity)).thenReturn(tourneeEntity);
 
-        TourneeEntity resultExpected = tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity);
+        TourneeEntity resultExpected = tourneeComponent.saveTournee(tourneeEntity);
         assertEquals(resultExpected, tourneeEntity);
     }
     @Test
