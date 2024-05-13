@@ -23,7 +23,8 @@ import lombok.RequiredArgsConstructor;
 
 public class TourneeController implements TourneeEndPoints {
     private final TourneeService tourneeService;
-    
+
+
     @Override
     public List<TourneeResponseDTO> getAllTournees(EtatsDeTournee etatsDeTournee, String reference) {
         return tourneeService.getTourneesByEtatsOrReferenceJournee(etatsDeTournee,reference);
