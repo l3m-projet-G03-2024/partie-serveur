@@ -3,7 +3,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundEntityRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
@@ -80,7 +80,7 @@ public class LivraisonService {
     public LivraisonResponseDTO updateLivraison(String referenceLivraison, LivraisonUpdateRequest livraisonUpdateRequest){
         LivraisonEntity livraisonExist = livraisonComponent.getLivraisonByReference(referenceLivraison);
         livraisonMapper.updateLivraisonFromDTO(livraisonUpdateRequest, livraisonExist);
-        if(livraisonUpdateRequest.getEtat() == EtatsDeLivraison.EFFECTUEE || livraisonUpdateRequest.getEtat() == EtatsDeLivraison.ENPARCOURS){
+        if(livraisonUpdateRequest.getEtat().equals(EtatsDeLivraison.EFFECTUEE) || livraisonUpdateRequest.getEtat().equals(EtatsDeLivraison.ENPARCOURS)){
             Set<CommandeEntity> commandeEntities =  updateCommandesLinkedWithLivraison(livraisonExist.getCommandes(), livraisonUpdateRequest.getEtat());
             livraisonExist.setCommandes(commandeEntities);
         }
@@ -88,14 +88,10 @@ public class LivraisonService {
     }
 
     Set<CommandeEntity> updateCommandesLinkedWithLivraison(Set<CommandeEntity> commandeEntities, EtatsDeLivraison etatsDeLivraison){
-        if(EtatsDeLivraison.EFFECTUEE == etatsDeLivraison){
-            for (CommandeEntity commande : commandeEntities){
-                commande.setEtat(EtatsDeCommande.LIVREE);
-            }
+        if(EtatsDeLivraison.EFFECTUEE.equals(etatsDeLivraison)){
+            commandeEntities.forEach(commandeEntity -> commandeEntity.setEtat(EtatsDeCommande.LIVREE));
         }else{
-            for (CommandeEntity commande : commandeEntities){
-                commande.setEtat(EtatsDeCommande.ENLIVRAISON);
-            }
+            commandeEntities.forEach(commandeEntity -> commandeEntity.setEtat(EtatsDeCommande.ENLIVRAISON));
         }
         return commandeEntities;
     }
@@ -104,7 +100,7 @@ public class LivraisonService {
            LivraisonEntity livraisonEntity = livraisonComponent.getLivraisonByReference(referenceLivraison);
            return livraisonMapper.toLivraisonResponseDTO(livraisonEntity);
        }catch (LivraisonNotFoundException e){
-           throw  new NotFoundEntityRestException(e.getMessage());
+           throw  new NotFoundRestException(e.getMessage());
        }
     }
     

@@ -117,7 +117,7 @@ public class TourneeComponentTest {
         when(employeRepository.findById(any())).thenReturn(Optional.of(employe));
         when(tourneeRepository.save(tourneeEntity)).thenReturn((tourneeEntity));
 
-        TourneeEntity tourneeEntity1 = tourneeComponent.addEmployeInTournee("test", "test1");
+        TourneeEntity tourneeEntity1 = tourneeComponent.addEmployeInTournee(tourneeEntity);
         Set<EmployeEntity> employeEntities = tourneeEntity1.getEmployes();
         assertNotNull(employeEntities);
         assertEquals(tourneeEntity1, tourneeEntity);

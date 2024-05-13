@@ -11,15 +11,15 @@ import java.time.LocalDate;
 @Builder
 public class JourneeUpdateRequest {
 
-    @Schema(description = "")
+    @Schema(description = "Etat possible d'une journee")
     private final EtatsDeJournee etat;
-    @Schema(description = "")
+    @Schema(description = "date de la journee")
     private final LocalDate date;
-    @Schema(description = "")
+    @Schema(description = "distance a parcourir")
     private final Double distanceAParcourir;
-    @Schema(description = "")
+    @Schema(description = "montant total")
     private final Double montant;
-    @Schema(description = "")
+    @Schema(description = "temps de montage theorique")
     private final Integer tdmTheorique;
 }
 
