@@ -41,7 +41,7 @@ public class CyberCommandesExceptionRestHandler {
         NotFoundRestException exception = (NotFoundRestException ) e;
         final NotFoundErrorResponse response = NotFoundErrorResponse
                 .builder()
-                .errorMessage(exception.getMessage()+exception.getReference())
+                .errorMessage(exception.getMessage())
                 .uri(httpServletRequest.getRequestURI())
                 .build();
                 log.warn(exception.getMessage());

@@ -28,13 +28,13 @@ import java.util.List;
 public interface LivraisonEndPoints {
 
 
-    @ApiResponse(responseCode = "200",description = "liste de livraison envoyer avec succès")
+    @ApiResponse(responseCode = "200", description = "liste de livraison envoyer avec succès")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     List<LivraisonResponseDTO> getLivraisons(@RequestParam(required = false) EtatsDeLivraison etat);
 
-    @ApiResponse(responseCode = "201",description = "Livraisons crées avec succès")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit l'ors de la création ")
+    @ApiResponse(responseCode = "201", description = "Livraisons crées avec succès")
+    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit l'ors de la création ", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
     LivraisonCreationResponseDTO createLivraisons(@RequestBody() LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest);
@@ -49,8 +49,8 @@ public interface LivraisonEndPoints {
     @PatchMapping("/{referenceLivraison}")
     LivraisonUpdateResponseDTO updateLivraison(@PathVariable(name = "referenceLivraison") String reference, @RequestBody LivraisonUpdateRequest livraisonUpdateRequest);
 
-    @ApiResponse(responseCode = "200",description = "récupère pour chaque livraison, sa commande et le client")
-    @ApiResponse(responseCode = "404", description = "Cette livraison n'existe pas")
+    @ApiResponse(responseCode = "200", description = "récupère pour chaque livraison, sa commande et le client")
+    @ApiResponse(responseCode = "404", description = "Cette livraison n'existe pas", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{referenceLivraison}")
     LivraisonResponseDTO getLivraisonsDetailByCommande(@PathVariable(name = "referenceLivraison") String referenceLivraison);

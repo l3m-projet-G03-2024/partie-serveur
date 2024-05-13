@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
-import fr.uga.l3miage.integrator.cyberCommandes.errors.EmployeNotFoundErrorResponse;
-import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
@@ -38,7 +37,7 @@ public interface TourneeEndPoints {
 
     @Operation(description = "crée des tournées pour une journée")
     @ApiResponse(responseCode = "201",description = "les tournées ont été créés")
-    @ApiResponse(responseCode = "404",description ="les tournées n'ont pas été créés")
+    @ApiResponse(responseCode = "404",description ="les tournées n'ont pas été créés", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
     TourneeCreationResponseDTO createTournees(@RequestBody TourneesCreationBodyRequest tourneeCreationBodyRequest);
@@ -50,18 +49,16 @@ public interface TourneeEndPoints {
     @PatchMapping("/{referenceTournee}/add-employe")
     TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestBody AddEmployeIdTourneeRequest addEmployeIdTourneeRequest);
 
-
-
     @Operation(description = "Récupération d'une tournée")
     @ApiResponse(responseCode = "200", description = "La tournée a été récupérée avec succès")
-    @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée",content = @Content(schema = @Schema(implementation = TourneeNotFoundResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{referenceTournee}")
     TourneeResponseDTO getTournee(@PathVariable(name = "referenceTournee") String referenceTournee) ;
 
     @Operation(description = "Recupérer toutes les tournées d'un employé (livreur)")
     @ApiResponse(responseCode = "200", description = "L'employé a été trouvé")
-    @ApiResponse(responseCode = "404", description = "Aucun employé n'a cette adresse mail", content = @Content(schema = @Schema(implementation = EmployeNotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", description = "Aucun employé n'a cette adresse mail", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/employes/{emailEmploye}")
     Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(@PathVariable(name = "emailEmploye")String emailEmploye);
@@ -74,7 +71,7 @@ public interface TourneeEndPoints {
 
     @Operation(description = "Mise à jour de l'état et du temps de retour effectif d'une tournée")
     @ApiResponse(responseCode = "200", description = "l'état et le temps de retour effectif de la tournée ont été modifiés avec succès")
-    @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = TourneeNotFoundResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceTournee}")
     TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) ;

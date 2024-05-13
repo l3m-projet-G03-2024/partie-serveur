@@ -6,20 +6,19 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import java.util.*;
 import java.util.stream.Collectors;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
+
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
-import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
@@ -318,9 +317,9 @@ public class TourneeServiceTest {
     @Test
     void getTourneeNotFound() throws TourneeNotFoundException {
         // Given
-        when(tourneeComponent.findTourneeByReference(anyString())).thenThrow(TourneeNotFoundException.class) ;
+        when(tourneeComponent.findTourneeByReference(anyString())).thenThrow(NotFoundRestException.class) ;
         // when - then
-        assertThrows(TourneeNotFoundRestException.class, () -> tourneeService.getTournee(anyString())) ;
+        assertThrows(NotFoundRestException.class, () -> tourneeService.getTournee(anyString())) ;
     }
 
     @Test
