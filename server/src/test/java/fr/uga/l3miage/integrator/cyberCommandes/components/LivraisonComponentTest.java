@@ -85,7 +85,6 @@ public class LivraisonComponentTest {
                 .builder()
                 .reference("1L")
                 .etat(EtatsDeLivraison.PLANIFIEE)
-                .date(LocalDateTime.of(2024, 5, 3, 15, 30))
                 .build();
         livraisonRepository.save(livraisonEntity);
 

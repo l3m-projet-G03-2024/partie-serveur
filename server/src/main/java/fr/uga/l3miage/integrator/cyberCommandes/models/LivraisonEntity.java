@@ -24,8 +24,6 @@ public class LivraisonEntity {
     @Enumerated(EnumType.STRING)
     private EtatsDeLivraison etat;
 
-    private LocalDateTime date;
-
     @Column(nullable = true)
     private Integer tdpTheorique;
 

@@ -54,13 +54,11 @@ public class LivraisonService {
     
     public LivraisonCreationResponseDTO createLivraisons(LivraisonsCreationTourneeRequest livraisons) {
         List<LivraisonEntity> livraisonEntities = new ArrayList<>();
-        LocalDateTime creationDate = LocalDateTime.now();
 
         livraisons.getLivraisons().stream()
             .map(livraison -> {
                 TourneeEntity tourneeEntity;
                 LivraisonEntity livraisonEntity = livraisonMapper.toEntity(livraison);
-                livraisonEntity.setDate(creationDate);
                 try {
                     tourneeEntity = tourneeComponent.findTourneeByReference(livraison.getReferenceTournee());
                     livraisonEntity.setTourneeEntity(tourneeEntity);
