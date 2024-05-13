@@ -192,4 +192,72 @@ public class CommandeServiceTest {
 //        assertEquals(commandeComponent.getCommandeByReference("REF2").getEtat(), EtatsDeCommande.LIVREE);
 //    }
 
+    @Test
+    void testUpdateCommandes() throws CommandeEntityNotFoundException, LivraisonNotFoundException {
+
+        CommandeUpdatingRequest commande1 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF1")
+                .etat(EtatsDeCommande.ENLIVRAISON)
+                .referenceLivraison("REF_LIVRAISON_1")
+                .build();
+
+        CommandeUpdatingRequest commande2 = CommandeUpdatingRequest
+                .builder()
+                .reference("REF2")
+                .etat(EtatsDeCommande.LIVREE)
+                .referenceLivraison("REF_LIVRAISON_2")
+                .build();
+
+        List<CommandeUpdatingRequest> commandes = new ArrayList<>();
+        commandes.add(commande1);
+        commandes.add(commande2);
+
+        CommandeUpdatingBodyRequest commandeUpdatingBodyRequest = new CommandeUpdatingBodyRequest(commandes) ;
+
+        CommandeEntity commandeEntity1 = new CommandeEntity();
+        commandeEntity1.setReference("REF1");
+
+        CommandeEntity commandeEntity2 = new CommandeEntity();
+        commandeEntity2.setReference("REF2");
+
+        List<CommandeEntity> commandeEntities = new ArrayList<>() ;
+        commandeEntities.add(commandeEntity1) ;
+        commandeEntities.add(commandeEntity2) ;
+
+        when(commandeComponent.getCommandeByReference("REF1")).thenReturn(commandeEntity1);
+        when(commandeComponent.getCommandeByReference("REF2")).thenReturn(commandeEntity2);
+
+        LivraisonEntity livraisonEntity1 = new LivraisonEntity();
+        livraisonEntity1.setReference("REF_LIVRAISON_1");
+
+        LivraisonEntity livraisonEntity2 = new LivraisonEntity();
+        livraisonEntity2.setReference("REF_LIVRAISON_2");
+
+        when(livraisonComponent.getLivraisonByReference("REF_LIVRAISON_1")).thenReturn(livraisonEntity1);
+        when(livraisonComponent.getLivraisonByReference("REF_LIVRAISON_2")).thenReturn(livraisonEntity2);
+
+        when(commandeComponent.updateCommandes(commandeEntities)).thenReturn(commandeEntities) ;
+
+        CommandeResponseDTO commandeResponseDTO1 = new CommandeResponseDTO();
+        CommandeResponseDTO commandeResponseDTO2 = new CommandeResponseDTO();
+
+        List<CommandeResponseDTO> commandeResponseDTOList = new ArrayList<>() ;
+        commandeResponseDTOList.add(commandeResponseDTO1) ;
+        commandeResponseDTOList.add(commandeResponseDTO2) ;
+
+        when(commandeMapper.toCommandesResponseDTO(commandeEntities)).thenReturn(commandeResponseDTOList) ;
+
+        List<CommandeResponseDTO> result = commandeService.updateCommandes(commandeUpdatingBodyRequest);
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals(commandeResponseDTO1, result.get(0));
+        assertEquals(commandeResponseDTO2, result.get(1));
+        verify(commandeComponent, times(2)).getCommandeByReference(anyString()) ;
+        verify(livraisonComponent, times(2)).getLivraisonByReference(anyString()) ;
+        assertEquals(commandeComponent.getCommandeByReference("REF1").getEtat(), EtatsDeCommande.ENLIVRAISON);
+        assertEquals(commandeComponent.getCommandeByReference("REF2").getEtat(), EtatsDeCommande.LIVREE);
+    }
+
 }

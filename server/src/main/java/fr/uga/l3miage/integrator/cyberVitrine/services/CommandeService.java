@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberVitrine.services;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberProduit.mappers.ProduitMapper;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.exceptions.rest.BadRequestRestException;
@@ -45,7 +46,7 @@ public class CommandeService {
             List<CommandeEntity> commandeUpdates = commandeComponent.updateCommandes(commandeEntities);
 
             return commandeMapper.toCommandesResponseDTO(commandeUpdates);
-        } catch (Exception e) {
+        } catch (CommandeEntityNotFoundException | LivraisonNotFoundException e) {
             throw new BadRequestRestException(e.getMessage()) ;
         }
     }
