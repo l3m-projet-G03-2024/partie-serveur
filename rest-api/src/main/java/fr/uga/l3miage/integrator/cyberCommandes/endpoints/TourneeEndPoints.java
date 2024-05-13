@@ -46,7 +46,7 @@ public interface TourneeEndPoints {
     @ApiResponse(responseCode = "200",description = "L'employe a été ajouté à la tournée")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la tounee ou l'employe demandé n'a pas été trouvé",content = @Content(schema = @Schema(implementation = AddTourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PatchMapping("/{referenceTournee}/addEmploye")
+    @PatchMapping("/{referenceTournee}/add-employe")
     TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestBody AddEmployeIdTourneeRequest addEmployeIdTourneeRequest);
 
 
@@ -68,7 +68,7 @@ public interface TourneeEndPoints {
     @Operation(description = "Ajouter un camion dans tournee")
     @ApiResponse(responseCode = "200", description = "Camion a été ajouté dans tournee")
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{referenceTournee}")
+    @PatchMapping("/{referenceTournee}/add-camion")
     AddCamionOnTourneeResponseDTO addCamionOnTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest);
 
 }

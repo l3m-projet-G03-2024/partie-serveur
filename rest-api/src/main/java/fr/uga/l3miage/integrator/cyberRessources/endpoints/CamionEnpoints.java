@@ -11,7 +11,8 @@ import java.util.List;
 
 @RestController
 @Tag(name = "Camion enpoint")
-@RequestMapping("/api/camions")
+@RequestMapping("/api/v1/camions")
+@CrossOrigin("*")
 public interface CamionEnpoints {
 
     @Operation(description = "recupère liste des camions")
@@ -19,7 +20,7 @@ public interface CamionEnpoints {
     @ApiResponse(responseCode = "404", description = "l'entrepot ou le nom demandée n'a pas été trouvé")
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{idEntrepot}")
-    List<CamionResponseDTO> getCamionsByIdEntrpot(@PathVariable(name = "idEntrepot") String idEntrepot);
+    @GetMapping("/")
+    List<CamionResponseDTO> getCamionsByIdEntrepot(@RequestParam(required = false) String nomEntrepot);
 
 }
