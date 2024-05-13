@@ -2,7 +2,6 @@ package fr.uga.l3miage.integrator.cyberRessources.services;
 
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
-import fr.uga.l3miage.integrator.cyberRessources.exceptions.handlers.EmployeNotFoundEntityHandler;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.rest.EmployeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;

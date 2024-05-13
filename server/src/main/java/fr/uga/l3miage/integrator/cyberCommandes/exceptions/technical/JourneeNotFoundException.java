@@ -4,12 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class JourneeNotFoundException extends Exception {
-
-    private final String reference;
-    public JourneeNotFoundException(String message,String reference){
+    public JourneeNotFoundException(String message){
         super(message);
-        this.reference = reference;
     }
-
-
 }

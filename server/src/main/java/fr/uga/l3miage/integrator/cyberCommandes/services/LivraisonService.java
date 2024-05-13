@@ -4,7 +4,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.LivraisonMapper;
@@ -54,18 +53,18 @@ public class LivraisonService {
     public LivraisonCreationResponseDTO createLivraisons(LivraisonsCreationTourneeRequest livraisons) {
         List<LivraisonEntity> livraisonEntities = new ArrayList<>();
         livraisons.getLivraisons().stream()
-            .map(livraison -> {
-                TourneeEntity tourneeEntity;
-                LivraisonEntity livraisonEntity = livraisonMapper.toEntity(livraison);
-                try {
-                    tourneeEntity = tourneeComponent.findTourneeByReference(livraison.getReferenceTournee());
-                    livraisonEntity.setTourneeEntity(tourneeEntity);
-                } catch (TourneeNotFoundException e) {
-                    throw new TourneeNotFoundRestException(e.getMessage(), e.getReference());
-                }
-                return livraisonEntity;
-            })
-            .forEach(livraisonEntities::add);
+                .map(livraison -> {
+                    TourneeEntity tourneeEntity;
+                    LivraisonEntity livraisonEntity = livraisonMapper.toEntity(livraison);
+                    try {
+                        tourneeEntity = tourneeComponent.findTourneeByReference(livraison.getReferenceTournee());
+                        livraisonEntity.setTourneeEntity(tourneeEntity);
+                    } catch (TourneeNotFoundException e) {
+                        throw new NotFoundRestException(e.getMessage());
+                    }
+                    return livraisonEntity;
+                })
+                .forEach(livraisonEntities::add);
         livraisonComponent.createLivraisons(livraisonEntities);
         return new LivraisonCreationResponseDTO(true, "Livraisons crées avec succès");
     }
@@ -82,7 +81,7 @@ public class LivraisonService {
             }
             return livraisonMapper.toLivraisonUpdateResponseDTO(livraisonComponent.updateLivraison(livraisonExist));
         }catch (LivraisonNotFoundException e) {
-            throw new RuntimeException(e);
+            throw new NotFoundRestException(e.getMessage());
         }
     }
 
