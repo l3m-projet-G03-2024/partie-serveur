@@ -16,6 +16,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTou
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
@@ -293,6 +294,7 @@ public class TourneeServiceTest {
         assertEquals(2, dtoSetExpected.size());
     }
 
+    @Test
     void getTourneeFound() throws TourneeNotFoundException {
         // Given
         TourneeEntity tourneeEntity = TourneeEntity
@@ -345,7 +347,7 @@ public class TourneeServiceTest {
 
         when(tourneeComponent.findTourneeByReference("T1")).thenReturn(tourneeEntity);
         when(camionRepository.findById("C1")).thenReturn(Optional.ofNullable(camionEntity));
-        when(tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity)).thenReturn(tourneeEntity);
+        when(tourneeComponent.saveTournee(tourneeEntity)).thenReturn(tourneeEntity);
         when(tourneeMapper.toTourneeCamionResponseDTO(tourneeEntity)).thenReturn(responseDTO);
 
         // Act
@@ -355,6 +357,38 @@ public class TourneeServiceTest {
         Assertions.assertThat(actualResponseDTO).isNotNull();
         Assertions.assertThat(actualResponseDTO.getCamion()).isEqualTo(camionResponseDTO);
         Assertions.assertThat(actualResponseDTO.getReference()).isEqualTo("T1");
+
+    }
+
+    @Test
+    void updateEtatAndTdrEffectifOfTournee() throws TourneeNotFoundException {
+        // Given
+        String refTournee = "T1" ;
+
+        UpdatingEtatAndTdrEffectifOfTourneeRequest request = UpdatingEtatAndTdrEffectifOfTourneeRequest.builder()
+                .etat(EtatsDeTournee.ENPARCOURS)
+                .tdrEffectf(200).build() ;
+
+        TourneeEntity tourneeEntity = TourneeEntity.builder()
+                .reference(refTournee)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(150).build();
+
+        when(tourneeComponent.findTourneeByReference(refTournee)).thenReturn(tourneeEntity) ;
+
+        tourneeEntity.setEtat(EtatsDeTournee.ENPARCOURS);
+        tourneeEntity.setTdrEffectif(200);
+
+        TourneeResponseDTO tourneeResponseExpected = TourneeResponseDTO.builder()
+                .reference(refTournee)
+                .etat(EtatsDeTournee.ENPARCOURS)
+                .distance(200.0).build();
+
+        when(tourneeMapper.toTourneeResponseDTO(tourneeEntity)).thenReturn(tourneeResponseExpected) ;
+
+        TourneeResponseDTO tourneeResponseActual = tourneeService.updateEtatAndTdrEffectifOfTournee(refTournee, request) ;
+
+        assertNotNull(tourneeResponseActual);
 
     }
 }

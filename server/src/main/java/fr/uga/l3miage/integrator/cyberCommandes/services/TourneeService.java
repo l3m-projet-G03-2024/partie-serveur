@@ -15,6 +15,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotF
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
@@ -134,9 +135,20 @@ public class TourneeService {
             TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(referenceTounee);
             CamionEntity camionEntity = camionRepository.findById(camionImmatriculationTouneeRequest.getImmatriculation()).orElseThrow();
             tourneeEntity.setCamion(camionEntity);
-            return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity));
+            return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.saveTournee(tourneeEntity));
         } catch (Exception e) {
             throw new NotFoundRestException(e.getMessage());
+        }
+    }
+
+    public TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(String refTournee, UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) {
+        try {
+            TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(refTournee) ;
+            tourneeMapper.updateTourneeEntityFromRequest(updatingEtatAndTdrEffectifOfTourneeRequest, tourneeEntity);
+            tourneeComponent.saveTournee(tourneeEntity) ;
+            return tourneeMapper.toTourneeResponseDTO(tourneeEntity) ;
+        } catch (TourneeNotFoundException e) {
+            throw new TourneeNotFoundRestException(e.getMessage(), e.getReference()) ;
         }
     }
 }

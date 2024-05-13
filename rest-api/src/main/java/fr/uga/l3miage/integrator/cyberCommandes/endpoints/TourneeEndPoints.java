@@ -9,6 +9,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.errors.TourneeNotFoundResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -70,5 +71,12 @@ public interface TourneeEndPoints {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceTournee}/add-camion")
     AddCamionOnTourneeResponseDTO addCamionOnTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody CamionImmatriculationTouneeRequest camionImmatriculationTouneeRequest);
+
+    @Operation(description = "Mise à jour de l'état et du temps de retour effectif d'une tournée")
+    @ApiResponse(responseCode = "200", description = "l'état et le temps de retour effectif de la tournée ont été modifiés avec succès")
+    @ApiResponse(responseCode = "404", description = "La tournée demandée n'a pas été trouvée", content = @Content(schema = @Schema(implementation = TourneeNotFoundResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{referenceTournee}")
+    TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) ;
 
 }
