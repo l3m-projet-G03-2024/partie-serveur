@@ -61,9 +61,7 @@ public class TourneeComponent {
 
     public Set<TourneeEntity> getAllTourneesByEmployeEmail(String emailEmploye) throws NotFoundEmployeEntityException {
         EmployeEntity employe = employeRepository.getByEmail(emailEmploye);
-        System.out.println(employe);
         if(employe != null) {
-            System.out.println(employe);
             return new HashSet<>(tourneeRepository.findByEmployesEmail(emailEmploye));
         }else throw new NotFoundEmployeEntityException(String.format("L'email %s n'appartient à aucun employé", emailEmploye));
     }
