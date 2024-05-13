@@ -7,9 +7,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.TourneeNotFoundRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.CamionNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
@@ -69,7 +68,7 @@ public class TourneeService {
             tourneeComponent.createTournees(tourneeEntities);
             return new TourneeCreationResponseDTO(true,"Toutes les tournées ont été créés avec succès");
         }catch (JourneeNotFoundException e) {
-            throw new JourneeNotFoundRestException(e.getMessage(),e.getReference());
+            throw new NotFoundRestException(e.getMessage());
         }
     }
 
@@ -126,7 +125,7 @@ public class TourneeService {
             TourneeEntity tourneeEntity = tourneeComponent.findTourneeByReference(referenceTournee) ;
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity) ;
         } catch (TourneeNotFoundException e) {
-            throw new TourneeNotFoundRestException(e.getMessage(), referenceTournee) ;
+            throw new NotFoundRestException(e.getMessage(), referenceTournee) ;
         }
     }
 
@@ -137,6 +136,8 @@ public class TourneeService {
             tourneeEntity.setCamion(camionEntity);
             return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.saveTournee(tourneeEntity));
         } catch (Exception e) {
+            return tourneeMapper.toTourneeCamionResponseDTO(tourneeComponent.addingTourneeAfterAddedCamion(tourneeEntity));
+        } catch (CamionNotFoundException | TourneeNotFoundException e) {
             throw new NotFoundRestException(e.getMessage());
         }
     }
@@ -148,7 +149,7 @@ public class TourneeService {
             tourneeComponent.saveTournee(tourneeEntity) ;
             return tourneeMapper.toTourneeResponseDTO(tourneeEntity) ;
         } catch (TourneeNotFoundException e) {
-            throw new TourneeNotFoundRestException(e.getMessage(), e.getReference()) ;
+            throw new NotFoundRestException(e.getMessage());
         }
     }
 }

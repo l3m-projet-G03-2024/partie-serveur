@@ -1,6 +1,5 @@
 package fr.uga.l3miage.integrator.cyberCommandes.components;
 
-import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.JourneeNotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import lombok.RequiredArgsConstructor;
@@ -10,14 +9,12 @@ import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Set;
 
 
 @Component
 @RequiredArgsConstructor
 public class JourneeComponent {
     private final JourneeRepository journeeRepository;
-
 
     public List<JourneeEntity> findAllJournees(){
         return journeeRepository.findAll();
@@ -28,24 +25,21 @@ public class JourneeComponent {
 
     public void deleteJourneeById(String reference) throws JourneeNotFoundException{
         journeeRepository.findById(reference)
-                .orElseThrow(()-> new JourneeNotFoundException("Journée non trouvée pour la référence : ", reference));
+                .orElseThrow(() -> new JourneeNotFoundException(String.format("Journée non trouvée pour la référence : [%s]",reference)));
         journeeRepository.deleteById(reference);
 
     }
     public JourneeEntity getJourneeById(String reference) throws JourneeNotFoundException {
         return journeeRepository.findById(reference)
-                .orElseThrow(() -> new JourneeNotFoundException("Journée non trouvée pour la référence : " ,reference));
+                .orElseThrow(() -> new JourneeNotFoundException(String.format("Journée non trouvée pour la référence : [%s]" ,reference)));
     }
 
     public JourneeEntity updateJournee(JourneeEntity journee) throws EntityNotFoundException{
         return journeeRepository.save(journee);
     }
 
-
     public JourneeEntity findJourneeByReference(String refJournee) throws JourneeNotFoundException  {
         return journeeRepository.findById(refJournee)
-                .orElseThrow(() -> new JourneeNotFoundException("Journée non trouvée pour la référence : ", refJournee));
+                .orElseThrow(() -> new JourneeNotFoundException(String.format("Journée non trouvée pour la référence : [%s]" ,refJournee)));
     }
-
-
 }

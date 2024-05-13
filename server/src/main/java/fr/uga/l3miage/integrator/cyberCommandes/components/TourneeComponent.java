@@ -2,7 +2,6 @@ package fr.uga.l3miage.integrator.cyberCommandes.components;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
-import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
@@ -11,7 +10,6 @@ import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +36,7 @@ public class TourneeComponent {
 
     public TourneeEntity findTourneeByReference(String referenceTournee) throws TourneeNotFoundException  {
         return tourneeRepository.findById(referenceTournee)
-                .orElseThrow(() -> new TourneeNotFoundException("Tournée non trouvée pour la référence : ", referenceTournee));
+                .orElseThrow(() -> new TourneeNotFoundException(String.format("Tournée non trouvée pour la référence : [%s]", referenceTournee)));
     }
 
     public TourneeEntity addEmployeInTournee(TourneeEntity tourneeEntity){
