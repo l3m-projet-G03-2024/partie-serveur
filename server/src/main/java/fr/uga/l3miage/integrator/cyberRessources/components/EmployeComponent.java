@@ -1,5 +1,6 @@
 package fr.uga.l3miage.integrator.cyberRessources.components;
 
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
@@ -36,4 +37,7 @@ public class EmployeComponent {
         }
     }
 
+    public EmployeEntity findEmployeByReference(String reference){
+        return employeRepository.findById(reference).orElseThrow(() -> new NotFoundRestException("Employe non trouvee"));
+    }
 }

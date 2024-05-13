@@ -31,7 +31,7 @@ public class JourneeDetailResponseDTO {
     @Schema(description = "temps de retour estimer")
     private Integer tdmTheorique;
 
-    @Schema(description = "")
+    @Schema(description = "entrepot associe a une journee")
     private EntrepotResponseDetailDTO entrepot;
 
 }
