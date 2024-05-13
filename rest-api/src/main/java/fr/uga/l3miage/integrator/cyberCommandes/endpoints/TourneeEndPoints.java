@@ -29,7 +29,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("api/v1/tournees")
 @CrossOrigin("*")
 public interface TourneeEndPoints {
-    
+
+
     @Operation(description = "recupère une tournée")
     @ApiResponse(responseCode = "200",description ="la tournée a été trouvée")
     @ResponseStatus(HttpStatus.OK)
