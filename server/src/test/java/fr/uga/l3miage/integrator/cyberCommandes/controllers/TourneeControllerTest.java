@@ -218,7 +218,7 @@ public class TourneeControllerTest {
 //
 //        // When
 //        ResponseEntity<TourneeResponseDTO> response = template
-//                .exchange("/api/v1/tournees/{referenceTournee}/addEmploye",
+//                .exchange("/api/v1/tournees/{referenceTournee}/add-employe",
 //                        HttpMethod.PATCH,
 //                        new HttpEntity<>(employe.getTrigramme(), headers),
 //                        TourneeResponseDTO.class,
@@ -361,7 +361,7 @@ public class TourneeControllerTest {
 
         // Make the PATCH request
         ResponseEntity<AddCamionOnTourneeResponseDTO> response = template
-                .exchange("/api/v1/tournees/{referenceTournee}",
+                .exchange("/api/v1/tournees/{referenceTournee}/add-camion",
                         HttpMethod.PATCH,
                         requestEntity,
                         AddCamionOnTourneeResponseDTO.class,

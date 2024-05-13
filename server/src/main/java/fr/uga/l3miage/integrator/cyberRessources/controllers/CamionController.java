@@ -13,8 +13,8 @@ import java.util.List;
 public class CamionController implements CamionEnpoints {
     private final CamionService camionService;
     @Override
-    public List<CamionResponseDTO> getCamionsByIdEntrpot(String id) {
-        return camionService.getCamions(id);
+    public List<CamionResponseDTO> getCamionsByIdEntrepot(String nomEntrepot) {
+        return camionService.getCamions(nomEntrepot);
     }
 
 }

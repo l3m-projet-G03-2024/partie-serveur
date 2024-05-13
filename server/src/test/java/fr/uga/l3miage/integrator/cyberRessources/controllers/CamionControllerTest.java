@@ -3,6 +3,7 @@ package fr.uga.l3miage.integrator.cyberRessources.controllers;
 import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
 import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
 import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
+import fr.uga.l3miage.integrator.cyberRessources.response.CamionResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -55,23 +56,15 @@ public class CamionControllerTest {
             camionRepository.save(camionEntity);
             final HttpHeaders headers = new HttpHeaders();
 
-            final Map<String, Object> urlParams = new HashMap<>();
-            urlParams.put("nom", "E1");
-
-
-            ResponseEntity<List<CamionEntity>> response = template.exchange(
-                    "/api/camions/{nom}",
+            ResponseEntity<List<CamionResponseDTO>> response = template.exchange(
+                    "/api/v1/camions/?nomEntrepot=E1",
                     HttpMethod.GET,
                     new HttpEntity<>(headers),
-                    new ParameterizedTypeReference<List<CamionEntity>>() {},
-                    urlParams
+                    new ParameterizedTypeReference<List<CamionResponseDTO>>() {}
             );
-            List<CamionEntity> camions = new ArrayList<>();
-            camions.add(camionEntity);
 
             // Assertions
             assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
             assertThat(response.getBody().size()).isEqualTo(1);
         }
 
