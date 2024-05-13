@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProduitLigneCommandeResponseDTO {
     private String reference;
-    private Boolean aOptionMontage;
+    private boolean aOptionMontage;
     private String encombrement;
     private Double prix;
     private String titre;
