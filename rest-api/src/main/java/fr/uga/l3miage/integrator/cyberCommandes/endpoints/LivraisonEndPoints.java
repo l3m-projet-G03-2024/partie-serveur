@@ -1,7 +1,6 @@
 package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
-
 import fr.uga.l3miage.integrator.cyberCommandes.errors.BadRequestErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.ForbiddenErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
@@ -10,6 +9,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonUpdateResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -47,7 +47,7 @@ public interface LivraisonEndPoints {
     @ApiResponse(responseCode = "500", description = "Échec de la mise à jour", content = @Content(schema = @Schema(implementation = UpdateFailedErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceLivraison}")
-    LivraisonResponseDTO updateLivraison(@PathVariable(name = "referenceLivraison") String reference, @RequestBody LivraisonUpdateRequest livraisonUpdateRequest);
+    LivraisonUpdateResponseDTO updateLivraison(@PathVariable(name = "referenceLivraison") String reference, @RequestBody LivraisonUpdateRequest livraisonUpdateRequest);
 
     @ApiResponse(responseCode = "200",description = "récupère pour chaque livraison, sa commande et le client")
     @ApiResponse(responseCode = "404", description = "Cette livraison n'existe pas")
