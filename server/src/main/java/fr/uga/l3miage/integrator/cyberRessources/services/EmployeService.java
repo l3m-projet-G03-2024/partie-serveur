@@ -2,6 +2,9 @@ package fr.uga.l3miage.integrator.cyberRessources.services;
 
 import fr.uga.l3miage.integrator.cyberRessources.components.EmployeComponent;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.handlers.EmployeNotFoundEntityHandler;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.rest.EmployeNotFoundRestException;
+import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;
 import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
@@ -29,5 +32,14 @@ public class EmployeService {
         return employeEntities.stream()
                 .map(employeMapper::toEmployeResponseDTO)
                 .collect(Collectors.toSet());
+    }
+
+    public EmployeResponseDTO getDetailsEmploye(String emailEmploye) {
+        try {
+            EmployeEntity employe = employeComponent.getEmployeByEmail(emailEmploye);
+            return employeMapper.toEmployeResponseDTO(employe);
+        }catch (NotFoundEmployeEntityException e) {
+            throw new EmployeNotFoundRestException(e.getMessage(),emailEmploye);
+        }
     }
 }
