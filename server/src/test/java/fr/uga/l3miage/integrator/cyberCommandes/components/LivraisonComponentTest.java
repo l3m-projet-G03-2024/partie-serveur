@@ -118,19 +118,19 @@ public class LivraisonComponentTest {
         livraison.setEtat(EtatsDeLivraison.EFFECTUEE);
         livraison.setTdcEffectif(1);
         livraison.setOrdre(1);
-        livraison.setTdcEffectif(30);
-        livraison.setTddEffectif(30);
-        livraison.setTdpEffectif(30);
-        livraison.setTecEffectif(30);
+        livraison.setTdcEffectif(40);
+        livraison.setTddEffectif(40);
+        livraison.setTdpEffectif(40);
+        livraison.setTecEffectif(40);
         LivraisonEntity result = livraisonComponent.updateLivraison(livraison);
 
         //Then
         assertThat(result.getEtat()).isEqualTo(EtatsDeLivraison.EFFECTUEE);
-        assertThat(result.getTdcEffectif()).isEqualTo(30);
+        assertThat(result.getTdcEffectif()).isEqualTo(40);
         assertThat(result.getOrdre()).isEqualTo(1);
-        assertThat(result.getTddEffectif()).isEqualTo(30);
-        assertThat(result.getTdpEffectif()).isEqualTo(30);
-        assertThat(result.getTecEffectif()).isEqualTo(30);
+        assertThat(result.getTddEffectif()).isEqualTo(40);
+        assertThat(result.getTdpEffectif()).isEqualTo(40);
+        assertThat(result.getTecEffectif()).isEqualTo(40);
 
     }
 

@@ -17,5 +17,6 @@ public class LivraisonUpdateRequest {
     private final Integer tdcEffectif;
     private final Integer tecEffectif;
     private final Integer tdmEffectif;
+    private final Integer tddEffectif;
 
 }

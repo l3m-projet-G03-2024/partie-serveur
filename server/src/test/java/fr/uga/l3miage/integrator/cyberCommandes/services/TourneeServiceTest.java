@@ -43,17 +43,14 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 public class TourneeServiceTest {
     @Autowired 
     private TourneeService tourneeService;
-
     @MockBean
     private TourneeComponent tourneeComponent;
-
     @Autowired
     private JourneeRepository journeeRepository;
     @MockBean
     private EmployeRepository employeRepository;
     @SpyBean
     private TourneeMapper tourneeMapper;
-
     @MockBean
     private CamionRepository camionRepository;
 

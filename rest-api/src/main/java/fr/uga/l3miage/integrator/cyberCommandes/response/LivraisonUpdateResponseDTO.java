@@ -22,5 +22,6 @@ public class LivraisonUpdateResponseDTO {
     private Integer tdcEffectif;
     private Integer tecEffectif;
     private Integer tdmEffectif;
+    private Integer tddEffectif;
     private Set<CommandeResponseDTO> commandes;
 }
