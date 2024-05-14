@@ -10,6 +10,9 @@ import java.util.Set;
 @Data
 @Builder
 public class TourneeUpdateLivraisonRequest {
-    private final Double distance;
-    private Set<LivraisonResponseDTO> livraisons;
+    private final String newReferenceTournee;
+    private final String referenceLivraison;
+    private final Double oldTourneeDistance;
+    private final Double newTourneeDistance;
+    private final int newOrdre;
 }

@@ -75,6 +75,6 @@ public interface TourneeEndPoints {
     TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) ;
 
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{referenceTournee}/{referenceLivraison}/{ordre}")
-    void changeLivraisonOnTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @PathVariable(name = "referenceLivraison") String referenceLivraison, @PathVariable(name = "ordre") int ordre, @RequestBody TourneeUpdateLivraisonRequest tourneeUpdateLivraisonRequest);
+    @PatchMapping("/")
+    void changeLivraisonOnTournee(@RequestBody TourneeUpdateLivraisonRequest tourneeUpdateLivraisonRequest);
 }

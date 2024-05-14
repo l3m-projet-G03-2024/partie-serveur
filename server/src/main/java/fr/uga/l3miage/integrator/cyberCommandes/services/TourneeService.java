@@ -12,6 +12,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.LivraisonRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeUpdateLivraisonRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
@@ -32,6 +33,8 @@ import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
 
 import lombok.AllArgsConstructor;
 
+import javax.swing.plaf.IconUIResource;
+
 @Service
 @AllArgsConstructor
 public class TourneeService {
@@ -40,7 +43,7 @@ public class TourneeService {
     private final JourneeComponent journeeComponent;
     private final EmployeComponent employeComponent;
     private final CamionRepository camionRepository;
-    LivraisonRepository livraisonRepository;
+    private final LivraisonRepository livraisonRepository;
 
 
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
@@ -107,34 +110,38 @@ public class TourneeService {
     }
 
 
-    public void changeLivraisonOnTournee(String newReferenceTournee, String referenceLivraison, int newOrdre) {
+    public void changeLivraisonOnTournee(TourneeUpdateLivraisonRequest updateRequest) {
         try {
-            TourneeEntity tourneeExist      = tourneeComponent.findTourneeByReference(newReferenceTournee);
-            LivraisonEntity livraisonExist  = livraisonRepository.findById(referenceLivraison).orElseThrow(() -> new NotFoundRestException("livraison non trouvee"));
-            Set<TourneeEntity> tournees     = livraisonExist.getTourneeEntity().getJournee().getTournees();
+            TourneeEntity newTournee        = tourneeComponent.findTourneeByReference(updateRequest.getNewReferenceTournee());
+            LivraisonEntity livraisonExist  = livraisonRepository.findById(updateRequest.getReferenceLivraison()).orElseThrow(() -> new NotFoundRestException("livraison non trouvee"));
+            TourneeEntity currentTournee    = livraisonExist.getTourneeEntity();
 
-            TourneeEntity tourneeToDeleteLivraison = tournees.stream().filter(
-                    tournee -> tournee.getLivraisons().stream().anyMatch(
-                            livraison -> livraison.getReference().equals(referenceLivraison))
-            ).findAny().orElseThrow(() -> new NotFoundRestException("Error pour trouver les tournees"));
+            if(currentTournee.getReference().equals(updateRequest.getNewReferenceTournee())){
+                sameTournee(livraisonExist, updateRequest.getNewOrdre(), updateRequest.getNewTourneeDistance());
+            }else {
+                currentTournee.getLivraisons().remove(livraisonExist);
+                currentTournee.setDistance(updateRequest.getOldTourneeDistance());
 
-            if(livraisonExist.getTourneeEntity().getReference().contains(newReferenceTournee)){
-                sameTournee(livraisonExist,newOrdre);
-            }else{
-                tourneeToDeleteLivraison.getLivraisons().remove(livraisonExist);
-                tourneeToDeleteLivraison.getLivraisons().forEach(livraison ->{
-                    if(livraison.getOrdre() > livraisonExist.getOrdre()){
-                        livraison.setOrdre(livraison.getOrdre()-1);
+                currentTournee.getLivraisons().forEach(livraison -> {
+                    if (livraison.getOrdre() > livraisonExist.getOrdre()) {
+                        livraison.setOrdre(livraison.getOrdre() - 1);
+                        livraisonRepository.save(livraison);
                     }
                 });
-                tourneeComponent.saveTournee(tourneeToDeleteLivraison);
-                livraisonExist.setTourneeEntity(tourneeExist);
-                tourneeExist.getLivraisons().forEach(livraison -> {
-                    if(livraison.getOrdre()>=newOrdre){
-                        livraison.setOrdre(livraison.getOrdre()+1);
+                tourneeComponent.saveTournee(currentTournee);
+                newTournee.getLivraisons().forEach(livraison -> {
+                    if (livraison.getOrdre() >= updateRequest.getNewOrdre()) {
+                        livraison.setOrdre(livraison.getOrdre() + 1);
+                        livraisonRepository.save(livraison);
                     }
                 });
-                tourneeComponent.saveTournee(tourneeExist);
+
+                livraisonExist.setOrdre(updateRequest.getNewOrdre());
+                livraisonExist.setTourneeEntity(newTournee);
+                newTournee.getLivraisons().add(livraisonExist);
+                newTournee.setDistance(updateRequest.getNewTourneeDistance());
+                livraisonRepository.save(livraisonExist);
+                tourneeComponent.saveTournee(newTournee);
             }
         }catch (TourneeNotFoundException e) {
             throw new NotFoundRestException(e.getMessage());
@@ -142,12 +149,24 @@ public class TourneeService {
 
     }
 
-    public void sameTournee(LivraisonEntity livraison, Integer ordre){
-        int tempOldOrdre = livraison.getOrdre();
-        LivraisonEntity getEntityByNewOrdre = livraisonRepository.findByOrdreAndTourneeEntityReference(ordre,livraison.getTourneeEntity().getReference());
-        livraison.setOrdre(ordre);
-        getEntityByNewOrdre.setOrdre(tempOldOrdre);
-        livraisonRepository.saveAll(Set.of(getEntityByNewOrdre,livraison));
+    public void sameTournee(LivraisonEntity currentLivraison, int newOrdre, double newTourneeDistance){
+        TourneeEntity currentTournee = currentLivraison.getTourneeEntity();
+        int oldOrdre = currentLivraison.getOrdre();
+
+        currentTournee.getLivraisons().forEach(livraison -> {
+            if (oldOrdre < newOrdre && livraison.getOrdre() > oldOrdre && livraison.getOrdre() <= newOrdre) {
+                livraison.setOrdre(livraison.getOrdre() - 1);
+                livraisonRepository.save(livraison);
+            } else if (oldOrdre > newOrdre && livraison.getOrdre() < oldOrdre && livraison.getOrdre() >= newOrdre) {
+                livraison.setOrdre(livraison.getOrdre() + 1);
+                livraisonRepository.save(livraison);
+            }
+        });
+
+        currentLivraison.setOrdre(newOrdre);
+        currentTournee.setDistance(newTourneeDistance);
+        livraisonRepository.save(currentLivraison);
+        tourneeComponent.saveTournee(currentTournee);
     }
 
     public Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(String emailEmploye){
