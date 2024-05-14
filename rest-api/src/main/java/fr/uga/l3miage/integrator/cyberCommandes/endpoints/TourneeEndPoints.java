@@ -3,8 +3,7 @@ package fr.uga.l3miage.integrator.cyberCommandes.endpoints;
 import java.util.List;
 import java.util.Set;
 
-import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
-import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.*;
 import fr.uga.l3miage.integrator.cyberCommandes.request.*;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
@@ -74,6 +73,11 @@ public interface TourneeEndPoints {
     @PatchMapping("/{referenceTournee}")
     TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) ;
 
+    @ApiResponse(responseCode = "200", description = "mise a jour de la tournee et livraison ok")
+    @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", description = "Journée non trouvée", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "500", description = "Échec de la recherche", content = @Content(schema = @Schema(implementation = DeleteFailedErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/")
     void changeLivraisonOnTournee(@RequestBody TourneeUpdateLivraisonRequest tourneeUpdateLivraisonRequest);
