@@ -33,16 +33,6 @@ public class JourneeEntity {
     
     private LocalDate date;
 
-
-    @Column(name = "distance_a_parcourir", nullable = true)
-    private Double distanceAParcourir;
-
-    @Column(nullable = true)
-    private Double montant;
-
-    @Column(nullable = true)
-    private Integer tdmTheorique;
-
     @OneToMany(mappedBy = "journee")
     private Set<TourneeEntity> tournees;
 

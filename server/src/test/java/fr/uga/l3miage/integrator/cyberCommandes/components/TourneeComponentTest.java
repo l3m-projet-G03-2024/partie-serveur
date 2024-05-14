@@ -105,7 +105,6 @@ public class TourneeComponentTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
         tourneeEntity.getEmployes().add(employe);
@@ -164,7 +163,6 @@ public class TourneeComponentTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
 
@@ -176,7 +174,6 @@ public class TourneeComponentTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
         tourneeEntity2.getEmployes().add(employe);
@@ -187,7 +184,6 @@ public class TourneeComponentTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
 
