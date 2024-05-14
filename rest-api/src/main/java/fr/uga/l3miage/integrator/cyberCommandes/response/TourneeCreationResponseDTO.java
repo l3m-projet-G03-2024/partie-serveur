@@ -1,12 +1,15 @@
 package fr.uga.l3miage.integrator.cyberCommandes.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @Schema(description = "creation des tournées d'une journée")
+@NoArgsConstructor
 public class TourneeCreationResponseDTO {
 
     @Schema(description = "echec ou reussite de la création des tournées")

@@ -6,12 +6,16 @@ import java.util.Date;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import fr.uga.l3miage.integrator.cyberProduit.response.EntrepotResponseDetailDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @Schema(description = "présentation d'une journée")
+@AllArgsConstructor
+@NoArgsConstructor
 public class JourneeDetailResponseDTO {
     @Schema(description = "represente la reference de la journée")
     private String reference;

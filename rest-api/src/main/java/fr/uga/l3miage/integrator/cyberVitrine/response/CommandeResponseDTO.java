@@ -33,7 +33,5 @@ public class CommandeResponseDTO {
 
     @Schema(description = "details necessaires du client")
     private ClientDetailResponseDTO client;
-/*
-    @Schema(description = "référence de la livraison de la commande")
-    private LivraisonResponseDTO livraison ;*/
+
 }

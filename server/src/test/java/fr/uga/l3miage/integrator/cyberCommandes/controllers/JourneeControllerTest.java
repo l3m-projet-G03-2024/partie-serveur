@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
@@ -28,15 +30,23 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.ResourceUtils;
 
+import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 
 @AutoConfigureTestDatabase
 @AutoConfigureWebClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect")
-public class JourneeControllerTest {
+public class JourneeControllerTest  {
     @Autowired
     private TestRestTemplate testRestTemplate;
     @Autowired
@@ -48,15 +58,32 @@ public class JourneeControllerTest {
     @Autowired
     private EntrepotRepository  entrepotRepository;
 
+    private String accessToken;
+
+    private final HttpHeaders headers = new HttpHeaders();
+
+
+
     @BeforeEach
     public void setup() {
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+       {
+            try {
+                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
+                headers.set("AuthorizationTest", "Test "+accessToken);
+               // System.out.println(accessToken);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+       }
     }
 
     @Test
     void canCreateJournee(){
         //Given
-        final HttpHeaders headers = new HttpHeaders();
+
 
         EntrepotEntity entrepot =  EntrepotEntity
                 .builder()
@@ -86,6 +113,7 @@ public class JourneeControllerTest {
     @Test
     void updateJourneeSuccess() {
         final HttpHeaders headers = new HttpHeaders();
+        headers.set("AuthorizationTest", "Test "+accessToken);
         // Given
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
@@ -133,6 +161,9 @@ public class JourneeControllerTest {
 
     @Test
     void deleteJourneeSuccess(){
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("AuthorizationTest", "Test "+accessToken);
         // Given
         JourneeEntity journeeEntity = JourneeEntity
                 .builder()
@@ -150,7 +181,7 @@ public class JourneeControllerTest {
         ResponseEntity<Void> response = testRestTemplate.exchange(
                 "/api/v1/journees/{referenceJournee}",
                 HttpMethod.DELETE,
-                null,
+                new HttpEntity<>(headers),
                 Void.class,
                 "j258G");
 
