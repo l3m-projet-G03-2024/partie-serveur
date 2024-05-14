@@ -2,24 +2,28 @@ package fr.uga.l3miage.integrator.cyberCommandes.request;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeJournee;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class JourneeUpdateRequest {
 
     @Schema(description = "Etat possible d'une journee")
-    private final EtatsDeJournee etat;
+    private EtatsDeJournee etat;
     @Schema(description = "date de la journee")
-    private final LocalDate date;
+    private  LocalDate date;
     @Schema(description = "distance a parcourir")
-    private final Double distanceAParcourir;
+    private  Double distanceAParcourir;
     @Schema(description = "montant total")
-    private final Double montant;
+    private  Double montant;
     @Schema(description = "temps de montage theorique")
-    private final Integer tdmTheorique;
+    private Integer tdmTheorique;
 }
 

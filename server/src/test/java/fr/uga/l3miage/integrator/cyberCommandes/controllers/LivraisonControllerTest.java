@@ -12,6 +12,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourne
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,8 +22,14 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -49,10 +56,29 @@ public class LivraisonControllerTest {
     }
 
 
+    private String accessToken;
+
+    private final HttpHeaders headers = new HttpHeaders();
+
+
+
+    @BeforeEach
+    public void setup() {
+        testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        {
+            try {
+                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
+                headers.set("AuthorizationTest", "Test "+accessToken);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     @Test
     void getLivraisonsTest() {
-        final HttpHeaders headers = new HttpHeaders();
         final Map<String, Object> urlParams = new HashMap<>();
         urlParams.put("etat", "EFFECTUEE");
 
@@ -87,7 +113,6 @@ public class LivraisonControllerTest {
     @Test
     void canCreateLivraison() {
         // Given
-        final HttpHeaders headers = new HttpHeaders();
         List<LivraisonTourneeRequest> livraisons = new ArrayList<>();
 
 
@@ -135,7 +160,6 @@ public class LivraisonControllerTest {
     }
     @Test
     void getNotFoundLivraisonDetailByCommande(){
-        final HttpHeaders headers = new HttpHeaders();
         final Map<String, Object> urlParams = new HashMap<>();
         urlParams.put("referenceLivraison", "La livraison n'existe pas");
 
