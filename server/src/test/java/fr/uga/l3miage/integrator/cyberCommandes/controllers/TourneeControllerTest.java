@@ -22,6 +22,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
@@ -84,12 +85,9 @@ public class TourneeControllerTest {
     @Autowired
     private CamionRepository camionRepository;
 
-
-
     private String accessToken;
 
     private final HttpHeaders headers = new HttpHeaders();
-
 
 
     @BeforeEach
@@ -418,6 +416,64 @@ public class TourneeControllerTest {
         // Assertions
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(expectedResponse);
+    }
+
+    @Test
+    void updateEtatAndTdrEffectifOfTourneeSuccess() {
+        // Given
+
+        TourneeEntity tourneeEntity = TourneeEntity.builder()
+                .reference("T123")
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(100).build();
+
+        tourneeRepository.save(tourneeEntity);
+
+        final UpdatingEtatAndTdrEffectifOfTourneeRequest request = UpdatingEtatAndTdrEffectifOfTourneeRequest.builder()
+                .referenceTournee("T123")
+                .etat(EtatsDeTournee.ENPARCOURS)
+                .tdrEffectf(200).build() ;
+
+        // when
+        ResponseEntity<TourneeResponseDTO> response = template.exchange(
+                "/api/v1/tournees/{referenceTournee}",
+                HttpMethod.PATCH,
+                new HttpEntity<>(request, headers),
+                TourneeResponseDTO.class,
+                "T123"
+        ) ;
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK) ;
+    }
+
+    @Test
+    void updateEtatAndTdrEffectifOfTourneeFailure() {
+        // given
+
+        TourneeEntity tourneeEntity = TourneeEntity.builder()
+                .reference("T1")
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(100).build();
+
+        tourneeComponent.saveTournee(tourneeEntity) ;
+
+        // when
+        final UpdatingEtatAndTdrEffectifOfTourneeRequest request = UpdatingEtatAndTdrEffectifOfTourneeRequest.builder()
+                .referenceTournee("ref_incorrecte")
+                .etat(EtatsDeTournee.ENPARCOURS)
+                .tdrEffectf(200).build() ;
+
+        ResponseEntity<NotFoundErrorResponse> response = template.exchange(
+                "/api/v1/tournees/{referenceTournee}",
+                HttpMethod.PATCH,
+                new HttpEntity<>(request, headers),
+                NotFoundErrorResponse.class,
+                request.getReferenceTournee()
+        ) ;
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND) ;
     }
 
 }

@@ -7,6 +7,7 @@ import fr.uga.l3miage.integrator.cyberProduit.exceptions.rest.CreationFailedRest
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 
 
+import fr.uga.l3miage.integrator.cyberVitrine.errors.BadRequestErrorResponse;
 import fr.uga.l3miage.integrator.cyberVitrine.models.CommandeEntity;
 import fr.uga.l3miage.integrator.cyberVitrine.repositories.CommandeRepository;
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyRequest;
@@ -219,11 +220,11 @@ public class CommandeControllerTest {
 
 
 
-        ResponseEntity<CreationFailedRestException> response = testRestTemplate.exchange(
+        ResponseEntity<BadRequestErrorResponse> response = testRestTemplate.exchange(
                 "/api/v1/commandes/",
                 HttpMethod.PATCH,
                 new HttpEntity<>(null, headers),
-                CreationFailedRestException.class
+                BadRequestErrorResponse.class
         ) ;
 
 
