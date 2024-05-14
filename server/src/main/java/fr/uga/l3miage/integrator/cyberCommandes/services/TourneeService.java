@@ -1,16 +1,16 @@
 package fr.uga.l3miage.integrator.cyberCommandes.services;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.JourneeComponent;
+import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.JourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
+import fr.uga.l3miage.integrator.cyberCommandes.repositories.LivraisonRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
@@ -40,6 +40,7 @@ public class TourneeService {
     private final JourneeComponent journeeComponent;
     private final EmployeComponent employeComponent;
     private final CamionRepository camionRepository;
+    LivraisonRepository livraisonRepository;
 
 
     public List<TourneeResponseDTO> getTourneesByEtatsOrReferenceJournee(EtatsDeTournee etatsDeTournee,String referenceJournee){
@@ -103,6 +104,50 @@ public class TourneeService {
         } catch (TourneeNotFoundException | NotFoundEmployeEntityException e) {
             throw new EmployeNotFoundRestException(e.getMessage(),idEmploye);
         }
+    }
+
+
+    public void changeLivraisonOnTournee(String newReferenceTournee, String referenceLivraison, int newOrdre) {
+        try {
+            TourneeEntity tourneeExist      = tourneeComponent.findTourneeByReference(newReferenceTournee);
+            LivraisonEntity livraisonExist  = livraisonRepository.findById(referenceLivraison).orElseThrow(() -> new NotFoundRestException("livraison non trouvee"));
+            Set<TourneeEntity> tournees     = livraisonExist.getTourneeEntity().getJournee().getTournees();
+
+            TourneeEntity tourneeToDeleteLivraison = tournees.stream().filter(
+                    tournee -> tournee.getLivraisons().stream().anyMatch(
+                            livraison -> livraison.getReference().equals(referenceLivraison))
+            ).findAny().orElseThrow(() -> new NotFoundRestException("Error pour trouver les tournees"));
+
+            if(livraisonExist.getTourneeEntity().getReference().contains(newReferenceTournee)){
+                sameTournee(livraisonExist,newOrdre);
+            }else{
+                tourneeToDeleteLivraison.getLivraisons().remove(livraisonExist);
+                tourneeToDeleteLivraison.getLivraisons().forEach(livraison ->{
+                    if(livraison.getOrdre() > livraisonExist.getOrdre()){
+                        livraison.setOrdre(livraison.getOrdre()-1);
+                    }
+                });
+                tourneeComponent.saveTournee(tourneeToDeleteLivraison);
+                livraisonExist.setTourneeEntity(tourneeExist);
+                tourneeExist.getLivraisons().forEach(livraison -> {
+                    if(livraison.getOrdre()>=newOrdre){
+                        livraison.setOrdre(livraison.getOrdre()+1);
+                    }
+                });
+                tourneeComponent.saveTournee(tourneeExist);
+            }
+        }catch (TourneeNotFoundException e) {
+            throw new NotFoundRestException(e.getMessage());
+        }
+
+    }
+
+    public void sameTournee(LivraisonEntity livraison, Integer ordre){
+        int tempOldOrdre = livraison.getOrdre();
+        LivraisonEntity getEntityByNewOrdre = livraisonRepository.findByOrdreAndTourneeEntityReference(ordre,livraison.getTourneeEntity().getReference());
+        livraison.setOrdre(ordre);
+        getEntityByNewOrdre.setOrdre(tempOldOrdre);
+        livraisonRepository.saveAll(Set.of(getEntityByNewOrdre,livraison));
     }
 
     public Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(String emailEmploye){
