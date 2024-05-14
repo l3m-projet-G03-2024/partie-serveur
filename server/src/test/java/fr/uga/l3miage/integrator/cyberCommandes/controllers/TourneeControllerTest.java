@@ -20,19 +20,20 @@ import fr.uga.l3miage.integrator.cyberCommandes.mappers.TourneeMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.JourneeRepository;
-import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.*;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
 
 import fr.uga.l3miage.integrator.cyberCommandes.services.TourneeService;
 
+import fr.uga.l3miage.integrator.cyberProduit.models.EntrepotEntity;
+import fr.uga.l3miage.integrator.cyberProduit.repositories.EntrepotRepository;
 import fr.uga.l3miage.integrator.cyberRessources.enums.Emploi;
 import fr.uga.l3miage.integrator.cyberRessources.exceptions.technical.NotFoundEmployeEntityException;
 import fr.uga.l3miage.integrator.cyberRessources.mappers.EmployeMapper;
 import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
+import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 
@@ -57,7 +58,6 @@ import org.springframework.http.ResponseEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.components.TourneeComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
-import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.ResourceUtils;
 
@@ -84,6 +84,8 @@ public class TourneeControllerTest {
 
     @Autowired
     private CamionRepository camionRepository;
+    @Autowired
+    private EntrepotRepository entrepotRepository;
 
     private String accessToken;
 
@@ -219,9 +221,40 @@ public class TourneeControllerTest {
     }
 
 //    @Test
-//    void canAddEmployeInTournee() {
+//    void canAddEmployeInTournee(){
 //        // Given
-//        final HttpHeaders headers = new HttpHeaders();
+//        final EntrepotEntity entrepot =  EntrepotEntity
+//                .builder()
+//                .nom("Albis")
+//                .build();
+//        entrepotRepository.save(entrepot);
+//
+//
+//        final JourneeEntity journeeEntity = JourneeEntity
+//                .builder()
+//                .reference("J1")
+//                .entrepotEntity(entrepot)
+//                .tournees(new HashSet<>())
+//                .build();
+//        journeeRepository.save(journeeEntity);
+//
+//
+//        final TourneeEntity tourneeEntity = TourneeEntity.builder()
+//                .reference("referenceTournee")
+//                .distance(7.00)
+//                .etat(EtatsDeTournee.PLANIFIEE)
+//                .tdrEffectif(1)
+//                .employes(new HashSet<>())
+//                .build();
+//
+//
+//        journeeEntity.getTournees().add(tourneeEntity);
+//
+//
+//        tourneeRepository.save(tourneeEntity);
+//        journeeRepository.save(journeeEntity);
+//
+//
 //        final EmployeEntity employe = EmployeEntity.builder()
 //                .trigramme("test1")
 //                .email("test1@gmail.com")
@@ -232,27 +265,27 @@ public class TourneeControllerTest {
 //                .tourneeEntities(new HashSet<>())
 //                .build();
 //
-//        final TourneeEntity tourneeEntity = TourneeEntity.builder()
-//                .reference("test")
-//                .distance(7.00)
-//                .etat(EtatsDeTournee.PLANIFIEE)
-//                .tdrEffectif(1)
-//                .tdrTheorique(1)
-//                .employes(new HashSet<>())
-//                .build();
 //        employeRepository.save(employe);
+//        tourneeEntity.getEmployes().add(employe);
 //        tourneeRepository.save(tourneeEntity);
 //
+//        final Map<String, Object> urlParams = new HashMap<>();
+//        urlParams.put(tourneeEntity.getReference(), employe.getTrigramme());
+//        final String referenceTournee = "referenceTournee";
+//
+//        AddEmployeIdTourneeRequest addEmployeIdTourneeRequest = AddEmployeIdTourneeRequest
+//                .builder()
+//                .idEmploye("test1")
+//                .build();
 //        // When
 //        ResponseEntity<TourneeResponseDTO> response = template
 //                .exchange("/api/v1/tournees/{referenceTournee}/add-employe",
 //                        HttpMethod.PATCH,
-//                        new HttpEntity<>(employe.getTrigramme(), headers),
+//                        new HttpEntity<>(addEmployeIdTourneeRequest, headers),
 //                        TourneeResponseDTO.class,
-//                        tourneeEntity.getReference());
-//
+//                        urlParams);
 //        // Then
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 //    }
 
 //    @Test

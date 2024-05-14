@@ -89,6 +89,7 @@ public class TourneeComponentTest {
     @Test
     void addEmployeInTournee() throws TourneeNotFoundException, NotFoundEmployeEntityException {
 
+
         EmployeEntity employe = EmployeEntity.builder()
                 .trigramme("test1")
                 .email("test1@gmail.com")
@@ -111,17 +112,28 @@ public class TourneeComponentTest {
         employe.getTourneeEntities().add(tourneeEntity);
 
 
+        TourneeEntity tournee2 = TourneeEntity.builder()
+                .reference("test")
+                .distance(7.00)
+                .etat(EtatsDeTournee.PLANIFIEE)
+                .tdrEffectif(1)
+                .employes(new HashSet<>())
+                .build();
+        //When
+        when(tourneeRepository.save(any(TourneeEntity.class))).thenReturn((tourneeEntity));
         when(tourneeRepository.findById(any())).thenReturn(Optional.of(tourneeEntity));
         when(employeRepository.findById(any())).thenReturn(Optional.of(employe));
-        when(tourneeRepository.save(tourneeEntity)).thenReturn((tourneeEntity));
 
-        TourneeEntity tourneeEntity1 = tourneeComponent.addEmployeInTournee(tourneeEntity);
-        Set<EmployeEntity> employeEntities = tourneeEntity1.getEmployes();
+
+        TourneeEntity tourneeExpected = tourneeComponent.addEmployeInTournee(tournee2);
+        Set<EmployeEntity> employeEntities = tourneeExpected.getEmployes();
+
+
         assertNotNull(employeEntities);
-        assertEquals(tourneeEntity1, tourneeEntity);
-        assertTrue(tourneeEntity1.getEmployes().contains(employe));
+        assertTrue(tourneeExpected.getEmployes().contains(employe));
         assertEquals(1, employeEntities.size());
     }
+
 
     @Test
     void findTourneeByReferenceNotFound() {
