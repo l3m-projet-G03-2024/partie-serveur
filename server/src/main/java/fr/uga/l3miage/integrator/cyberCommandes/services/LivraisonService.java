@@ -93,7 +93,7 @@ public class LivraisonService {
         }
         return commandeEntities;
     }
-    public LivraisonResponseDTO getLivraisonByCommandes(String referenceLivraison)  {
+    public LivraisonResponseDTO getLivraisonsByCommandes(String referenceLivraison)  {
         try {
             LivraisonEntity livraisonEntity = livraisonComponent.getLivraisonByReference(referenceLivraison);
             return livraisonMapper.toLivraisonResponseDTO(livraisonEntity);

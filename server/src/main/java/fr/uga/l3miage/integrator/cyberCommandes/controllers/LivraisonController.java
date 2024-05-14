@@ -36,7 +36,7 @@ public class LivraisonController implements LivraisonEndPoints {
 
     @Override
     public LivraisonResponseDTO getLivraisonsDetailByCommande(String referenceLivraison) {
-        return livraisonService.getLivraisonByCommandes(referenceLivraison);
+        return livraisonService.getLivraisonsByCommandes(referenceLivraison);
     }
 
 }
