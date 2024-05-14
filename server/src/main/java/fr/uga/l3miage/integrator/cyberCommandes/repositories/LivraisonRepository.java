@@ -1,6 +1,7 @@
 package fr.uga.l3miage.integrator.cyberCommandes.repositories;
 
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
+import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,5 +13,6 @@ import java.util.List;
 public interface LivraisonRepository extends JpaRepository<LivraisonEntity,String> {
 
     List<LivraisonEntity> findAllByEtat(EtatsDeLivraison etat);
+    LivraisonEntity findByOrdreAndTourneeEntityReference(int ordre, String tourneeReference);
 
 }

@@ -7,6 +7,7 @@ import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestExce
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.TourneeNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.LivraisonMapper;
+import fr.uga.l3miage.integrator.cyberCommandes.models.JourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonUpdateRequest;
