@@ -59,7 +59,7 @@ public class TourneeController implements TourneeEndPoints {
     }
 
     @Override
-    public void changeLivraisonOnTournee(String referenceTournee, String referenceLivraison, int ordre, TourneeUpdateLivraisonRequest tourneeUpdateLivraisonRequest) {
-        tourneeService.changeLivraisonOnTournee(referenceTournee,referenceLivraison,ordre);
+    public void changeLivraisonOnTournee(TourneeUpdateLivraisonRequest tourneeUpdateLivraisonRequest) {
+        tourneeService.changeLivraisonOnTournee(tourneeUpdateLivraisonRequest);
     }
 }
