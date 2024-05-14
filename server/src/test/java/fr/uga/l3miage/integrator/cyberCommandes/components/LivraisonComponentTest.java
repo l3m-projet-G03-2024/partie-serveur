@@ -74,7 +74,7 @@ public class LivraisonComponentTest {
 
         when(livraisonRepository.findAllByEtat(EtatsDeLivraison.ENPARCOURS))
                 .thenReturn(Collections.singletonList(livraisonEntity2));
-        // then-wen
+        // then-when
 
         List<LivraisonEntity> result = livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.PLANIFIEE);
         assertEquals(1, result.size(), "La liste des commandes doit contenir un élément");
@@ -97,6 +97,24 @@ public class LivraisonComponentTest {
 
         // Vérification que la méthode save a bien été appelée une fois avec n'importe quelle entité de livraison
         verify(livraisonRepository, times(1)).save(any(LivraisonEntity.class));
+    }
+
+    @Test
+    void canUpdateLivraison(){
+        //Given
+        LivraisonEntity livraison = LivraisonEntity
+                .builder()
+                .reference("l025")
+                .etat(EtatsDeLivraison.PLANIFIEE)
+                .ordre(2)
+                .tdcEffectif(30)
+                .tddEffectif(30)
+                .tdpEffectif(30)
+                .tecEffectif(30)
+                .build();
+        when(livraisonRepository.save(livraison)).thenReturn(livraison);
+        livraison.setEtat(EtatsDeLivraison.EFFECTUEE);
+        livraison.setTdcEffectif(1);
     }
 
 
