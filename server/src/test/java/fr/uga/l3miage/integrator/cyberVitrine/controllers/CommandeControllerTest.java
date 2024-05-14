@@ -13,6 +13,7 @@ import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyReque
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
 
+import fr.uga.l3miage.integrator.cyberVitrine.response.DetailsCommandeResponseDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -229,5 +230,60 @@ public class CommandeControllerTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST) ;
     }
+
+    @Test
+    void getDetailsCommandeOK() {
+        final HttpHeaders headers = new HttpHeaders();
+        final Map<String,Object> urlParams = new HashMap<>();
+        urlParams.put("referenceCommande","C1");
+
+        CommandeEntity commande = CommandeEntity
+                .builder()
+                .reference("C1")
+                .etat(EtatsDeCommande.PLANIFIEE)
+                .build();
+        commandeRepository.save(commande);
+
+        ResponseEntity<DetailsCommandeResponseDTO> response = testRestTemplate
+                .exchange(
+                        "/api/v1/commandes/{referenceCommande}",
+                        HttpMethod.GET,
+                        new HttpEntity<>(headers),
+                        new ParameterizedTypeReference<DetailsCommandeResponseDTO>() {},
+                        urlParams
+                );
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        DetailsCommandeResponseDTO commandeResponseDTOS = response.getBody();
+        assertThat(commandeResponseDTOS).isNotNull();
+
+    }
+
+    @Test
+    void getDetailsCommandeBad() {
+        final HttpHeaders headers = new HttpHeaders();
+        final Map<String,Object> urlParams = new HashMap<>();
+        urlParams.put("referenceCommande","C2");
+
+        CommandeEntity commande = CommandeEntity
+                .builder()
+                .reference("C1")
+                .etat(EtatsDeCommande.PLANIFIEE)
+                .build();
+        commandeRepository.save(commande);
+
+        ResponseEntity<DetailsCommandeResponseDTO> response = testRestTemplate
+                .exchange(
+                        "/api/v1/commandes/{referenceCommande}",
+                        HttpMethod.GET,
+                        new HttpEntity<>(headers),
+                        new ParameterizedTypeReference<DetailsCommandeResponseDTO>() {},
+                        urlParams
+                );
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
 
 }
