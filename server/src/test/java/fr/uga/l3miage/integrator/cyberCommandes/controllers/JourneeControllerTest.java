@@ -120,18 +120,12 @@ public class JourneeControllerTest  {
                 .reference("j258G")
                 .etat(NONPLANIFIEE)
                 .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
                 .build();
 
         final JourneeUpdateRequest journeeUpdateRequest = JourneeUpdateRequest
                 .builder()
                 .etat(PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
                 .build();
 
         JourneeDetailResponseDTO updatedResponse = JourneeDetailResponseDTO
@@ -139,9 +133,6 @@ public class JourneeControllerTest  {
                 .reference("j258G")
                 .etat(PLANIFIEE)
                 .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
                 .build();
         journeeRepository.save(journeeEntity);
        // when(entrepotComponent.getEntrepotByNom("Albis")).thenReturn(entrepotEntity);
@@ -170,9 +161,6 @@ public class JourneeControllerTest  {
                 .reference("j258G")
                 .etat(NONPLANIFIEE)
                 .date(LocalDate.of(2024, 04, 29))
-                .distanceAParcourir(123.1)
-                .montant(200.0)
-                .tdmTheorique(60)
                 .build();
 
         journeeRepository.save(journeeEntity);

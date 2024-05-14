@@ -19,11 +19,5 @@ public class JourneeUpdateRequest {
     private EtatsDeJournee etat;
     @Schema(description = "date de la journee")
     private  LocalDate date;
-    @Schema(description = "distance a parcourir")
-    private  Double distanceAParcourir;
-    @Schema(description = "montant total")
-    private  Double montant;
-    @Schema(description = "temps de montage theorique")
-    private Integer tdmTheorique;
 }
 

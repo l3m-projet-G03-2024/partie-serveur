@@ -26,15 +26,6 @@ public class JourneeDetailResponseDTO {
     @Schema(description = "date de la journée")
     private LocalDate date;
 
-    @Schema(description = "somme des distances a parcourir dans la journée")
-    private Double distanceAParcourir;
-    
-    @Schema(description = "montant total de la journée")
-    private Double montant;
-
-    @Schema(description = "temps de retour estimer")
-    private Integer tdmTheorique;
-
     @Schema(description = "entrepot associe a une journee")
     private EntrepotResponseDetailDTO entrepot;
 

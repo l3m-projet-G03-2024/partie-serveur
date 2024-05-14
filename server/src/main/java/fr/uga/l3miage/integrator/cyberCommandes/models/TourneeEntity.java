@@ -25,12 +25,8 @@ public class TourneeEntity {
     @Enumerated(EnumType.STRING)
     private EtatsDeTournee etat;
 
-    @Column(nullable = true)
-    private Integer tdrTheorique;
-
     private Integer tdrEffectif;
 
-    @Column(nullable =  true)
     private Double distance;
 
     @OneToMany(mappedBy = "tourneeEntity")

@@ -243,7 +243,6 @@ public class TourneeServiceTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
         tourneeEntity1.getEmployes().add(employe);
@@ -254,7 +253,6 @@ public class TourneeServiceTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
         tourneeEntity2.getEmployes().add(employe);
@@ -265,7 +263,6 @@ public class TourneeServiceTest {
                 .distance(7.00)
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(1)
-                .tdrTheorique(1)
                 .employes(new HashSet<>())
                 .build();
         Set<TourneeEntity> tourneeEntitiesByEmploi = new HashSet<>();

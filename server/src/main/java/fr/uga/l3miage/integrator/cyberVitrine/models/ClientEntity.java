@@ -26,12 +26,6 @@ public class ClientEntity {
 
     private String ville ;
 
-    @Column(nullable = true)
-    private Double longitude ;
-
-    @Column(nullable = true)
-    private Double latitude ;
-
     @OneToMany(mappedBy = "clientEntity")
     private Set<CommandeEntity> commandeEntities ;
 }

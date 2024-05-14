@@ -22,19 +22,14 @@ public class EntrepotEntity {
 
     private String lettre;
 
-    @Column(nullable = true)
     private String adresse ;
 
-    @Column(nullable = true)
     private String codePostal ;
 
-    @Column(nullable = true)
     private String ville ;
 
-    @Column(nullable = true)
     private Double latitude ;
 
-    @Column(nullable = true)
     private Double longitude ;
 
     @OneToMany(mappedBy = "entrepotEntity")
