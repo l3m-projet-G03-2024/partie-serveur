@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,8 +46,7 @@ public class LivraisonComponentTest {
         when(livraisonRepository.findAll()).thenReturn(Collections.singletonList(livraisonEntity));
         // then-wen
         List<LivraisonEntity> result = livraisonComponent.findAllLivraisons();
-        assertTrue(result.size() == 1, "La liste des commandes doit contenir un élément");
-
+        assertEquals(1, result.size(), "La liste des commandes doit contenir un élément");
     }
 
     @Test
@@ -113,8 +113,25 @@ public class LivraisonComponentTest {
                 .tecEffectif(30)
                 .build();
         when(livraisonRepository.save(livraison)).thenReturn(livraison);
+
+        //When
         livraison.setEtat(EtatsDeLivraison.EFFECTUEE);
         livraison.setTdcEffectif(1);
+        livraison.setOrdre(1);
+        livraison.setTdcEffectif(30);
+        livraison.setTddEffectif(30);
+        livraison.setTdpEffectif(30);
+        livraison.setTecEffectif(30);
+        LivraisonEntity result = livraisonComponent.updateLivraison(livraison);
+
+        //Then
+        assertThat(result.getEtat()).isEqualTo(EtatsDeLivraison.EFFECTUEE);
+        assertThat(result.getTdcEffectif()).isEqualTo(30);
+        assertThat(result.getOrdre()).isEqualTo(1);
+        assertThat(result.getTddEffectif()).isEqualTo(30);
+        assertThat(result.getTdpEffectif()).isEqualTo(30);
+        assertThat(result.getTecEffectif()).isEqualTo(30);
+
     }
 
 
