@@ -6,6 +6,7 @@ import fr.uga.l3miage.integrator.cyberRessources.models.CamionEntity;
 import fr.uga.l3miage.integrator.cyberRessources.response.CamionResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.CamionRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -14,7 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -37,6 +44,27 @@ public class CamionControllerTest {
     }
 
 
+    private String accessToken;
+    private final HttpHeaders headers = new HttpHeaders();
+
+
+
+    @BeforeEach
+    public void setup() {
+        template.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        {
+            try {
+                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
+                headers.set("AuthorizationTest", "Test "+accessToken);
+                // System.out.println(accessToken);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 
 
     @Test
@@ -54,7 +82,6 @@ public class CamionControllerTest {
                     .entrepot(entrepotEntity)
                     .build();
             camionRepository.save(camionEntity);
-            final HttpHeaders headers = new HttpHeaders();
 
             ResponseEntity<List<CamionResponseDTO>> response = template.exchange(
                     "/api/v1/camions/?nomEntrepot=E1",

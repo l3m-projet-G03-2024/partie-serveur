@@ -6,6 +6,7 @@ import fr.uga.l3miage.integrator.cyberRessources.models.EmployeEntity;
 import fr.uga.l3miage.integrator.cyberRessources.repositories.EmployeRepository;
 import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
 import fr.uga.l3miage.integrator.cyberRessources.services.EmployeService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,7 +17,13 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.util.ResourceUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -41,10 +48,31 @@ public class EmployeControllerTest {
     @SpyBean
     private EmployeMapper employeMapper;
 
+
+    private String accessToken;
+    private final HttpHeaders headers = new HttpHeaders();
+
+
+
+    @BeforeEach
+    public void setup() {
+        testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        {
+            try {
+                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
+                headers.set("AuthorizationTest", "Test "+accessToken);
+                // System.out.println(accessToken);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     @Test
     void canListEmployesByEmploi(){
         //Given
-        final HttpHeaders headers = new HttpHeaders();
 
         final EmployeResponseDTO employe1 = EmployeResponseDTO
                 .builder()
