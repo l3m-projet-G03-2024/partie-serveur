@@ -3,6 +3,7 @@ package fr.uga.l3miage.integrator.cyberVitrine.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
+import fr.uga.l3miage.integrator.cyberProduit.response.ProduitLigneCommandeResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.components.CommandeComponent;
 import fr.uga.l3miage.integrator.cyberVitrine.enums.EtatsDeCommande;
 import fr.uga.l3miage.integrator.cyberVitrine.errors.technical.CommandeEntityNotFoundException;
@@ -13,16 +14,17 @@ import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingBodyReque
 import fr.uga.l3miage.integrator.cyberVitrine.requests.CommandeUpdatingRequest;
 import fr.uga.l3miage.integrator.cyberVitrine.response.ClientDetailResponseDTO;
 import fr.uga.l3miage.integrator.cyberVitrine.response.CommandeResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.DetailsCommandeResponseDTO;
+import fr.uga.l3miage.integrator.cyberVitrine.response.LigneCommandeResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -259,5 +261,59 @@ public class CommandeServiceTest {
         assertEquals(commandeComponent.getCommandeByReference("REF1").getEtat(), EtatsDeCommande.ENLIVRAISON);
         assertEquals(commandeComponent.getCommandeByReference("REF2").getEtat(), EtatsDeCommande.LIVREE);
     }
+
+
+    @Test
+    void getDetailsCommandeOk() throws CommandeEntityNotFoundException {
+
+        CommandeEntity commandeEntity1 = new CommandeEntity();
+        commandeEntity1.setReference("REF1");
+
+
+        when(commandeComponent.getCommandeByReference("REF1")).thenReturn(commandeEntity1);
+
+        ProduitLigneCommandeResponseDTO produitLigneCommandeResponseDTO = new ProduitLigneCommandeResponseDTO();
+        produitLigneCommandeResponseDTO.setReference("p1");
+
+        LigneCommandeResponseDTO ligneCommandeResponseDTO = new LigneCommandeResponseDTO();
+        ligneCommandeResponseDTO.setId("L1");
+        ligneCommandeResponseDTO.setProduit(produitLigneCommandeResponseDTO);
+        Set<LigneCommandeResponseDTO> list = new HashSet<>();
+        list.add(ligneCommandeResponseDTO);
+
+
+
+        DetailsCommandeResponseDTO detailsCommandeResponseDTO = DetailsCommandeResponseDTO.builder()
+                .lignes(list)
+                .reference("REF1").build();
+
+        when(commandeService.getDetailsCommande("REF1")).thenReturn(detailsCommandeResponseDTO);
+
+
+        DetailsCommandeResponseDTO  resultExpected = commandeService.getDetailsCommande("REF1");
+
+        assertNotNull(resultExpected);
+        verify(commandeComponent, times(2)).getCommandeByReference(anyString()) ;
+        assertThat(detailsCommandeResponseDTO).usingRecursiveComparison().isEqualTo(resultExpected);
+
+
+    }
+
+    @Test
+    void getDetailsCommandeNotFound() throws CommandeEntityNotFoundException {
+
+        CommandeEntity commandeEntity1 = new CommandeEntity();
+        commandeEntity1.setReference("REF1");
+
+        when(commandeService.getDetailsCommande("REF2")).thenReturn(null);
+
+
+        DetailsCommandeResponseDTO  resultExpected = commandeService.getDetailsCommande("REF2");
+
+        assertNull(resultExpected);
+        verify(commandeComponent, times(2)).getCommandeByReference(anyString()) ;
+
+    }
+
 
 }
