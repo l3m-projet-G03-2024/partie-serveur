@@ -373,21 +373,26 @@ public class TourneeServiceTest {
                 .etat(EtatsDeTournee.PLANIFIEE)
                 .tdrEffectif(150).build();
 
-        when(tourneeComponent.findTourneeByReference(refTournee)).thenReturn(tourneeEntity) ;
-
-        tourneeEntity.setEtat(EtatsDeTournee.ENPARCOURS);
-        tourneeEntity.setTdrEffectif(200);
-
         TourneeResponseDTO tourneeResponseExpected = TourneeResponseDTO.builder()
                 .reference(refTournee)
                 .etat(EtatsDeTournee.ENPARCOURS)
                 .distance(200.0).build();
 
+        // when
+        tourneeEntity.setEtat(EtatsDeTournee.ENPARCOURS);
+        tourneeEntity.setTdrEffectif(200);
+
+        when(tourneeComponent.findTourneeByReference(refTournee)).thenReturn(tourneeEntity) ;
         when(tourneeMapper.toTourneeResponseDTO(tourneeEntity)).thenReturn(tourneeResponseExpected) ;
 
         TourneeResponseDTO tourneeResponseActual = tourneeService.updateEtatAndTdrEffectifOfTournee(refTournee, request) ;
 
+        // then
         assertNotNull(tourneeResponseActual);
-
+        verify(tourneeComponent, times(1)).findTourneeByReference(anyString()) ;
+        verify(tourneeMapper, times(2)).toTourneeResponseDTO(tourneeEntity) ;
+        verify(tourneeComponent, times(1)).saveTournee(tourneeEntity) ;
+        doThrow(TourneeNotFoundException.class).when(tourneeComponent).findTourneeByReference(eq("ref_incorrecte")) ;
+        assertThrows(NotFoundRestException.class, () -> tourneeService.updateEtatAndTdrEffectifOfTournee("ref_incorrecte", request)) ;
     }
 }
