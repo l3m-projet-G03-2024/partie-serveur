@@ -5,10 +5,7 @@ import java.util.Set;
 
 import fr.uga.l3miage.integrator.cyberCommandes.errors.AddTourneeErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
-import fr.uga.l3miage.integrator.cyberCommandes.request.AddEmployeIdTourneeRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.request.CamionImmatriculationTouneeRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.request.TourneesCreationBodyRequest;
-import fr.uga.l3miage.integrator.cyberCommandes.request.UpdatingEtatAndTdrEffectifOfTourneeRequest;
+import fr.uga.l3miage.integrator.cyberCommandes.request.*;
 import fr.uga.l3miage.integrator.cyberCommandes.response.AddCamionOnTourneeResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeCreationResponseDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -77,4 +74,7 @@ public interface TourneeEndPoints {
     @PatchMapping("/{referenceTournee}")
     TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) ;
 
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{referenceTournee}/{referenceLivraison}/{ordre}")
+    void changeLivraisonOnTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @PathVariable(name = "referenceLivraison") String referenceLivraison, @PathVariable(name = "ordre") int ordre, @RequestBody TourneeUpdateLivraisonRequest tourneeUpdateLivraisonRequest);
 }
