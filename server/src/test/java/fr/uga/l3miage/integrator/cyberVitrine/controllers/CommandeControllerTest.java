@@ -233,7 +233,7 @@ public class CommandeControllerTest {
 
     @Test
     void getDetailsCommandeOK() {
-        final HttpHeaders headers = new HttpHeaders();
+
         final Map<String,Object> urlParams = new HashMap<>();
         urlParams.put("referenceCommande","C1");
 
@@ -262,7 +262,7 @@ public class CommandeControllerTest {
 
     @Test
     void getDetailsCommandeBad() {
-        final HttpHeaders headers = new HttpHeaders();
+
         final Map<String,Object> urlParams = new HashMap<>();
         urlParams.put("referenceCommande","C2");
 
