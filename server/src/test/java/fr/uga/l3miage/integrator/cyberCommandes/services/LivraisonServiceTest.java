@@ -3,6 +3,8 @@ package fr.uga.l3miage.integrator.cyberCommandes.services;
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.rest.NotFoundRestException;
+import fr.uga.l3miage.integrator.cyberCommandes.exceptions.technical.LivraisonNotFoundException;
 import fr.uga.l3miage.integrator.cyberCommandes.mappers.LivraisonMapper;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
@@ -44,9 +46,6 @@ public class LivraisonServiceTest {
     private LivraisonMapper livraisonMapper;
     @Test
     void getLivraisonsWithNoState() {
-
-
-
             // Given: Setup test entities and mocks
             ClientEntity client1 = new ClientEntity();
             CommandeEntity commande1 = new CommandeEntity("1ABC", null, null, 10, "magnifique", client1, null, null);
@@ -135,8 +134,36 @@ public class LivraisonServiceTest {
 
        LivraisonCreationResponseDTO response = livraisonService.createLivraisons(livraisonsCreationTourneeRequest);
        assertTrue(response.isSucces());
-       //assertThat(response.getMessage()).isEqualTo("Livraisons crées avec succès");
        assertThat(response.getMessage()).isEqualTo("Livraisons crées avec succès");
+    }
+    @Test
+    void getLivraisonsByCommande() throws LivraisonNotFoundException {
+        LivraisonEntity livraison =  LivraisonEntity
+                .builder()
+                .reference("L07")
+                .ordre(4)
+                .build();
+        when(livraisonComponent.getLivraisonByReference(anyString())).thenReturn(livraison);
+        LivraisonResponseDTO expectedResponse = livraisonMapper.toLivraisonResponseDTO(livraison) ;
+
+        // when
+        LivraisonResponseDTO actualResponse = livraisonService.getLivraisonsByCommandes(livraison.getReference());
+
+        // then
+        assertNotNull(actualResponse);
+        assertThat(expectedResponse).usingRecursiveComparison().isEqualTo(actualResponse) ;
+        verify(livraisonComponent, times(1)).getLivraisonByReference(anyString());
+        verify(livraisonMapper,times(2)).toLivraisonResponseDTO(livraison) ;
+
+    }
+    @Test
+    void getLivraisonsByCommandeNotFound() throws LivraisonNotFoundException {
+        // Given
+        when(livraisonComponent.getLivraisonByReference(anyString())).thenThrow(LivraisonNotFoundException.class);
+        // when - then
+
+        assertThrows(NotFoundRestException.class,() -> livraisonService.getLivraisonsByCommandes(anyString()));
+
     }
 
 }

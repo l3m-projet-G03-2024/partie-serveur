@@ -79,6 +79,7 @@ public class LivraisonComponentTest {
         List<LivraisonEntity> result = livraisonComponent.findLivraisonByEtat(EtatsDeLivraison.PLANIFIEE);
         assertEquals(1, result.size(), "La liste des commandes doit contenir un élément");
     }
+    @Test
     void canCreateLivraison() {
         // Création d'une entité de livraison
         LivraisonEntity livraisonEntity = LivraisonEntity

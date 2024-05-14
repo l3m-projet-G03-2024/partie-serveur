@@ -2,6 +2,8 @@ package fr.uga.l3miage.integrator.cyberCommandes.controllers;
 
 import fr.uga.l3miage.integrator.cyberCommandes.components.LivraisonComponent;
 import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeLivraison;
+import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
+import fr.uga.l3miage.integrator.cyberCommandes.errors.LivraisonNotFoundResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.errors.NotFoundErrorResponse;
 import fr.uga.l3miage.integrator.cyberCommandes.models.LivraisonEntity;
 import fr.uga.l3miage.integrator.cyberCommandes.models.TourneeEntity;
@@ -11,6 +13,9 @@ import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.request.LivraisonsCreationTourneeRequest;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonCreationResponseDTO;
 import fr.uga.l3miage.integrator.cyberCommandes.response.LivraisonResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.response.TourneeResponseDTO;
+import fr.uga.l3miage.integrator.cyberCommandes.services.LivraisonService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +32,7 @@ import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @AutoConfigureTestDatabase
@@ -42,6 +48,8 @@ public class LivraisonControllerTest {
     private LivraisonComponent livraisonComponent;
     @Autowired
     private TourneeRepository tourneeRepository;
+    @Autowired
+    private LivraisonService livraisonService;
 
     @AfterEach
     public void clear() {
@@ -134,22 +142,48 @@ public class LivraisonControllerTest {
 
     }
     @Test
-    void getNotFoundLivraisonDetailByCommande(){
+    void getLivraisonsDetailByCommandeNotFound(){
         final HttpHeaders headers = new HttpHeaders();
         final Map<String, Object> urlParams = new HashMap<>();
-        urlParams.put("referenceLivraison", "La livraison n'existe pas");
+        urlParams.put("referenceLivraison","La livraison n'existe pas");
 
-        NotFoundErrorResponse notFoundErrorResponseExpected = NotFoundErrorResponse
+        LivraisonNotFoundResponse livraisonNotFoundResponse = LivraisonNotFoundResponse
                 .builder()
-                .uri("/api/v1/livraisons/A123")
-                .errorMessage("Livraison non trouvée pour la référence : ")
+                .referenceTournee("La livraison n'existe pas")
+                .uri("/api/v1/livraisons/La%20livraison%20n%27existe%20pas")
+                .errorMessage("Livraison non trouvée pour la référence : La livraison n'existe pas")
                 .build();
 
         //when
-        ResponseEntity<NotFoundErrorResponse> response = testRestTemplate.exchange("/api/v1/livraisons/{referenceLivraison}", HttpMethod.GET, new HttpEntity<>(null, headers), NotFoundErrorResponse.class, urlParams);
+        ResponseEntity<LivraisonNotFoundResponse> response = testRestTemplate.exchange("/api/v1/livraisons/{referenceLivraison}", HttpMethod.GET, new HttpEntity<>(null, headers), LivraisonNotFoundResponse.class, urlParams);
 
         //then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).usingRecursiveComparison()
+                .isEqualTo(livraisonNotFoundResponse);
     }
+    @Test
+    void getLivraisonsDetailByCommandeFound(){
+        final HttpHeaders headers = new HttpHeaders();
+        final String referenceLivraison = "L06" ;
+
+
+        final Map<String, Object> urlParams = new HashMap<>();
+        urlParams.put("L06", referenceLivraison);
+
+        LivraisonEntity livraisonEntity = LivraisonEntity
+                .builder()
+                .reference(referenceLivraison)
+                .etat(EtatsDeLivraison.EFFECTUEE)
+                .build();
+        livraisonRepository.save(livraisonEntity);
+        // when
+        ResponseEntity<LivraisonResponseDTO> response = testRestTemplate.exchange("/api/v1/livraisons/{L06}", HttpMethod.GET, new HttpEntity<>(null, headers), LivraisonResponseDTO.class, urlParams) ;
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+    }
+
 
 }

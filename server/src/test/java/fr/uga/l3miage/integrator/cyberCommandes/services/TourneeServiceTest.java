@@ -60,7 +60,7 @@ public class TourneeServiceTest {
 
 
 
-    @Test 
+    @Test
     void RequestTourneeByEtatOrReferenceJournee(){
 
         JourneeEntity journee1 = JourneeEntity.builder()
@@ -80,9 +80,6 @@ public class TourneeServiceTest {
             .reference("3T")
             .etat(EtatsDeTournee.EFFECTUEE)
             .build();
-
-
-
         // Création d'une liste de tournées simulées
         List<TourneeEntity> tourneeEntities = new ArrayList<>();
         tourneeEntities.add(tourneeEntity1);
@@ -119,10 +116,6 @@ public class TourneeServiceTest {
         List<TourneeResponseDTO> tourneeResponseDTOsAll = tourneeService.getTourneesByEtatsOrReferenceJournee(null,null);
         // On s'attend à recevoir 1 DTO de réponse de tournée en chargement
         assertEquals(3, tourneeResponseDTOsAll.size());
-
-
-
-
 
     }
 
