@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface TourneeEndPoints {
 
 
-    @Operation(description = "recupère une tournée")
+    @Operation(description = "recupère une tournée par état et référence")
     @ApiResponse(responseCode = "200",description ="la tournée a été trouvée")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
@@ -53,14 +53,14 @@ public interface TourneeEndPoints {
     @GetMapping("/{referenceTournee}")
     TourneeResponseDTO getTournee(@PathVariable(name = "referenceTournee") String referenceTournee) ;
 
-    @Operation(description = "Recupérer toutes les tournées d'un employé (livreur)")
+    @Operation(description = "Récupérer toutes les tournées d'un employé (livreur)")
     @ApiResponse(responseCode = "200", description = "L'employé a été trouvé")
     @ApiResponse(responseCode = "404", description = "Aucun employé n'a cette adresse mail", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/employes/{emailEmploye}")
     Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(@PathVariable(name = "emailEmploye")String emailEmploye);
 
-    @Operation(description = "Ajouter un camion dans tournee")
+    @Operation(description = "Ajouter un camion dans tournée")
     @ApiResponse(responseCode = "200", description = "Camion a été ajouté dans tournee")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{referenceTournee}/add-camion")
@@ -73,6 +73,7 @@ public interface TourneeEndPoints {
     @PatchMapping("/{referenceTournee}")
     TourneeResponseDTO updateEtatAndTdrEffectifOfTournee(@PathVariable(name = "referenceTournee") String referenceTournee, @RequestBody UpdatingEtatAndTdrEffectifOfTourneeRequest updatingEtatAndTdrEffectifOfTourneeRequest) ;
 
+    @Operation(description = "Mise à jour d'une livraison dans tournée égale ou différente")
     @ApiResponse(responseCode = "200", description = "mise a jour de la tournee et livraison ok")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))

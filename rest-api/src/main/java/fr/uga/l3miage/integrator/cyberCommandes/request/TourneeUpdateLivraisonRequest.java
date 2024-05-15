@@ -10,9 +10,14 @@ import java.util.Set;
 @Data
 @Builder
 public class TourneeUpdateLivraisonRequest {
+    @Schema(description = "Nouvelle référence pour une tournée")
     private final String newReferenceTournee;
+    @Schema(description = "Référence de la livraison")
     private final String referenceLivraison;
+    @Schema(description = "Ancienne distance de la tournée")
     private final Double oldTourneeDistance;
+    @Schema(description = "Nouvelle distance de la tournée")
     private final Double newTourneeDistance;
+    @Schema(description = "Nouvel ordre")
     private final int newOrdre;
 }

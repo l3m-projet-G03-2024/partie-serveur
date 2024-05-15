@@ -28,18 +28,20 @@ import java.util.List;
 public interface LivraisonEndPoints {
 
 
-    @ApiResponse(responseCode = "200", description = "liste de livraison envoyer avec succès")
+    @Operation(description = "Récupère les livraisons en fonction d'un état")
+    @ApiResponse(responseCode = "200", description = "liste de livraison envoyé avec succès")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     List<LivraisonResponseDTO> getLivraisons(@RequestParam(required = false) EtatsDeLivraison etat);
 
+    @Operation(description = "Création des livraisons")
     @ApiResponse(responseCode = "201", description = "Livraisons crées avec succès")
     @ApiResponse(responseCode = "404", description = "Une erreur c'est produit l'ors de la création ", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
     LivraisonCreationResponseDTO createLivraisons(@RequestBody() LivraisonsCreationTourneeRequest livraisonsCreationTourneeRequest);
 
-    @Operation(description = "Update d'une livraison")
+    @Operation(description = "Mise à jour d'une livraison")
     @ApiResponse(responseCode = "200", description = "Mise à jour réussie")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
@@ -49,10 +51,11 @@ public interface LivraisonEndPoints {
     @PatchMapping("/{referenceLivraison}")
     LivraisonUpdateResponseDTO updateLivraison(@PathVariable(name = "referenceLivraison") String reference, @RequestBody LivraisonUpdateRequest livraisonUpdateRequest);
 
+    @Operation(description = "Récupère une livraison et ses commandes à partir d'une référence livraison")
     @ApiResponse(responseCode = "200", description = "récupère pour chaque livraison, sa commande et le client")
     @ApiResponse(responseCode = "404", description = "Cette livraison n'existe pas", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{referenceLivraison}")
-    LivraisonResponseDTO getLivraisonsDetailByCommande(@PathVariable(name = "referenceLivraison") String referenceLivraison);
+    LivraisonResponseDTO getLivraisonDetailCommande(@PathVariable(name = "referenceLivraison") String referenceLivraison);
 
 }

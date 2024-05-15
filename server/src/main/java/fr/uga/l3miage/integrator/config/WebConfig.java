@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     // Register an interceptor with the registry, Interceptor name : RequestInterceptor
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/api/v1/**");
     }
     //* We can register any number of interceptors with our spring application context
 }

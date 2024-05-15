@@ -21,6 +21,7 @@ import java.util.List;
 @CrossOrigin("*")
 public interface JourneeEndPoints {
 
+    @Operation(description = "Lister toutes les journée")
     @ApiResponse(responseCode = "200",description = "liste de journée envoie avec success")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
@@ -34,7 +35,7 @@ public interface JourneeEndPoints {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
     JourneeDetailResponseDTO createJournee(@RequestBody JourneeCreationRequest journeeRequest) ;
-
+    @Operation(description = "Supprimer une journée par référence")
     @ApiResponse(responseCode = "200",description = "La journée a été supprimée avec succès")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
@@ -44,7 +45,7 @@ public interface JourneeEndPoints {
     @DeleteMapping("/{referenceJournee}")
     void deleteJourneeById(@PathVariable(name = "referenceJournee") String referenceJournee);
 
-    @Operation(description = "Prend une journée")
+    @Operation(description = "Récupère une journée à partir d'une référence")
     @ApiResponse(responseCode = "200", description = "La journée a est présent dans la base de donnée")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
@@ -54,7 +55,7 @@ public interface JourneeEndPoints {
     @GetMapping("/{reference}")
     JourneeDetailResponseDTO getJourneeById(@PathVariable String reference);
 
-    @Operation(description = "Update d'une journée")
+    @Operation(description = "Mise à jour d'une journée")
     @ApiResponse(responseCode = "200", description = "")
     @ApiResponse(responseCode = "400", description = "Requête invalide", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ApiResponse(responseCode = "403", description = "Accès refusé", content = @Content(schema = @Schema(implementation = ForbiddenErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))

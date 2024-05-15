@@ -18,9 +18,6 @@ public class LivraisonComponent {
     private final LivraisonRepository livraisonRepository;
     private final CommandeRepository commandeRepository;
 
-
-
-
     public List<LivraisonEntity> findAllLivraisons() {
         return livraisonRepository.findAll();
     }

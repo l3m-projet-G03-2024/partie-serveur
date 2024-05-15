@@ -13,6 +13,5 @@ import java.util.List;
 public interface LivraisonRepository extends JpaRepository<LivraisonEntity,String> {
 
     List<LivraisonEntity> findAllByEtat(EtatsDeLivraison etat);
-    LivraisonEntity findByOrdreAndTourneeEntityReference(int ordre, String tourneeReference);
 
 }
