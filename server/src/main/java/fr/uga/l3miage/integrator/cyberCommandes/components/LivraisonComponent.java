@@ -33,9 +33,6 @@ public class LivraisonComponent {
         return livraisonRepository.findById(reference)
                 .orElseThrow(() ->  new LivraisonNotFoundException(String.format("Livraison non trouvée pour la référence : [%s] ", reference))) ;
     }
-    public List<LivraisonEntity> getLivraisonEntities(Set<LivraisonEntity> livraisonEntities){
-        return livraisonRepository.saveAll(livraisonEntities);
-    }
 
     public List<LivraisonEntity> createLivraisons(List<LivraisonEntity> livraisonEntities) {
         return livraisonRepository.saveAll(livraisonEntities);
