@@ -46,7 +46,7 @@ public interface TourneeEndPoints {
 
     @Operation(description = "Ajouter un employé à une tournée")
     @ApiResponse(responseCode = "200",description = "L'employe a été ajouté à la tournée")
-    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la tounee ou l'employe demandé n'a pas été trouvé",content = @Content(schema = @Schema(implementation = AddTourneeErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
+    @ApiResponse(responseCode = "404", description = "Une erreur c'est produit, la tounee ou l'employe demandé n'a pas été trouvé",content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PatchMapping("/{referenceTournee}/add-employe")
     TourneeResponseDTO addEmployeInTournee(@PathVariable(name = "referenceTournee")String referenceTournee, @RequestBody AddEmployeIdTourneeRequest addEmployeIdTourneeRequest);
