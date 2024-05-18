@@ -30,7 +30,7 @@ public interface EmployeEndPoints {
     @ApiResponse(responseCode = "200", description = "détails de l'employé envoyées avec succès")
     @ApiResponse(responseCode = "400", description = "Requête incorrect ou mal formée", content = @Content(schema = @Schema(implementation = BadRequestErrorResponse.class),mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/{emailEmploye}")
+    @GetMapping("/{emailEmploye}/")
     EmployeResponseDTO getDetailsEmploye(@PathVariable(name = "emailEmploye")String emailEmploye);
 
 }

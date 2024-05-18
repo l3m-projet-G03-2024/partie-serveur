@@ -82,14 +82,15 @@ public class TourneeService {
 
             Set<TourneeEntity> tourneeEntities = tourneeEntity.getJournee().getTournees();
 
-            TourneeEntity tourneeToDeleteEmploye =  tourneeEntities.stream().filter(tournee ->
+            Optional<TourneeEntity> tourneeToDeleteEmploye =  tourneeEntities.stream().filter(tournee ->
                     tournee.getEmployes().stream().anyMatch(employe -> employe.getTrigramme().equals(idEmploye))
-            ).findAny().orElseThrow(() -> new NotFoundEmployeEntityException(String.format("L'employé %s n'existe pas", idEmploye)));
+            ).findAny();
 
-            if (tourneeToDeleteEmploye != null) {
-                tourneeToDeleteEmploye.getEmployes().remove(employeEntity);
-                employeEntity.getTourneeEntities().remove(tourneeToDeleteEmploye);
-                tourneeComponent.addEmployeInTournee(tourneeToDeleteEmploye);
+            if (tourneeToDeleteEmploye.isPresent()) {
+                TourneeEntity tournee = tourneeToDeleteEmploye.get();
+                tournee.getEmployes().remove(employeEntity);
+                employeEntity.getTourneeEntities().remove(tournee);
+                tourneeComponent.addEmployeInTournee(tournee);
             }
 
             if (tourneeEntity.getEmployes() == null) {
@@ -104,7 +105,7 @@ public class TourneeService {
 
             employeEntity.getTourneeEntities().add(tourneeEntity);
             return tourneeMapper.toTourneeResponseDTO(tourneeComponent.addEmployeInTournee(tourneeEntity));
-        } catch (TourneeNotFoundException | NotFoundEmployeEntityException e) {
+        } catch (TourneeNotFoundException e) {
             throw new EmployeNotFoundRestException(e.getMessage(),idEmploye);
         }
     }

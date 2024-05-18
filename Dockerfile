@@ -9,7 +9,7 @@ LABEL description="Java 16 Docker image build to run Integrator project"
 
 ARG JAR_FILE="/intégrator-project/server/target/integrator-project.jar"
 ENV TZ="Europe/Paris"
-ENV spring_profiles_active="prod"
+ENV spring_profiles_active="dev"
 
 COPY --from=build ${JAR_FILE} /opt/app/app.jar
 RUN chmod u+x /opt/app/app.jar

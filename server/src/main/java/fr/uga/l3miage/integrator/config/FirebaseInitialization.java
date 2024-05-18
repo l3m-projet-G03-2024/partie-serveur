@@ -5,10 +5,9 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 
 @Configuration
 public class FirebaseInitialization {
@@ -16,14 +15,14 @@ public class FirebaseInitialization {
     @Bean
     public void initialization() {
         try{
-
-            File file = ResourceUtils.getFile("classpath:serviceAccountKey.json");
-            FileInputStream serviceAccount = new FileInputStream(file);
+            InputStream serviceAccount = new ClassPathResource("serviceAccountKey.json").getInputStream();
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
 
-            FirebaseApp.initializeApp(options);
+            if(FirebaseApp.getApps().isEmpty()) {
+                FirebaseApp.initializeApp(options);
+            }
         } catch (Exception error) {
             error.printStackTrace();
         }

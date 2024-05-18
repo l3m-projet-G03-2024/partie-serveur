@@ -14,9 +14,9 @@ import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebCl
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +54,7 @@ public class CamionControllerTest {
         template.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         {
             try {
-                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                File file = new ClassPathResource("accessToken.txt").getFile();
                 accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
                 headers.set("AuthorizationTest", "Test "+accessToken);
                 // System.out.println(accessToken);
@@ -69,33 +69,33 @@ public class CamionControllerTest {
 
     @Test
     void getCamionFound() {
-            // Créer un entrepot
-            EntrepotEntity entrepotEntity = EntrepotEntity.builder()
-                    .nom("E1").build();
-            entrepotRepository.save(entrepotEntity);
+        // Créer un entrepot
+        EntrepotEntity entrepotEntity = EntrepotEntity.builder()
+                .nom("E1").build();
+        entrepotRepository.save(entrepotEntity);
 
-            // CamionEntity est dans entrepotEntity
-            CamionEntity camionEntity = CamionEntity.builder()
-                    .immatriculation("A100")
-                    .longitude(1.9)
-                    .latitude(2.0)
-                    .entrepot(entrepotEntity)
-                    .build();
-            camionRepository.save(camionEntity);
+        // CamionEntity est dans entrepotEntity
+        CamionEntity camionEntity = CamionEntity.builder()
+                .immatriculation("A100")
+                .longitude(1.9)
+                .latitude(2.0)
+                .entrepot(entrepotEntity)
+                .build();
+        camionRepository.save(camionEntity);
 
-            ResponseEntity<List<CamionResponseDTO>> response = template.exchange(
-                    "/api/v1/camions/?nomEntrepot=E1",
-                    HttpMethod.GET,
-                    new HttpEntity<>(headers),
-                    new ParameterizedTypeReference<List<CamionResponseDTO>>() {}
-            );
+        ResponseEntity<List<CamionResponseDTO>> response = template.exchange(
+                "/api/v1/camions/?nomEntrepot=E1",
+                HttpMethod.GET,
+                new HttpEntity<>(headers),
+                new ParameterizedTypeReference<List<CamionResponseDTO>>() {}
+        );
 
-            // Assertions
-            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(response.getBody().size()).isEqualTo(1);
-        }
-
+        // Assertions
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().size()).isEqualTo(1);
     }
+
+}
 
 
 
