@@ -33,7 +33,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -67,17 +66,17 @@ public class JourneeControllerTest  {
     @BeforeEach
     public void setup() {
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-       {
+        {
             try {
-                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                File file = new ClassPathResource("accessToken.txt").getFile();
                 accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
                 headers.set("AuthorizationTest", "Test "+accessToken);
-               // System.out.println(accessToken);
+                // System.out.println(accessToken);
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-       }
+        }
     }
 
     @Test
@@ -144,7 +143,7 @@ public class JourneeControllerTest  {
                 .tdmTheorique(60)
                 .build();
         journeeRepository.save(journeeEntity);
-       // when(entrepotComponent.getEntrepotByNom("Albis")).thenReturn(entrepotEntity);
+        // when(entrepotComponent.getEntrepotByNom("Albis")).thenReturn(entrepotEntity);
 
         // When
         ResponseEntity<JourneeDetailResponseDTO> response = testRestTemplate.exchange(

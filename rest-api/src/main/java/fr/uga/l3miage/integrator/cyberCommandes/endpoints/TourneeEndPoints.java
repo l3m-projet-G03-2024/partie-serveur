@@ -57,7 +57,7 @@ public interface TourneeEndPoints {
     @ApiResponse(responseCode = "200", description = "L'employé a été trouvé")
     @ApiResponse(responseCode = "404", description = "Aucun employé n'a cette adresse mail", content = @Content(schema = @Schema(implementation = NotFoundErrorResponse.class), mediaType = MediaType.APPLICATION_JSON_VALUE))
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/employes/{emailEmploye}")
+    @GetMapping("/employes/{emailEmploye}/")
     Set<TourneeResponseDTO> getAllTourneesByEmployeEmail(@PathVariable(name = "emailEmploye")String emailEmploye);
 
     @Operation(description = "Ajouter un camion dans tournee")

@@ -16,9 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,6 +49,7 @@ public class EmployeControllerTest {
     private EmployeMapper employeMapper;
 
 
+
     private String accessToken;
     private final HttpHeaders headers = new HttpHeaders();
 
@@ -59,7 +60,7 @@ public class EmployeControllerTest {
         testRestTemplate.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         {
             try {
-                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                File file = new ClassPathResource("accessToken.txt").getFile();
                 accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
                 headers.set("AuthorizationTest", "Test "+accessToken);
                 // System.out.println(accessToken);

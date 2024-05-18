@@ -42,12 +42,15 @@ import fr.uga.l3miage.integrator.cyberRessources.response.EmployeResponseDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -59,7 +62,6 @@ import fr.uga.l3miage.integrator.cyberCommandes.enums.EtatsDeTournee;
 import fr.uga.l3miage.integrator.cyberCommandes.repositories.TourneeRepository;
 import fr.uga.l3miage.integrator.cyberCommandes.request.TourneeCreationRequest;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.util.ResourceUtils;
 
 @AutoConfigureTestDatabase
 @AutoConfigureWebClient
@@ -95,7 +97,7 @@ public class TourneeControllerTest {
         template.getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         {
             try {
-                File file = ResourceUtils.getFile("classpath:accessToken.txt");
+                File file = new ClassPathResource("accessToken.txt").getFile();
                 accessToken = new String(Files.readAllBytes(Paths.get(file.getPath())));
                 headers.set("AuthorizationTest", "Test "+accessToken);
                 // System.out.println(accessToken);
@@ -141,14 +143,14 @@ public class TourneeControllerTest {
 
         journee.setTournees(tournees);
         // When
-     ResponseEntity<List<TourneeResponseDTO>> response1 = template
+        ResponseEntity<List<TourneeResponseDTO>> response1 = template
                 .exchange(
                         "/api/v1/tournees/?etat=EFFECTUEE",
                         HttpMethod.GET,
                         new HttpEntity<>(headers),
                         new ParameterizedTypeReference<List<TourneeResponseDTO>>() {}
                 );
-     ResponseEntity<Set<TourneeResponseDTO>> response2 = template
+        ResponseEntity<Set<TourneeResponseDTO>> response2 = template
                 .exchange(
                         "/api/v1/tournees/?reference=J1",
                         HttpMethod.GET,
@@ -177,7 +179,7 @@ public class TourneeControllerTest {
         // Given
 
         List<TourneeCreationRequest> tournees = new ArrayList<>();
-         TourneeCreationRequest tourneeCreationRequest1 = TourneeCreationRequest
+        TourneeCreationRequest tourneeCreationRequest1 = TourneeCreationRequest
                 .builder()
                 .reference("T1")
                 .etat(EtatsDeTournee.ENPARCOURS)
@@ -210,9 +212,9 @@ public class TourneeControllerTest {
         // When
         ResponseEntity<TourneeCreationResponseDTO> response = template
                 .exchange("/api/v1/tournees/",
-                HttpMethod.POST,
-                new HttpEntity<>(tourneesCreationBodyRequest,headers),
-                TourneeCreationResponseDTO.class);
+                        HttpMethod.POST,
+                        new HttpEntity<>(tourneesCreationBodyRequest,headers),
+                        TourneeCreationResponseDTO.class);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
